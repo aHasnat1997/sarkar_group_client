@@ -7,7 +7,8 @@ import {
   FormProvider,
   useFormContext,
 } from "react-hook-form";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography, FormControl, InputAdornment, OutlinedInput, IconButton, InputLabel } from "@mui/material";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 /**
  * Context value for a form field.
@@ -129,7 +130,7 @@ FormLabel.displayName = "FormLabel";
  * @param {React.ComponentPropsWithoutRef<typeof TextField>} props - Props for the form control component.
  * @returns {JSX.Element} The form control component.
  */
-const FormControl = React.forwardRef<
+const FormInput = React.forwardRef<
   React.ElementRef<typeof TextField>,
   React.ComponentPropsWithoutRef<typeof TextField>
 >(({ ...props }, ref) => {
@@ -144,7 +145,52 @@ const FormControl = React.forwardRef<
     />
   );
 });
-FormControl.displayName = "FormControl";
+FormInput.displayName = "FormInput";
+
+/**
+ * Component for a form control password.
+ * @param {React.ComponentPropsWithoutRef<typeof TextField>} props - Props for the form control component.
+ * @returns {JSX.Element} The form control component.
+ */
+const FormInputPassword = React.forwardRef<
+  React.ElementRef<typeof OutlinedInput>,
+  Omit<React.ComponentPropsWithoutRef<typeof OutlinedInput>, 'margin'>
+>(({ label, ...props }, ref) => {
+  const { error, name } = useFormField();
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  return (
+    <FormControl fullWidth>
+      <InputLabel htmlFor={name} className="bg-white"><span className="px-1">{label}</span></InputLabel>
+      <OutlinedInput
+        id={name}
+        type={showPassword ? "text" : "password"}
+        ref={ref}
+        error={!!error}
+        margin="none"
+        {...props}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              aria-label={
+                showPassword ? "hide the password" : "display the password"
+              }
+              onClick={() => setShowPassword((show) => !show)}
+              edge="end"
+              sx={{
+                border: 'none'
+              }}
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        }
+      />
+    </FormControl>
+  );
+});
+FormInputPassword.displayName = "FormInputPassword";
+
 
 /**
  * Component for a form message.
@@ -180,7 +226,8 @@ export {
   FormProvider as Form,
   FormItem,
   FormLabel,
-  FormControl,
+  FormInputPassword,
+  FormInput,
   FormMessage,
   FormField,
 };

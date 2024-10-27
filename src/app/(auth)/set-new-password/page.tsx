@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/form";
+import { Form, FormField, FormItem, FormMessage, FormInputPassword } from "@/components/form";
 
 const zodSchema = z.object({
   newPassword: z.string().min(8, 'Minimum 8 character.'),
@@ -97,10 +97,9 @@ export default function SetNewPassword() {
                   name='newPassword'
                   control={methods.control}
                   render={({ field }) => (
-                    <FormControl
+                    <FormInputPassword
                       {...field}
                       label='New Password'
-                      type='password'
                       sx={{
                         width: '60%'
                       }}
@@ -114,10 +113,9 @@ export default function SetNewPassword() {
                   name='confirmPassword'
                   control={methods.control}
                   render={({ field }) => (
-                    <FormControl
+                    <FormInputPassword
                       {...field}
                       label='Confirm Password'
-                      type='password'
                       sx={{
                         width: '60%'
                       }}

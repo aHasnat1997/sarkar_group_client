@@ -1,11 +1,11 @@
 'use client';
 
 import assets from "@/assets";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/form";
+import { Form, FormInput, FormField, FormItem, FormMessage, FormInputPassword } from "@/components/form";
 import { Box, Button, Checkbox, FormControlLabel, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -19,7 +19,7 @@ const userZodSchema = z.object({
 type FormValues = z.infer<typeof userZodSchema>;
 
 export default function LoginPage() {
-  // const router = useRouter();
+  const router = useRouter();
 
   const methods = useForm<FormValues>({
     resolver: zodResolver(userZodSchema),
@@ -31,7 +31,7 @@ export default function LoginPage() {
   });
 
   const formSubmit: SubmitHandler<FormValues> = (value) => {
-    // router.push('/dashboard');
+    router.push('/dashboard');
     console.log(value);
   }
 
@@ -102,7 +102,7 @@ export default function LoginPage() {
                   name='email'
                   control={methods.control}
                   render={({ field }) => (
-                    <FormControl
+                    <FormInput
                       {...field}
                       label='Email'
                       sx={{
@@ -119,10 +119,9 @@ export default function LoginPage() {
                   name='password'
                   control={methods.control}
                   render={({ field }) => (
-                    <FormControl
+                    <FormInputPassword
                       {...field}
                       label='Password'
-                      type='password'
                       sx={{
                         width: '60%'
                       }}

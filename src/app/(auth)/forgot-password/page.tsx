@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem } from "@/components/form";
+import { Form, FormInput, FormField, FormItem } from "@/components/form";
 
 const schema = z.object({
   email: z.string().email({ message: 'use a valid email' })
@@ -90,7 +90,7 @@ export default function ForgotPassword() {
                 name='email'
                 control={methods.control}
                 render={({ field }) => (
-                  <FormControl
+                  <FormInput
                     {...field}
                     label='Email'
                     sx={{
