@@ -52,7 +52,7 @@ export default function SMDDataTable<T>({
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>
       <Table>
         <TableHead>
           <TableRow>
