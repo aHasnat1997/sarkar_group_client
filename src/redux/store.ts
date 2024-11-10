@@ -1,20 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { configureStore } from '@reduxjs/toolkit';
 import { baseApi } from './api/baseApi';
-// import authReducer from './slices/authSlice';
-// import storage from 'redux-persist/lib/storage';
+import authReducer from './slices/authSlice';
+import storage from 'redux-persist/lib/storage';
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, persistReducer, persistStore } from 'redux-persist';
 
-// const persistConfig = {
-//   key: 'userInfo',
-//   storage,
-// };
-// const persistedUserInfoReducer = persistReducer(persistConfig, authReducer);
-
+const persistConfig = {
+  key: 'userInfo',
+  storage,
+};
+const persistedUserInfoReducer = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
   reducer: {
-    // auth: persistedUserInfoReducer,
+    auth: persistedUserInfoReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

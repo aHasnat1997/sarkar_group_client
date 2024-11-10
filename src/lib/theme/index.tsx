@@ -21,8 +21,9 @@ const theme = createTheme({
       defaultProps: {
         variant: 'contained',
         sx: {
-          borderRadius: '.63rem',
-          fontSize: '1rem'
+          borderRadius: '.5rem',
+          fontSize: '.8rem',
+          padding: '.5rem 1rem'
         }
       }
     },

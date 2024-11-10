@@ -1,5 +1,4 @@
 import type { BaseQueryFn } from "@reduxjs/toolkit/query";
-
 import type { AxiosRequestConfig, AxiosError } from "axios";
 import { instance as axiosInstance } from "./axiosInstance";
 
@@ -37,7 +36,8 @@ export const axiosBaseQuery = (
           ...headers
         },
       });
-      return result;
+      // Return data in a structure that RTK Query expects
+      return { data: result.data };  // <---- Add this line
     } catch (axiosError) {
       const err = axiosError as AxiosError;
       return {

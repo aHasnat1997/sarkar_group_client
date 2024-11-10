@@ -39,7 +39,6 @@ export default function SMDDataTable<T>({
   columns,
   page,
   limit,
-  // total,
   totalPages,
   sortBy,
   sortOrder,
@@ -64,7 +63,7 @@ export default function SMDDataTable<T>({
                     direction={sortBy === col.field ? sortOrder : 'asc'}
                     onClick={() => handleSort(col.field as keyof T)}
                   >
-                    {col.label}
+                    <Typography variant="subtitle1" color='text.secondary'>{col.label}</Typography>
                   </TableSortLabel>
                 ) : (
                   <Typography variant="subtitle1" color='text.secondary'>{col.label}</Typography>
