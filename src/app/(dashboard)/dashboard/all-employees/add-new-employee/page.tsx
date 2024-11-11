@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormField, FormInput, FormItem } from "@/components/form";
 import Link from "next/link";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const employeeZodSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
@@ -26,7 +26,7 @@ const employeeZodSchema = z.object({
 type EmployeeFormValues = z.infer<typeof employeeZodSchema>;
 
 export default function AddNewEmployee() {
-  // const router = useRouter();
+  const router = useRouter();
   const [value, setValue] = useState(0);
   const tebContent = [
     { index: 0, label: 'Personal Information', icon: <UserIcon /> },
@@ -54,7 +54,7 @@ export default function AddNewEmployee() {
 
   const formSubmit: SubmitHandler<EmployeeFormValues> = (data) => {
     console.log("Form submitted with:", data);
-    // router.push('/dashboard/all-employees');
+    router.push('/dashboard/all-employees');
   };
 
   return (
