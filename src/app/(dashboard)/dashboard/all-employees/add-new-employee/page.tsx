@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Checkbox, FormControlLabel, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useState } from "react";
@@ -8,22 +8,16 @@ import UserIcon from '@/assets/icons/user.svg';
 import BriefcaseIcon from "@/assets/icons/briefcase-04.svg";
 import DocumentIcon from '@/assets/icons/document-text.svg';
 import LockIcon from "@/assets/icons/lock.svg";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Form, FormField, FormInput, FormItem } from "@/components/form";
-import Link from "next/link";
+import { Form } from "@/components/form";
 import { useRouter } from "next/navigation";
-
-const employeeZodSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
-  email: z.string().email({ message: 'Need valid email' }),
-  role: z.enum(['ADMIN', 'USER', 'MANAGER']),
-  department: z.string().min(2, { message: 'Department is required' }),
-  isActive: z.boolean()
-});
-
-type EmployeeFormValues = z.infer<typeof employeeZodSchema>;
+import TabOne from "./form/tabOne";
+import TabTwo from "./form/tabTwo";
+import TabThree from "./form/tabThree";
+import TabFour from "./form/tabFour";
+import FormButton from "./form/formButton";
+import { EmployeeFormValues, employeeZodSchema } from "./form/formZodSchema";
 
 export default function AddNewEmployee() {
   const router = useRouter();
@@ -45,12 +39,6 @@ export default function AddNewEmployee() {
       isActive: false
     }
   });
-
-  const handleNext = () => {
-    if (value < tebContent.length - 1) {
-      setValue(value + 1);
-    }
-  };
 
   const formSubmit: SubmitHandler<EmployeeFormValues> = (data) => {
     console.log("Form submitted with:", data);
@@ -88,70 +76,22 @@ export default function AddNewEmployee() {
         </Box>
 
         <Box p={3}>
-          {value === 0 && (
-            <>
-              <FormItem>
-                <FormField name="name" control={methods.control} render={({ field }) => (
-                  <FormInput {...field} label="Full Name" />
-                )} />
-              </FormItem>
-              <FormItem>
-                <FormField name='email' control={methods.control} render={({ field }) => (
-                  <FormInput {...field} label='Email' />
-                )} />
-              </FormItem>
-            </>
-          )}
-          {value === 1 && (
-            <>
-              <FormItem>
-                <FormField name="department" control={methods.control} render={({ field }) => (
-                  <FormInput {...field} label="Department" />
-                )} />
-              </FormItem>
-              <FormItem>
-                <FormField name="role" control={methods.control} render={({ field }) => (
-                  <FormInput {...field} label="Role" placeholder="Role (e.g., ADMIN, USER)" />
-                )} />
-              </FormItem>
-            </>
-          )}
-          {value === 2 && (
-            <Box>
-              <p>Documents tab content (if any)</p>
-            </Box>
-          )}
-          {value === 3 && (
-            <Stack width="60%" justifyContent="space-between">
-              <FormItem>
-                <Controller name="isActive" control={methods.control} render={({ field }) => (
-                  <FormControlLabel control={<Checkbox {...field} />} label="Is Active" labelPlacement="end" />
-                )} />
-              </FormItem>
-            </Stack>
-          )}
+          {
+            value === 0 ? <TabOne methods /> :
+              value === 1 ? <TabTwo methods /> :
+                value === 2 ? <TabThree /> :
+                  value === 3 ? <TabFour methods /> :
+                    <></>
+          }
         </Box>
 
-        {/* Navigation buttons */}
-        <Stack direction="row" spacing={2} justifyContent="flex-end" pb={2}>
-          {value > 0 ? (
-            <Button variant="outlined" type="button" onClick={() => setValue(value - 1)}>
-              Previous
-            </Button>
-          ) : (
-            <Link href='/dashboard/all-employees'>
-              <Button variant="outlined" type="button">
-                Cancel
-              </Button>
-            </Link>
-          )}
-          <Button variant="contained" type="button" onClick={handleNext} sx={{ display: `${value < tebContent.length - 1 ? 'block' : 'none'}` }}>
-            Next
-          </Button>
-          <Button variant="contained" type="submit" sx={{ display: `${value < tebContent.length - 1 ? 'none' : 'block'}` }}>
-            Submit
-          </Button>
-        </Stack>
+        <Box>
+          <FormButton
+            value={value}
+            setValue={setValue}
+            tebCount={tebContent.length - 1}
+          />
+        </Box>
       </Box>
     </Form>
   );
