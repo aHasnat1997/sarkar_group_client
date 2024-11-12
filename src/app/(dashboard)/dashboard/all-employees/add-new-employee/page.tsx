@@ -32,11 +32,34 @@ export default function AddNewEmployee() {
   const methods = useForm<EmployeeFormValues>({
     resolver: zodResolver(employeeZodSchema),
     defaultValues: {
-      name: '',
+      firstName: '',
+      lastName: '',
+      mobileNumber: '',
       email: '',
-      role: 'ADMIN',
-      department: 'Software Engineer',
-      isActive: false
+      dob: '',
+      maritalStatus: '',
+      gender: '',
+      nationality: '',
+      address: '',
+      city: '',
+      state: '',
+      zip: '',
+      employeeId: '',
+      userName: '',
+      employeeType: '',
+      department: '',
+      designation: '',
+      workingDays: '',
+      joiningDate: '',
+      officeLocation: '',
+      appointmentLetter: '',
+      salarySlips: '',
+      relivingLetter: '',
+      experienceLetter: '',
+      projectName: '',
+      role: '',
+      roleDesignation: '',
+      optionalMessage: ''
     }
   });
 
