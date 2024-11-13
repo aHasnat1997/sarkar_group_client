@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, IconButton, Stack } from "@mui/material";
 import React, { useState } from 'react';
 import SMDDataTable from "../../components/ui/SMDDataTable";
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@/assets/icons/add-circle.svg';
 import FilterIcon from '@/assets/icons/filter.svg';
 import Link from "next/link";
+import ViewIcon from "@/assets/icons/view.svg";
+import EditIcon from "@/assets/icons/edit.svg";
+import TrashIcon from "@/assets/icons/trash.svg";
 // import { useAllEmployeesQuery } from "@/redux/api/endpoints/employeesApi";
 
 type Equipment = {
@@ -492,6 +495,19 @@ export default function AllEmployees() {
           }}
           onPageChange={setPage}
           onLimitChange={setLimit}
+          actions={(row) => (
+            <Stack gap='.2rem'>
+              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                <ViewIcon />
+              </IconButton>
+              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                <EditIcon />
+              </IconButton>
+              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                <TrashIcon />
+              </IconButton>
+            </Stack>
+          )}
         /> :
           <Box></Box>
       }

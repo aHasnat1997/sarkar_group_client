@@ -23,6 +23,7 @@ type TableComponentProps<T> = {
   onSortChange?: (field: keyof T) => void;
   onPageChange: (page: number) => void;
   onLimitChange: (page: number) => void;
+  actions?: (row: T) => React.ReactNode;
 };
 
 const BadgeStyled = styled(Badge)(({ theme }) => ({
@@ -44,7 +45,8 @@ export default function SMDDataTable<T>({
   sortOrder,
   onSortChange,
   onPageChange,
-  onLimitChange
+  onLimitChange,
+  actions
 }: TableComponentProps<T>) {
   const handleSort = (field: keyof T) => {
     if (onSortChange) onSortChange(field);
@@ -70,6 +72,9 @@ export default function SMDDataTable<T>({
                 )}
               </TableCell>
             ))}
+            {actions && <TableCell>
+              <Typography variant="subtitle1" color='text.secondary'>Action</Typography>
+            </TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -88,6 +93,11 @@ export default function SMDDataTable<T>({
                   )}
                 </TableCell>
               ))}
+              {actions && (
+                <TableCell>
+                  {actions(row)}
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
