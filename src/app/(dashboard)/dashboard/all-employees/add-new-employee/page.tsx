@@ -85,7 +85,6 @@ export default function AddNewEmployee() {
           <Tabs
             value={value}
             onChange={(e, newValue) => setValue(newValue)}
-            aria-label="basic tabs example"
           >
             {tebContent.map(data => (
               <Tab

@@ -497,9 +497,11 @@ export default function AllEmployees() {
           onLimitChange={setLimit}
           actions={(row) => (
             <Stack gap='.2rem'>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <ViewIcon />
-              </IconButton>
+              <Link href={`/dashboard/all-employees/${row.id}`}>
+                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                  <ViewIcon />
+                </IconButton>
+              </Link>
               <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                 <EditIcon />
               </IconButton>
