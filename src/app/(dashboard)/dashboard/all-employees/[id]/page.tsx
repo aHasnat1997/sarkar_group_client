@@ -13,7 +13,7 @@ import ProfileTab from "./profile";
 import ProjectTab from "./project";
 import { TEmployeeData } from "@/types";
 
-export default function AllEmployees({ params }: { params: { id: string } }) {
+export default function EmployeeDetails({ params }: { params: { id: string } }) {
   const [value, setValue] = useState(0);
   console.log(params);
   const employeeData: TEmployeeData = {

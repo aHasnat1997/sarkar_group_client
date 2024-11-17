@@ -2,10 +2,12 @@ import RightDirectionIcon from "@/assets/icons/direction_right.svg";
 import UserIcon from "@/assets/icons/clients.svg";
 import Image from "next/image";
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import Link from "next/link";
 
 type TProjectCard = {
   cardTitle: string;
   cardSubTitle: string;
+  detailsInfoPath: string;
   clientFullName: string;
   clientImage: string;
   projectManagerFullName: string;
@@ -17,6 +19,7 @@ type TProjectCard = {
 export default function ProjectCard({
   cardTitle,
   cardSubTitle,
+  detailsInfoPath,
   clientFullName,
   clientImage,
   projectManagerFullName,
@@ -64,7 +67,9 @@ export default function ProjectCard({
             {cardSubTitle}
           </Typography>
         </Box>
-        <Button variant='text'>View Project</Button>
+        <Link href={detailsInfoPath}>
+          <Button variant='text'>View Project</Button>
+        </Link>
       </Stack>
       <Box my='1.5rem'>
         {

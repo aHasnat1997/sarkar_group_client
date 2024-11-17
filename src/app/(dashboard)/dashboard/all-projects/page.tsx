@@ -568,7 +568,7 @@ export default function AllProjects() {
             className="focus:outline-none bg-transparent"
           />
         </Stack>
-        <Link href='/dashboard/all-employees/add-new-employee'>
+        <Link href='/dashboard/all-projects/add-new-project'>
           <Button>
             <Stack gap='.5rem' alignItems='center'>
               <EditIcon /> Add Project
@@ -585,6 +585,7 @@ export default function AllProjects() {
             <ProjectCard
               cardTitle={data.projectName}
               cardSubTitle='4 Members'
+              detailsInfoPath={`/dashboard/all-projects/${data.id}`}
               clientFullName={`${data.client.user.firstName} ${data.client.user.lastName}`}
               clientImage={`${data.client.user.profileImage}`}
               projectManagerFullName={`${data.projectManager.user.firstName} ${data.projectManager.user.lastName}`}
