@@ -10,7 +10,6 @@ import TabTwo from "./tabs/tabTwo";
 import TabThree from "./tabs/tabThree";
 
 export default function ProfileTab({ payload }: { payload: TEmployeeData }) {
-  console.log(payload);
   const [value, setValue] = useState(0);
   const tebContent = [
     { index: 0, label: 'Personal Information', icon: <UserIcon /> },

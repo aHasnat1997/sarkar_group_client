@@ -14,15 +14,15 @@ type Column<T> = {
 type TableComponentProps<T> = {
   data: T[];
   columns: Column<T>[];
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
   total?: number;
-  totalPages: number;
+  totalPages?: number;
   sortBy?: keyof T;
   sortOrder?: SortOrder;
   onSortChange?: (field: keyof T) => void;
-  onPageChange: (page: number) => void;
-  onLimitChange: (page: number) => void;
+  onPageChange?: (page: number) => void;
+  onLimitChange?: (page: number) => void;
   actions?: (row: T) => React.ReactNode;
 };
 
@@ -102,16 +102,20 @@ export default function SMDDataTable<T>({
           ))}
         </TableBody>
       </Table>
-      <TablePagination
-        component={'div'}
-        count={totalPages}
-        page={page}
-        onPageChange={(event, value) => onPageChange(value)}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25, 50]}
-        onRowsPerPageChange={(event) => onLimitChange(Number(event.target?.value))}
-        color="primary"
-      />
+      {
+        page && limit && totalPages && onPageChange && onLimitChange ?
+          <TablePagination
+            component={'div'}
+            count={totalPages}
+            page={page}
+            onPageChange={(event, value) => onPageChange(value)}
+            rowsPerPage={limit}
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            onRowsPerPageChange={(event) => onLimitChange(Number(event.target?.value))}
+            color="primary"
+          /> :
+          <></>
+      }
     </TableContainer>
   );
 };

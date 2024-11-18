@@ -10,14 +10,14 @@ import RequisitionIcon from '@/assets/icons/requisition.svg';
 import ApplicationIcon from '@/assets/icons/application.svg';
 import MediaIcon from '@/assets/icons/media.svg';
 import DailyReportIcon from '@/assets/icons/daily-report.svg';
-
 // import { useAppSelector } from '@/redux/hooks';
 // import { RootState } from '@/redux/store';
 
 type TList = {
   title: string,
   path: string,
-  icon: React.ReactNode
+  icon: React.ReactNode,
+  hasChild: boolean
 }
 
 export default function DrawerListItems(): TList[] {
@@ -31,52 +31,62 @@ export default function DrawerListItems(): TList[] {
     {
       icon: <DashboardIcon />,
       title: 'Dashboard',
-      path: '/dashboard'
+      path: '/dashboard',
+      hasChild: false
     },
     {
       icon: <AllEmployeesIcon />,
       title: 'All Employees',
-      path: '/dashboard/all-employees'
+      path: '/dashboard/all-employees',
+      hasChild: true
     },
     {
       icon: <AllProjectIcon />,
       title: 'All Projects',
-      path: '/dashboard/all-projects'
+      path: '/dashboard/all-projects',
+      hasChild: true
     },
     {
       icon: <ClientsIcon />,
       title: 'Clients',
-      path: '/dashboard/clients'
+      path: '/dashboard/clients',
+      hasChild: true
     },
     {
       icon: <PaymentIcon />,
       title: 'Payment',
-      path: '/dashboard/payment'
+      path: '/dashboard/payment',
+      hasChild: true
     },
     {
       icon: <ProductIcon />,
       title: 'Product',
-      path: '/dashboard/all-products'
+      path: '/dashboard/all-products',
+      hasChild: true
     },
     {
       icon: <RequisitionIcon />,
       title: 'Requisition',
-      path: '/dashboard/requisition'
+      path: '/dashboard/requisition',
+      hasChild: true
     },
     {
       icon: <ApplicationIcon />,
       title: 'Application',
-      path: '/dashboard/application'
+      path: '/dashboard/application',
+      hasChild: true
     },
     {
       icon: <MediaIcon />,
       title: 'Media',
-      path: '/dashboard/media'
+      path: '/dashboard/media',
+      hasChild: true
     },
     {
       icon: <DailyReportIcon />,
       title: 'Daily Report',
-      path: '/dashboard/daily-report'
+      path: '/dashboard/daily-report',
+      hasChild: true
     }
   ];
 

@@ -10,6 +10,11 @@ function DrawerList() {
   const pathname = usePathname();
   const drawerLists = DrawerListItems();
 
+  const isActive = (path: string, hasChild: boolean) => {
+    if (hasChild && pathname.startsWith(path)) return true;
+    if (!hasChild && pathname === path) return true;
+  }
+
   return (
     <Box sx={{
       width: '100%',
@@ -41,18 +46,18 @@ function DrawerList() {
             >
               <ListItem
                 disablePadding
-                className={list.path === pathname ? 'bg-primary/5 text-primary' : ''}
+                className={isActive(list.path, list.hasChild) ? 'bg-primary/5 text-primary' : ''}
               >
                 <Box
                   sx={
-                    list.path === pathname ?
+                    isActive(list.path, list.hasChild) ?
                       { bgcolor: 'primary.main', padding: '2px', height: '3rem' } :
                       { padding: '2px' }
                   } />
                 <ListItemButton>
                   <ListItemIcon
                     sx={{
-                      color: list.path === pathname ? 'primary.main' : 'inherit', // Change icon color on active
+                      color: isActive(list.path, list.hasChild) ? 'primary.main' : 'inherit', // Change icon color on active
                     }}
                   >
                     {list.icon}
@@ -60,7 +65,7 @@ function DrawerList() {
                   <ListItemText
                     primary={list.title}
                     sx={{
-                      color: list.path === pathname ? 'primary.main' : 'inherit', // Change text color on active
+                      color: isActive(list.path, list.hasChild) ? 'primary.main' : 'inherit', // Change text color on active
                     }}
                   />
                 </ListItemButton>

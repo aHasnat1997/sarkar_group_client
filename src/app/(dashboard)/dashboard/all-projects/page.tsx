@@ -549,7 +549,7 @@ export default function AllProjects() {
         padding: '1.5rem'
       }}
     >
-      <Stack justifyContent='space-between' alignItems='baseline'>
+      <Stack justifyContent='space-between'>
         <Stack
           border='1.5px solid'
           borderColor='grey.400'
