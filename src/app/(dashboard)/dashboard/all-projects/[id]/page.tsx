@@ -1,17 +1,17 @@
 'use client';
 
-import { Box, Button, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { useState } from "react";
 import ProjectIcon from '@/assets/icons/all-projects.svg';
 import EmployeeIcon from "@/assets/icons/all-employees.svg";
 import BriefcaseIcon from '@/assets/icons/briefcase-04.svg';
 import GalleryIcon from "@/assets/icons/image-gallery.svg";
-import EditIcon from "@/assets/icons/edit.svg";
 import TabOne from "./tabs/tabOne";
 import TabTwo from "./tabs/tabTwo";
 import TabThree from "./tabs/tabThree";
 import { TProject } from "@/types";
 import TabFour from "./tabs/tabFour";
+import ProjectDialogButtons from "./dialogs";
 
 export default function ProjectDetails({ params }: { params: { id: string } }) {
   console.log(params);
@@ -175,45 +175,6 @@ export default function ProjectDetails({ params }: { params: { id: string } }) {
     { index: 3, label: 'Project Gallery', icon: <GalleryIcon /> }
   ];
 
-  const HeaderButton = () => {
-    if (value === 0) {
-      return <>
-        <Button>
-          <Stack gap='.5rem' alignItems='center'>
-            <EditIcon /> Edit Profile
-          </Stack>
-        </Button>
-      </>;
-    }
-    else if (value === 1) {
-      return <>
-        <Button>
-          <Stack gap='.5rem' alignItems='center'>
-            <EditIcon /> Add Employee
-          </Stack>
-        </Button>
-      </>;
-    }
-    else if (value === 2) {
-      return <>
-        <Button>
-          <Stack gap='.5rem' alignItems='center'>
-            <EditIcon /> Add Product
-          </Stack>
-        </Button>
-      </>;
-    }
-    else if (value === 3) {
-      return <>
-        <Button>
-          <Stack gap='.5rem' alignItems='center'>
-            <EditIcon /> Add Image
-          </Stack>
-        </Button>
-      </>;
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -239,7 +200,7 @@ export default function ProjectDetails({ params }: { params: { id: string } }) {
               </Typography>
             </Box>
           </Stack>
-          <HeaderButton />
+          <ProjectDialogButtons value={value} />
         </Stack>
       </Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

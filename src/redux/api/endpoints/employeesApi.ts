@@ -5,7 +5,7 @@ const employeesApi = baseApi.injectEndpoints({
     allEmployees: build.query({
       query: () => ({
         method: 'GET',
-        url: '/admin/all/employee'
+        url: '/admin/employee/all'
       }),
       providesTags: ['employees']
     })
