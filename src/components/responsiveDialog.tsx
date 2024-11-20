@@ -4,10 +4,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  IconButton,
+  // IconButton,
   Typography,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+// import CloseIcon from '@mui/icons-material/Close';
 
 interface ResponsiveDialogProps {
   open: boolean;
@@ -36,16 +36,22 @@ export const ResponsiveDialog: React.FC<ResponsiveDialogProps> = ({
       maxWidth={maxWidth}
       aria-labelledby="dialog-title"
     >
-      <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <DialogTitle
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}
+      >
         {title ? (
           <Typography variant="h6" id="dialog-title">
             {title}
           </Typography>) :
           (<Typography id="dialog-title"></Typography>)
         }
-        <IconButton onClick={onClose} aria-label="close" size='small'>
+        {/* <IconButton onClick={onClose} aria-label="close" size='small'>
           <CloseIcon />
-        </IconButton>
+        </IconButton> */}
       </DialogTitle>
       <DialogContent>{children}</DialogContent>
       {footer && <DialogActions>{footer}</DialogActions>}
