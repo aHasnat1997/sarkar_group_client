@@ -14,6 +14,12 @@ const theme = createTheme({
     text: {
       primary: '#16151C',
       secondary: '#A2A1A8'
+    },
+    success: {
+      main: '#3FC28A'
+    },
+    warning: {
+      main: '#F45B69'
     }
   },
   components: {

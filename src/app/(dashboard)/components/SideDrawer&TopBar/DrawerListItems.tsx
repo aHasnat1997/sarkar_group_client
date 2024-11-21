@@ -49,7 +49,7 @@ export default function DrawerListItems(): TList[] {
     {
       icon: <ClientsIcon />,
       title: 'Clients',
-      path: '/dashboard/clients',
+      path: '/dashboard/all-clients',
       hasChild: true
     },
     {
