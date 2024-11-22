@@ -6,7 +6,7 @@ import { ResponsiveDialog } from "@/components/responsiveDialog";
 export default function DialogThree({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
 
   return <>
-    <Button>
+    <Button onClick={() => setOpen(true)}>
       <Stack gap='.5rem' alignItems='center'>
         <EditIcon /> Add Product
       </Stack>

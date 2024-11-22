@@ -61,6 +61,14 @@ const theme = createTheme({
       defaultProps: {
         color: 'text.primary'
       }
+    },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backdropFilter: 'blur(10px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        }
+      }
     }
   },
   typography: {

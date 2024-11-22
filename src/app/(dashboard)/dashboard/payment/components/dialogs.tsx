@@ -7,7 +7,10 @@ import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
 export default function Dialogs({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
 
   return <>
-    <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+    <IconButton
+      onClick={() => setOpen(true)}
+      sx={{ border: 'none', color: 'text.primary' }}
+    >
       <ViewIcon />
     </IconButton>
 
@@ -28,9 +31,9 @@ export default function Dialogs({ open, setOpen }: { open: boolean, setOpen: Dis
           <DataViewField title="Project Name" data='Padma Railway Project' />
           <DataViewField title="Amount" data='70,000/=' />
         </Stack>
-        <Stack>
-          <Button sx={{ bgcolor: 'success.main' }}>Accept</Button>
-          <Button sx={{ bgcolor: 'error.main' }}>Decline</Button>
+        <Stack gap='1rem'>
+          <Button fullWidth sx={{ bgcolor: 'success.main' }}>Accept</Button>
+          <Button fullWidth sx={{ bgcolor: 'error.main' }}>Decline</Button>
         </Stack>
       </Stack>
     </ResponsiveDialog>
