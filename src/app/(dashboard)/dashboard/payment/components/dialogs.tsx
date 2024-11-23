@@ -4,7 +4,14 @@ import { ResponsiveDialog } from "@/components/responsiveDialog";
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
 import { THandleOpenModalRow } from "@/types";
 
-export default function Dialogs({ open, setOpen, data }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, data: THandleOpenModalRow | null }) {
+export default function Dialogs(
+  { open, setOpen, data }:
+    {
+      open: boolean,
+      setOpen: Dispatch<SetStateAction<boolean>>,
+      data: THandleOpenModalRow | null
+    }
+) {
   return <>
     <ResponsiveDialog
       open={open}
