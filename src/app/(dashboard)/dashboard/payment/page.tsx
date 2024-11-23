@@ -4,12 +4,14 @@ import { useState } from "react";
 import { Box, IconButton, Stack } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import SMDDataTable from "../../components/ui/SMDDataTable";
-import EditIcon from "@/assets/icons/edit.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
+import ViewIcon from "@/assets/icons/view.svg";
 import Dialogs from "./components/dialogs";
+import { THandleOpenModalRow } from "@/types";
 
 export default function Payment() {
   const [open, setOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<THandleOpenModalRow | null>(null);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const paymentData = {
@@ -82,6 +84,11 @@ export default function Payment() {
     ]
   };
 
+  const handleOpenModal = (row: THandleOpenModalRow) => {
+    setSelectedRow(row);
+    setOpen(true);
+  };
+
   return (
     <Box sx={{
       border: '.5px solid',
@@ -111,33 +118,39 @@ export default function Payment() {
         </Stack>
       </Stack>
       {
-        paymentData ? <SMDDataTable
-          data={paymentData.data}
-          columns={[
-            { label: 'Request From', field: 'requestFrom' },
-            { label: 'Project Name', field: 'projectName' },
-            { label: 'Amount', field: 'amount' },
-            { label: "Status", field: 'status' }
-          ]}
-          page={page}
-          limit={limit}
-          totalPages={paymentData.mete.totalPage}
-          total={paymentData.mete.total}
-          onPageChange={setPage}
-          onLimitChange={setLimit}
-          actions={() => (
-            <Stack gap='.2rem'>
-              <Dialogs open={open} setOpen={setOpen} />
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <EditIcon />
-              </IconButton>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <TrashIcon />
-              </IconButton>
-            </Stack>
-          )}
-        /> :
+        paymentData ? <>
+          <SMDDataTable
+            data={paymentData.data}
+            columns={[
+              { label: 'Request From', field: 'requestFrom' },
+              { label: 'Project Name', field: 'projectName' },
+              { label: 'Amount', field: (row) => `${row.amount}/=` },
+              { label: "Status", field: 'status' }
+            ]}
+            page={page}
+            limit={limit}
+            totalPages={paymentData.mete.totalPage}
+            total={paymentData.mete.total}
+            onPageChange={setPage}
+            onLimitChange={setLimit}
+            actions={(row) => (
+              <Stack gap='.2rem'>
+                <Stack gap=".2rem">
+                  <IconButton onClick={() => handleOpenModal(row)} sx={{ border: 'none', color: 'text.primary' }}>
+                    <ViewIcon />
+                  </IconButton>
+                </Stack>
+                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                  <TrashIcon />
+                </IconButton>
+              </Stack>
+            )}
+          />
+        </> :
           <Box></Box>
+      }
+      {
+        open && <Dialogs open={open} setOpen={setOpen} data={selectedRow} />
       }
     </Box>
   );
