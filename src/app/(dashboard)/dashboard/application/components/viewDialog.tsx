@@ -1,10 +1,12 @@
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
 import { THandleOpenModalRow } from "@/types";
+import AcceptDialog from "./acceptDialog";
+import DeclineDialog from "./declineDialog";
 
-export default function Dialogs(
+export default function ViewDialogs(
   { open, setOpen, data }:
     {
       open: boolean,
@@ -31,8 +33,8 @@ export default function Dialogs(
           <DataViewField title="Amount" data={`${data?.amount}/=`} />
         </Stack>
         <Stack gap='1rem'>
-          <Button fullWidth sx={{ bgcolor: 'success.main' }}>Accept</Button>
-          <Button fullWidth sx={{ bgcolor: 'error.main' }}>Decline</Button>
+          <AcceptDialog setOpen={setOpen} />
+          <DeclineDialog setOpen={setOpen} />
         </Stack>
       </Stack>
     </ResponsiveDialog>
