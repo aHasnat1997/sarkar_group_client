@@ -4,20 +4,32 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  // IconButton,
+  IconButton,
   Typography,
+  Slide,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
-// import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@mui/icons-material/Close'
+import { TransitionProps } from '@mui/material/transitions';
 
 interface ResponsiveDialogProps {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
-  title?: ReactNode; // Allow title to be fully customized (e.g., strings, elements)
-  footer?: ReactNode; // Actions like buttons can be passed here
+  title?: ReactNode;
+  footer?: ReactNode;
   fullWidth?: boolean;
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  isDrawer?: boolean;
 }
+
+const SlideTransition = React.forwardRef(function SlideTransition(
+  props: TransitionProps & { children: React.ReactElement },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="left" ref={ref} {...props} />;
+});
 
 export const ResponsiveDialog: React.FC<ResponsiveDialogProps> = ({
   open,
@@ -27,34 +39,83 @@ export const ResponsiveDialog: React.FC<ResponsiveDialogProps> = ({
   footer,
   fullWidth = true,
   maxWidth = 'sm',
+  isDrawer = false,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Dialog
+      fullScreen={isDrawer}
       open={open}
       onClose={onClose}
       fullWidth={fullWidth}
-      maxWidth={maxWidth}
+      maxWidth={isDrawer ? false : maxWidth} // Drawer ignores maxWidth
       aria-labelledby="dialog-title"
+      TransitionComponent={isDrawer ? SlideTransition : undefined}
+      PaperProps={{
+        sx: isDrawer
+          ? {
+            width: isMobile ? '80%' : '60%', // Width adjustment for drawer
+            margin: 0,
+            borderRadius: 0,
+            position: 'fixed',
+            right: 0,
+            top: 0,
+            bottom: 0,
+            overflow: 'hidden', // Prevent overflow
+            display: 'flex', // Stack content vertically
+            flexDirection: 'column',
+          }
+          : undefined,
+      }}
     >
-      <DialogTitle
+      {title && (
+        <>
+          <DialogTitle
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography variant="h6" id="dialog-title">
+              {title}
+            </Typography>
+          </DialogTitle>
+        </>
+      )}
+      <IconButton
+        aria-label="close"
+        onClick={onClose}
+        sx={(theme) => ({
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          color: theme.palette.grey[500],
+        })}
+      >
+        <CloseIcon />
+      </IconButton>
+      <DialogContent
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
+          flex: 1, // Allow content to take remaining space
+          padding: 2,
+          overflowY: 'auto', // Enable scrolling for overflow content
         }}
       >
-        {title ? (
-          <Typography variant="h6" id="dialog-title">
-            {title}
-          </Typography>) :
-          (<Typography id="dialog-title"></Typography>)
-        }
-        {/* <IconButton onClick={onClose} aria-label="close" size='small'>
-          <CloseIcon />
-        </IconButton> */}
-      </DialogTitle>
-      <DialogContent>{children}</DialogContent>
-      {footer && <DialogActions>{footer}</DialogActions>}
+        {children}
+      </DialogContent>
+      {footer && (
+        <DialogActions
+          sx={{
+            padding: 2,
+            borderTop: `1px solid ${theme.palette.divider}`, // Footer border for clarity
+          }}
+        >
+          {footer}
+        </DialogActions>
+      )}
     </Dialog>
   );
 };
