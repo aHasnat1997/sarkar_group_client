@@ -1,9 +1,11 @@
-import { Box, Stack, Typography } from "@mui/material";
+'use client';
+
+import { useState } from "react";
+import { Box, Stack } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import ViewDialog from "./components/viewDialog";
-import Image from "next/image";
-import assets from "@/assets";
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+import MediaCardOne from "./components/mediaCardOne";
+import FormDialog from "./components/formDialog";
 
 import Image1 from "@/assets/images/ccc.png";
 import Image2 from "@/assets/images/eee.png";
@@ -11,8 +13,9 @@ import Image3 from "@/assets/images/ddd.png";
 import Image4 from "@/assets/images/bbb.png";
 import Image5 from "@/assets/images/aaa.png";
 
-
 export default function MediaPage() {
+  const [open, setOpen] = useState<boolean>(false);
+  const [singleData, setSingleData] = useState({});
   const mediaData = {
     "success": true,
     "statusCode": 302,
@@ -114,7 +117,7 @@ export default function MediaPage() {
             className="focus:outline-none bg-transparent"
           />
         </Stack>
-        <ViewDialog />
+        <FormDialog />
       </Stack>
 
       <Stack
@@ -122,69 +125,20 @@ export default function MediaPage() {
         gap='1.5rem'
       >
         {
-          mediaData.data.slice(0, 3).map((data, i) => <Stack
-            key={i}
-            direction='column'
-            gap='1.25rem'
-          >
-            <Box position='relative'>
-              <Image
-                alt="media image"
-                src={data.image || assets.images.brokenImage}
-                width={500}
-                height={500}
-                className="rounded-2xl"
-              />
-              <Stack
-                width='100%'
-                justifyContent='space-between'
-                alignItems='center'
-                px='.5rem'
-                position='absolute'
-                top={8}
-              >
-                <Box sx={{
-                  bgcolor: 'text.primary',
-                  color: 'white',
-                  p: '.5rem',
-                  borderRadius: '1rem'
-                }}>
-                  {data.category}
-                </Box>
-                <Box sx={{
-                  bgcolor: 'text.primary',
-                  color: 'white',
-                  p: '.5rem',
-                  borderRadius: '1rem'
-                }}>
-                  <TurnedInNotIcon />
-                </Box>
-              </Stack>
-            </Box>
-            <Typography
-              fontSize='1.125rem'
-              fontWeight={700}
+          mediaData.data.slice(0, 3).map(
+            (data, i) => <Box
+              key={i}
+              onClick={() => {
+                setOpen(true)
+                setSingleData(data)
+              }}
             >
-              {data.title}
-            </Typography>
-            <Stack justifyContent='space-between' alignItems='center'>
-              <Stack gap='.5rem'>
-                <Image
-                  alt="author image"
-                  src={data.author.profileImage || assets.images.userPlaceholderImage}
-                  width={100}
-                  height={100}
-                  className="size-5 rounded"
-                />
-                <Typography>By {data.author.firstName} {data.author.lastName}</Typography>
-              </Stack>
-              <Typography>{data.uploadAt}</Typography>
-            </Stack>
-          </Stack>)
+              <MediaCardOne payload={data} />
+            </Box>
+          )
         }
       </Stack>
-
-
     </Box>
+    {open && <ViewDialog open={open} setOpen={setOpen} payload={singleData} />}
   </>
 };
