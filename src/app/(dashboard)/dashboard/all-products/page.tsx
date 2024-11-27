@@ -1,14 +1,582 @@
-import { Box, Typography } from "@mui/material";
+'use client';
+
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import SearchIcon from '@mui/icons-material/Search';
+import EditIcon from "@/assets/icons/edit.svg";
+import ViewIcon from "@/assets/icons/view.svg";
+import TrashIcon from "@/assets/icons/trash.svg";
+import Link from "next/link";
+import SMDDataTable from "../../components/ui/SMDDataTable";
 
 export default function AllProduct() {
+  type TProductCategory = 'CIVIL' | 'MARIN' | 'ENGINEERING';
+  const [currentCategory, setCurrentCategory] = useState<TProductCategory>('CIVIL');
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const tabData = [
+    {
+      category: 'CIVIL',
+      title: "Civil Equipment's",
+      assigned: '25',
+      unassigned: '12',
+      total: '37'
+    },
+    {
+      category: 'MARIN',
+      title: "Marine Equipment's",
+      assigned: '20',
+      unassigned: '8',
+      total: '28'
+    },
+    {
+      category: 'ENGINEERING',
+      title: "Engineering Service's",
+      assigned: '28',
+      unassigned: '14',
+      total: '42'
+    },
+  ];
+  const productsData = {
+    "success": true,
+    "statusCode": 200,
+    "message": "All product found successfully.",
+    "mete": {
+      "page": 1,
+      "limit": 10,
+      "total": 33,
+      "totalPage": 4
+    },
+    "data": [
+      {
+        "id": "66d76ac4450b87d20857dc4d",
+        "equipmentId": "EQUIP-b9af5b50-ce0b-4148-b992-9d03c3aea971",
+        "equipmentName": "CncMachine",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG9900",
+        "category": "MARIN",
+        "status": "IN_REPAIR",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Jean Hintz",
+        "ownerAddress": "45495 Klocko Vista",
+        "ownerNumber": "892-542-0594",
+        "charteredBy": "Claire Franecki",
+        "charteredPersonPhone": "462-726-3440",
+        "charteredPersonAddress": "8673 Judah Unions",
+        "brandName": "Hyundai",
+        "model": "EC950F",
+        "dimensions": "9.5m x 3.5m x 4.5m",
+        "manufacturingYear": "2018",
+        "createdAt": "2024-09-03T20:00:04.957Z",
+        "updatedAt": "2024-09-03T20:00:04.957Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      },
+      {
+        "id": "66d76ac6450b87d20857dc4e",
+        "equipmentId": "EQUIP-da9fd6a0-a882-4b3d-8d5a-325ad71db062",
+        "equipmentName": "Crane",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG1213",
+        "category": "CIVIL",
+        "status": "STAND_BY",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Randal Tremblay",
+        "ownerAddress": "83176 Torp Passage",
+        "ownerNumber": "580-949-3341",
+        "charteredBy": "Stacey Fisher",
+        "charteredPersonPhone": "315-887-1957",
+        "charteredPersonAddress": "42887 Lynch Cove",
+        "brandName": "Hitachi",
+        "model": "WA380",
+        "dimensions": "10m x 4m x 5m",
+        "manufacturingYear": "2021",
+        "createdAt": "2024-09-03T20:00:06.196Z",
+        "updatedAt": "2024-09-03T20:00:06.196Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      },
+      {
+        "id": "66d76ac7450b87d20857dc4f",
+        "equipmentId": "EQUIP-50de2c02-cf47-4013-adad-4849699f7c4e",
+        "equipmentName": "SubseaRov",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG4567",
+        "category": "CIVIL",
+        "status": "DAMAGED",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Glenda Boyer IV",
+        "ownerAddress": "8733 Camren Rapids",
+        "ownerNumber": "647-321-9542",
+        "charteredBy": "Mrs. Stuart Bosco",
+        "charteredPersonPhone": "361-715-0517",
+        "charteredPersonAddress": "9639 Kshlerin Flats",
+        "brandName": "Komatsu",
+        "model": "SK210LC",
+        "dimensions": "6.5m x 2.5m x 3.5m",
+        "manufacturingYear": "2020",
+        "createdAt": "2024-09-03T20:00:07.204Z",
+        "updatedAt": "2024-09-03T20:00:07.204Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      },
+      {
+        "id": "66d76ac9450b87d20857dc51",
+        "equipmentId": "EQUIP-0c655a76-1e12-40a7-b0f7-7916c2549538",
+        "equipmentName": "AirCompressor",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG7879",
+        "category": "MARIN",
+        "status": "RESERVED",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Mr. Dianne Rice",
+        "ownerAddress": "192 Lilla Oval",
+        "ownerNumber": "326-695-4580",
+        "charteredBy": "Miss Amber Carroll",
+        "charteredPersonPhone": "824-652-5994",
+        "charteredPersonAddress": "555 Nicolas Circles",
+        "brandName": "Caterpillar",
+        "model": "SV60",
+        "dimensions": "6.8m x 2.8m x 3.2m",
+        "manufacturingYear": "1992",
+        "createdAt": "2024-09-03T20:00:09.262Z",
+        "updatedAt": "2024-09-03T20:00:09.262Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      },
+      {
+        "id": "66d76aca450b87d20857dc52",
+        "equipmentId": "EQUIP-65c719e8-2858-457b-b06a-30f85452b24c",
+        "equipmentName": "Dredger",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG7475",
+        "category": "CIVIL",
+        "status": "RESERVED",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Gilberto Abbott",
+        "ownerAddress": "70716 Shayne Hollow",
+        "ownerNumber": "488-971-4858",
+        "charteredBy": "Mark Brown",
+        "charteredPersonPhone": "829-819-9383",
+        "charteredPersonAddress": "953 Elwyn Key",
+        "brandName": "Doosan",
+        "model": "TL12R2",
+        "dimensions": "10m x 4m x 5m",
+        "manufacturingYear": "2005",
+        "createdAt": "2024-09-03T20:00:10.798Z",
+        "updatedAt": "2024-09-03T20:00:10.798Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      },
+      {
+        "id": "66d76acc450b87d20857dc53",
+        "equipmentId": "EQUIP-b5a3b811-9b69-47cb-a073-1296f2109e80",
+        "equipmentName": "Excavator",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG6263",
+        "category": "ENGINEERING",
+        "status": "WORKING",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Charles Toy",
+        "ownerAddress": "075 Langosh Hill",
+        "ownerNumber": "686-403-2850",
+        "charteredBy": "Cory Hettinger Jr.",
+        "charteredPersonPhone": "758-911-8983",
+        "charteredPersonAddress": "61024 Tremaine Alley",
+        "brandName": "Case",
+        "model": "R210W",
+        "dimensions": "8.5m x 3.5m x 4.2m",
+        "manufacturingYear": "2006",
+        "createdAt": "2024-09-03T20:00:12.074Z",
+        "updatedAt": "2024-09-03T20:00:12.074Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      },
+      {
+        "id": "66d76acd450b87d20857dc54",
+        "equipmentId": "EQUIP-d5ed84ad-907a-421d-a8dd-431ba9b90e8c",
+        "equipmentName": "Tugboat",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG7273",
+        "category": "CIVIL",
+        "status": "PENDING_INSPECTION",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Wesley Purdy",
+        "ownerAddress": "8061 Kling Corner",
+        "ownerNumber": "766-543-0017",
+        "charteredBy": "Willard Lakin",
+        "charteredPersonPhone": "761-687-6548",
+        "charteredPersonAddress": "8071 Mabel Point",
+        "brandName": "Caterpillar",
+        "model": "L586",
+        "dimensions": "8.5m x 3.5m x 4.2m",
+        "manufacturingYear": "1993",
+        "createdAt": "2024-09-03T20:00:13.470Z",
+        "updatedAt": "2024-09-03T20:00:13.470Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      },
+      {
+        "id": "66d76ae3450b87d20857dc56",
+        "equipmentId": "EQUIP-d8368bc8-26c4-4ac8-aca4-4ad27b80f2c0",
+        "equipmentName": "RoadRoller",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG8081",
+        "category": "MARIN",
+        "status": "RESERVED",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Janet Roob",
+        "ownerAddress": "032 Alivia Drive",
+        "ownerNumber": "681-954-5461",
+        "charteredBy": "Edmond Bayer",
+        "charteredPersonPhone": "756-386-7154",
+        "charteredPersonAddress": "2253 Carter Mountain",
+        "brandName": "Volvo",
+        "model": "ZX350LC",
+        "dimensions": "6.8m x 2.8m x 3.2m",
+        "manufacturingYear": "2004",
+        "createdAt": "2024-09-03T20:00:35.486Z",
+        "updatedAt": "2024-09-03T20:00:35.486Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      },
+      {
+        "id": "66d76af0450b87d20857dc58",
+        "equipmentId": "EQUIP-65dcaff4-90a1-4623-af6e-54e5293e8741",
+        "equipmentName": "Tugboat",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG2627",
+        "category": "ENGINEERING",
+        "status": "AVAILABLE",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Minnie Ryan",
+        "ownerAddress": "4617 Kohler Gateway",
+        "ownerNumber": "940-272-2875",
+        "charteredBy": "Jacob McLaughlin",
+        "charteredPersonPhone": "388-582-7769",
+        "charteredPersonAddress": "5303 Quigley Mission",
+        "brandName": "JCB",
+        "model": "DX225LC",
+        "dimensions": "3m x 1.5m x 2m",
+        "manufacturingYear": "2012",
+        "createdAt": "2024-09-03T20:00:48.307Z",
+        "updatedAt": "2024-09-03T20:00:48.307Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      },
+      {
+        "id": "66d76b8d450b87d20857dc59",
+        "equipmentId": "EQUIP-2948098f-b70f-4383-a45c-2d5fe6f9a4ae",
+        "equipmentName": "VacuumPump",
+        "equipmentImage": [
+          "backhoe1.jpg",
+          "backhoe2.jpg"
+        ],
+        "registrationNumber": "REG4647",
+        "category": "CIVIL",
+        "status": "IN_REPAIR",
+        "createdAdminId": "66d766fe065bcecc665e7500",
+        "ownerName": "Bennie Bosco",
+        "ownerAddress": "99066 Mable Shore",
+        "ownerNumber": "493-595-5788",
+        "charteredBy": "Tara Toy I",
+        "charteredPersonPhone": "264-711-2397",
+        "charteredPersonAddress": "70329 Bogan Cliffs",
+        "brandName": "JohnDeere",
+        "model": "ZX135US",
+        "dimensions": "7m x 3m x 3.5m",
+        "manufacturingYear": "2004",
+        "createdAt": "2024-09-03T20:03:25.848Z",
+        "updatedAt": "2024-09-03T20:03:25.848Z",
+        "createdAdminInfo": {
+          "id": "66d766fe065bcecc665e7500",
+          "mobile": "298-447-9420",
+          "employeeType": "CONTRACTOR",
+          "department": "ENGINEERING",
+          "designation": "UX_UI_DESIGN_LEAD",
+          "officeLocation": "27254 Karley Parks",
+          "user": {
+            "firstName": "Jacquelyn",
+            "lastName": "joo",
+            "email": "Audrey77@yahoo.com",
+            "role": "ADMIN"
+          }
+        },
+        "projects": [],
+        "crews": []
+      }
+    ]
+  };
+
   return (
-    <Box>
-      <Typography component='h1' variant="h3">
-        Welcome to Sarkar Group - SMD All Product page
-      </Typography>
-      <Typography textAlign='justify'>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione repellendus corrupti qui cumque dolore vero, omnis, eum inventore sunt, officia quas porro ex voluptate reprehenderit vitae saepe ad. Sint nisi in molestias esse animi rerum tenetur ratione magni cupiditate voluptatem rem, hic assumenda aspernatur? Dolor quam esse, distinctio id, tenetur quaerat quos aspernatur accusamus nobis vitae odio a maxime beatae nemo perferendis assumenda incidunt recusandae hic qui, veritatis tempora cupiditate earum. Saepe exercitationem doloribus deleniti et expedita placeat! Laudantium, alias pariatur nesciunt aut perspiciatis impedit blanditiis doloribus cumque nobis id eos maxime neque dignissimos ex non ducimus in vel corporis dicta! Ullam quos aspernatur eligendi id maiores quidem laborum consectetur officia praesentium soluta odio quasi distinctio, voluptatem repudiandae ducimus necessitatibus eveniet ut vitae incidunt, aut quod expedita esse maxime molestiae? Vitae assumenda explicabo quos porro accusantium officia architecto laudantium, ea, omnis alias consequatur? Recusandae repudiandae distinctio fuga similique ut maiores autem vel, itaque natus sit incidunt consectetur magnam saepe fugit labore alias ratione. Veritatis facilis corrupti vitae est nostrum tempora omnis assumenda, enim soluta rem! Suscipit quod nemo illo tenetur vero earum quas, enim ipsam non quos nobis debitis maxime, accusantium quia nihil velit esse culpa, quaerat atque sit dignissimos. Magnam, quisquam saepe libero ad exercitationem quas provident autem obcaecati repellat debitis soluta voluptatem vel nesciunt explicabo mollitia perferendis, a amet, aliquam incidunt praesentium sunt impedit maiores fugiat tempora! Quae eligendi assumenda dolorem quisquam quaerat ab corrupti minus temporibus rerum. Delectus eum exercitationem porro voluptatibus! Modi voluptates id repellendus possimus, ullam non velit voluptate reprehenderit, tempora autem laborum, vel incidunt nihil distinctio voluptatem repudiandae expedita! Asperiores, odit magni reprehenderit aliquam vero incidunt eligendi quisquam, natus ipsam dignissimos, omnis enim quo dolor neque doloremque ducimus iusto rerum molestias porro praesentium! Cupiditate inventore in enim aliquid ipsa quod, dolore dignissimos necessitatibus illum aliquam iusto atque exercitationem blanditiis cumque impedit facilis voluptatum explicabo ducimus est eveniet. Dolores necessitatibus ullam, doloribus amet voluptatibus velit distinctio quisquam labore perferendis enim et debitis cupiditate maxime aut odit mollitia iste, animi, id voluptas consequatur reiciendis maiores eius illum? Qui enim sunt, natus cum modi molestias assumenda, consequatur rem provident, quam doloremque tenetur placeat blanditiis nobis incidunt culpa. Praesentium eaque possimus accusantium id nostrum perferendis sed ab assumenda quis veniam nemo nihil eveniet, vel rem ex ducimus rerum animi unde illo velit sit. Sequi tempora autem dignissimos beatae qui tempore vitae ex sapiente ullam? Repellendus repudiandae doloribus sint nostrum quae illo necessitatibus perspiciatis sequi repellat quaerat, nobis, perferendis obcaecati, culpa dolorem. Animi et qui sit explicabo aliquam eius temporibus natus quae repellat eligendi veniam numquam iste molestias facere, quas fuga ab reiciendis perspiciatis quam! Assumenda architecto dolorem dolorum nihil quibusdam expedita atque corrupti vel doloremque ducimus dolore, deleniti, sint tempore reiciendis molestiae porro neque delectus, pariatur provident cum ullam placeat nisi aliquam. Natus quaerat architecto maiores magnam quam mollitia, quisquam repellendus assumenda non error eos vero ipsa, suscipit totam. A culpa provident autem asperiores delectus nobis id dicta praesentium dolorem impedit. Mollitia, tempore. Temporibus laudantium voluptatem ex! Nihil facilis, reiciendis, repudiandae reprehenderit accusamus consequatur vitae adipisci tempora tempore ad illo fugit enim? Sed, cum, perspiciatis quia doloremque dignissimos molestiae nihil asperiores maiores aut cupiditate esse nobis necessitatibus, beatae repellendus illo eaque? Vitae odio rerum pariatur blanditiis similique est asperiores beatae veniam sint expedita nostrum at repellendus dolorum a ea, eaque magnam necessitatibus et iusto tempora, facere consequuntur. Dolor laborum aperiam quas omnis, placeat eius. Voluptates reprehenderit eius nisi enim optio sapiente cum fugit molestias, perferendis voluptatem. Doloremque necessitatibus itaque beatae, reiciendis sequi illo est dolore ipsam voluptate blanditiis omnis fuga error fugit nesciunt sapiente aliquam tempore deserunt quos cupiditate explicabo quam nisi. Ab modi quasi est libero eaque unde voluptas, aspernatur asperiores omnis quos! Magnam possimus rem culpa delectus praesentium molestias odit repellat consequuntur expedita quae minima reprehenderit saepe ducimus quidem quas consequatur illo nihil, rerum voluptatum totam porro! Quos illo, quidem repudiandae veritatis maiores nostrum modi qui aperiam nemo! Qui culpa repellat blanditiis est enim minus facere voluptatibus atque officiis quo ipsa, libero repellendus nesciunt quibusdam nihil magnam dolore consectetur delectus. Ullam quae est iusto. Cupiditate illum nemo dolorum praesentium sequi, magnam expedita ut pariatur vitae eius nobis illo excepturi non alias. Blanditiis explicabo, fugiat tenetur incidunt, adipisci ab voluptatibus doloribus temporibus ut ratione quod cum porro ullam enim, consequuntur voluptate magni quam ad laboriosam. Voluptatem iste aliquam deserunt a reiciendis placeat beatae perferendis provident hic ea nisi temporibus officiis fuga distinctio eius eaque sequi doloremque sint esse earum, laborum inventore, autem nam consequuntur? Mollitia praesentium similique aperiam vero, dicta doloremque! Ipsa laborum nihil illo similique distinctio voluptate eligendi earum numquam natus laboriosam explicabo et dolor architecto quidem, totam, animi cum libero tempora ipsum itaque ex. Enim quos aperiam alias nam, ab, impedit atque officia perspiciatis vero corrupti eaque maiores cumque. Iste architecto aliquam eius blanditiis corrupti facere tempore, cumque ipsam consequuntur magni facilis distinctio ad, quo, vitae quasi sed maxime tempora quos! Et asperiores maxime ad iure eos perferendis commodi illo ducimus impedit praesentium aut ab architecto est facilis, atque repudiandae unde quibusdam odit, nesciunt, veritatis similique? Recusandae a ea dolores natus? Corporis eos voluptates, ipsam reiciendis voluptatem saepe. Sapiente numquam laboriosam vel voluptas, non aliquam fuga. Tempore impedit minima quo. Molestiae veniam voluptatibus quibusdam, consequuntur pariatur beatae ipsam dolores repudiandae quae et accusantium, natus perferendis, repellat error vitae ratione impedit laboriosam officia hic maxime ab? Rem quas maxime consectetur? Commodi maxime vel quo vero laboriosam sint iste explicabo fugiat laudantium illum praesentium voluptates illo cumque deleniti tempore mollitia eaque corporis blanditiis, vitae doloremque perferendis recusandae! Dolore natus rerum error voluptatem inventore. Eius nulla error dicta aliquid quam. Excepturi veritatis placeat dolore doloremque perferendis laboriosam illum, eum aliquam ad obcaecati. Porro voluptatem asperiores perspiciatis modi velit et nisi exercitationem corrupti! Consequuntur adipisci impedit iste mollitia dolorem corrupti minima tempora magni asperiores laboriosam veniam rem ad sequi sunt dolores quo iure, reprehenderit enim? Est voluptate doloremque minima aut iste aperiam officia deserunt voluptas nobis deleniti pariatur ullam debitis possimus sapiente, rem dicta vero neque ea libero tempora exercitationem. Architecto culpa, accusamus eum tempore nihil commodi ea. Ducimus adipisci dolor tenetur! Quo ratione cupiditate nostrum rerum repudiandae eum laborum sequi in rem sunt? Nihil placeat mollitia, dicta ex tenetur voluptatum maiores quia labore! Aliquid debitis fugit dolore nam iusto beatae libero, placeat ea animi? Necessitatibus, facere reprehenderit explicabo quis veritatis id vero fugit consequuntur, vitae blanditiis totam, maxime illum eos odit itaque atque! Unde reprehenderit debitis modi iusto, iure quos voluptate cum aut quisquam illo possimus beatae eligendi, nam perferendis laborum. Earum natus architecto sequi illo ipsum porro ipsa nisi officia cumque quidem quasi harum vitae velit consectetur, nemo nihil obcaecati magni nulla deleniti nobis. Tenetur quo dicta aliquam tempore ipsa ullam nam minus? Ratione consequatur quod corporis nihil quos ut quia reiciendis facere quasi, corrupti dolore illum debitis et, magnam aut, facilis consequuntur doloribus omnis? Illum cum assumenda nostrum fugit tempora obcaecati accusamus quas reprehenderit cupiditate ipsa distinctio veniam ex numquam molestias, nam corrupti aspernatur eos ducimus architecto. Recusandae, animi doloremque cum optio reprehenderit velit fugiat aliquam praesentium deleniti perferendis explicabo distinctio repellat quas dolorem possimus aut eveniet dolores accusantium fuga modi. Ipsum fugit odio, sapiente asperiores et maxime quisquam nulla porro dolorum laborum debitis explicabo eligendi ratione, fugiat rerum? Dolore dicta, aliquid voluptatem possimus optio enim neque dolor illum minima, beatae praesentium ad accusamus. Dignissimos modi autem dolorum vitae ipsam omnis ratione fuga optio assumenda magnam veritatis sequi quia, ad laborum nisi cum necessitatibus recusandae labore soluta obcaecati tempora quos iste accusamus! Magni ea ratione omnis vero praesentium incidunt dolor, temporibus dolorum qui illum voluptatem adipisci similique laborum dolore nam, accusamus non totam hic aut maiores saepe, eveniet quo. Voluptatem quis dolor ab laboriosam, explicabo quod. Eligendi magnam repellendus sapiente eius ea! Dolor recusandae natus vero id est incidunt quae dolore repudiandae harum. Iure quis adipisci laboriosam! Incidunt officia, delectus quaerat repellendus quisquam repudiandae molestiae sequi porro ut illo perspiciatis error laudantium nam obcaecati sunt omnis rerum iusto veritatis molestias enim ex. Neque ex, fugit doloribus, architecto, laboriosam voluptatum dignissimos autem quibusdam molestias earum pariatur minus facilis quos iure minima voluptates fuga perspiciatis vero soluta dolorem impedit aspernatur. Optio earum soluta, libero beatae repellat hic expedita nostrum odit quisquam numquam, aliquid omnis officiis vitae quos fugit! Et delectus consequuntur deserunt itaque aliquam aperiam tempore? Saepe, quia est vitae architecto alias laborum deserunt sint autem magni amet temporibus quibusdam officiis fugiat nisi suscipit velit beatae! Unde, exercitationem explicabo doloribus placeat delectus libero dicta accusantium aliquam sit fuga voluptatum facere architecto minus sed nemo ad excepturi tempora, reprehenderit quis sint temporibus officia. Accusamus beatae aperiam similique esse quibusdam corrupti nesciunt laboriosam nisi veniam dolorum! Officiis eos sequi culpa molestiae quibusdam, consequatur minima tempora fuga. Sunt dolor cupiditate iure, non distinctio enim libero eos! Voluptas excepturi eius, eaque ea aut provident illum commodi est molestiae totam fugiat quod necessitatibus. Cumque deleniti excepturi cupiditate voluptatum itaque eligendi quod, voluptates, repudiandae ipsa velit doloribus nostrum necessitatibus quam iste! Enim doloremque maxime facere eos fugiat incidunt. Reprehenderit temporibus ipsa fuga et nihil enim nisi quasi accusantium sapiente voluptas debitis laborum, veniam quia fugiat, eius aliquid id assumenda quod explicabo qui necessitatibus porro ratione. Fugiat suscipit sed est earum eligendi voluptatem maiores sint accusantium, neque odit, pariatur dolores animi cumque quae architecto quos aperiam ad dolorum et, numquam sequi ab dolor eum? Explicabo totam cum nihil nostrum recusandae minus debitis, incidunt, illum dolorem sapiente ullam accusamus! Assumenda laudantium error vero animi nemo dolorum similique, quia in quae, non voluptatibus quos magni. Sint soluta perferendis quas necessitatibus officiis et consequatur voluptatum alias accusantium doloremque pariatur vitae omnis tenetur assumenda cumque ex, quo incidunt id ratione tempore non excepturi eaque quasi eius! Tenetur necessitatibus sapiente, quaerat cumque nihil quam fugit ipsum nulla id odio totam. Possimus eligendi alias at aliquam quis, iusto est a voluptatibus ut quos perspiciatis hic magni, cumque quod atque? Cupiditate possimus corporis est esse perspiciatis, itaque doloribus dignissimos incidunt! Totam facere voluptas repellendus enim iure neque quasi laboriosam accusamus, harum distinctio fugit dolore debitis, excepturi consequuntur laborum quis ea modi reiciendis? Nihil autem laudantium quaerat numquam et velit delectus quod, nemo similique quos exercitationem, minus incidunt aperiam maiores voluptates quam molestiae eum officia? Ex eveniet explicabo quidem saepe voluptas quisquam dolores voluptatibus quos! Magni esse nobis velit distinctio non, dolore iure obcaecati similique vero tempore eaque nemo eligendi ratione. Neque adipisci, error obcaecati nisi, rerum doloremque eveniet necessitatibus reiciendis tempore libero voluptatem! Sint fugiat modi alias corporis accusantium itaque vitae cupiditate officia. Voluptatem rem perferendis non nihil. Ad, quod. Placeat voluptatem voluptatum iusto molestias, perferendis velit ratione ea! Velit voluptatibus nostrum esse fugit ipsa quaerat laboriosam ex cumque eaque rerum aliquam voluptatem dicta iusto nemo, qui totam enim. Eaque labore aut quidem id molestiae fugiat quos molestias officiis eum qui perspiciatis ea excepturi facere accusamus optio, natus totam. Eveniet voluptas eaque id, vel soluta facilis dolor vitae culpa porro omnis atque nihil deserunt assumenda nesciunt, ullam quos sed! Deleniti beatae corporis incidunt iste praesentium? Et placeat facere ullam consequatur fuga voluptatum eius voluptas, ex esse repellendus, velit quam. Laborum commodi earum voluptatibus distinctio corporis ab fuga quas error iusto fugiat similique porro nisi quibusdam harum, vitae architecto. Laudantium ratione quae totam nostrum fugit quibusdam numquam! Optio facere harum at saepe non similique adipisci dolor repellendus voluptatem quam suscipit perferendis, minima unde asperiores illo dicta deserunt sit vitae recusandae ad perspiciatis, laborum et quaerat quod. Minus aperiam assumenda illo qui suscipit accusantium, magni quas libero reprehenderit dignissimos placeat id minima mollitia sequi facere consequuntur ducimus aliquid provident cum reiciendis ut adipisci impedit doloribus cupiditate. Qui reiciendis impedit iure, nesciunt, repudiandae consectetur ratione odit sequi, deserunt id non iste sapiente? Officia rem, odio unde commodi dignissimos nesciunt repudiandae ratione quo enim nam a minus id eos iste ex laboriosam modi veritatis ut adipisci expedita omnis. Nesciunt dicta porro numquam minima neque placeat a facere repudiandae, enim error consequatur ipsam, saepe atque pariatur nam illo facilis praesentium tempora repellat. Totam facilis odio maxime aperiam recusandae nihil aliquam distinctio voluptates ullam, ratione architecto alias velit quasi magnam, voluptatum nobis, et corporis nemo officia eum vel reprehenderit. Dolor quod nisi ex totam perferendis. Fuga mollitia adipisci similique, dolores natus cum omnis, eaque numquam sit facilis, illo doloribus suscipit reprehenderit aperiam amet possimus quis libero. Labore aut amet temporibus qui blanditiis, debitis quasi ad. Consequatur illum blanditiis dolorem laudantium magnam libero sunt repellendus ratione, illo reiciendis. Blanditiis nobis, architecto iusto sit porro eius aperiam eum iste doloribus corrupti optio explicabo quae quod voluptatum atque vitae, qui dolores nesciunt voluptate! Quis cupiditate sunt in. Omnis, ex quae totam autem sunt, distinctio eum voluptatem sint et cum itaque facere voluptates tempora architecto quo facilis explicabo ipsum consectetur. Iusto laboriosam autem ipsam similique eos praesentium corporis saepe quia fugit in suscipit minima, facilis fugiat. Fugit animi nobis id eligendi quibusdam, incidunt aspernatur, sunt fugiat distinctio esse atque necessitatibus aut recusandae omnis, tenetur temporibus corporis culpa eius vitae similique blanditiis soluta! Facere necessitatibus porro perspiciatis quasi laudantium et modi neque voluptatum, ratione dignissimos. Doloribus assumenda quisquam asperiores voluptas earum necessitatibus blanditiis cumque ab velit, placeat iure vero reprehenderit repellat perspiciatis officia magnam voluptatibus voluptate. Assumenda, illo? Totam illo in minima repellat veniam atque necessitatibus, consectetur sapiente? Hic cumque id illo officiis, ullam veniam. Dicta vero, molestiae sapiente quasi quo modi aliquid soluta, omnis non eum error recusandae dolorem quos a? Velit facilis enim dignissimos. Aliquid consequuntur aut quod, minima veritatis suscipit praesentium adipisci exercitationem labore iste at eos vero voluptate doloremque debitis rerum quidem a illo voluptas assumenda cumque vitae sequi impedit? Laboriosam recusandae est optio, rerum quibusdam odit quidem maxime corporis at sed aliquam facilis, eos molestiae. Eligendi sequi quis asperiores aperiam ipsa, impedit, quia neque tempore veniam consequatur minus eius architecto aut accusantium voluptate ex? At fugit iste doloremque vitae facere ipsa explicabo incidunt dolores dicta consectetur culpa, sint tempore et quae iusto dolore. Delectus, dolores! Tempora fugit facere sint esse numquam quos, repellendus repudiandae minus delectus magnam cupiditate, natus quam quisquam obcaecati perspiciatis illo assumenda ullam corporis beatae. Minima veritatis maxime est possimus incidunt, recusandae temporibus suscipit sunt explicabo non fugit dolorem asperiores nobis quo illum error autem? Ipsum nesciunt laborum sapiente, autem quam quia, quis delectus vitae cum facilis voluptate nostrum temporibus ex? Ea autem excepturi nam sed blanditiis maiores! Dolore culpa ipsum vero blanditiis error id itaque, iusto delectus autem dignissimos. Maiores omnis quam at tenetur enim natus magni, animi voluptatibus fugit magnam veniam alias sapiente beatae quaerat sit voluptas ullam suscipit quia cum, consectetur quibusdam officiis illum ipsam blanditiis. Necessitatibus optio, dolores totam, enim quis eum accusantium, velit possimus excepturi recusandae molestias voluptas provident suscipit quia dolorem inventore temporibus. Illo commodi officiis hic ad! Fugiat pariatur recusandae reiciendis fuga, iste voluptatum praesentium, eos adipisci accusamus enim nostrum ducimus, provident architecto reprehenderit asperiores vero temporibus a delectus quos. Laborum a recusandae dicta porro explicabo impedit minus est velit, facilis fugit distinctio quisquam sapiente veritatis animi architecto facere incidunt ad possimus ipsam officia assumenda cumque tempora culpa labore! Iure, reprehenderit quod fugiat maiores nulla excepturi repudiandae aperiam dignissimos nam iusto, asperiores quasi sapiente tenetur, suscipit itaque voluptate culpa corrupti amet incidunt. Vero dolor ducimus quibusdam dolorum nobis, unde veniam hic, similique consequatur nam odio! Reprehenderit blanditiis eum, quo quibusdam officiis earum illum aperiam cumque molestias tenetur officia odio porro beatae nesciunt? Eius facilis deleniti doloremque ipsum odit totam enim incidunt ipsam corrupti quibusdam. Laboriosam obcaecati accusantium aliquid nesciunt ipsum modi itaque. Facere officiis aliquid blanditiis deleniti quidem quis laborum assumenda, dolore illum. Hic rerum similique sit dicta sunt necessitatibus ipsum eveniet sequi magni ducimus aut omnis, ut corrupti obcaecati quasi earum repellat deserunt voluptates temporibus. Esse molestiae assumenda obcaecati. Suscipit debitis ratione consequatur rerum nisi corrupti laudantium recusandae tempora, laboriosam, aperiam ducimus eius id perferendis, accusantium reiciendis repellat vitae molestiae. Reprehenderit voluptatibus iste, magnam incidunt architecto minus dolores quo porro, repudiandae possimus velit sequi animi? Officia a soluta vero fugiat iure voluptatem, natus nostrum recusandae porro minus! Libero at officia accusantium, culpa dolorum temporibus harum consectetur minus incidunt itaque cupiditate provident ipsam aperiam delectus earum sequi repellat? Voluptatibus consequatur aut soluta quia alias, vel, sapiente quisquam suscipit ut vitae iure, enim impedit quam nam necessitatibus itaque aspernatur minus nisi. Velit voluptatibus neque a obcaecati, est expedita ipsa beatae quia vero labore, soluta perspiciatis libero nostrum amet voluptate non doloremque sint fugit! Praesentium magnam doloribus adipisci harum dicta dolorem tenetur ipsa sunt incidunt, placeat veritatis possimus sequi ratione quos autem et? Illo soluta odit quibusdam ipsum atque molestiae a laborum, officiis maiores tempora impedit mollitia ab tenetur, recusandae maxime totam officia voluptatibus, temporibus esse quis veniam doloremque quos. Assumenda, veritatis recusandae provident praesentium voluptatibus iure veniam alias sed voluptas aut tempora est quod maiores nam porro obcaecati, accusamus quam vero harum minima autem impedit dolorem possimus quo. Quisquam necessitatibus non, placeat, aliquid illum voluptatem cumque ducimus commodi, dignissimos dolores voluptatibus. A cum quaerat eos facilis nulla voluptates consequuntur maiores minima nostrum cupiditate deserunt repellat illum ab ipsa, tempore praesentium non, distinctio veritatis? Voluptate quo natus possimus aspernatur, necessitatibus vitae? Omnis perferendis sed, repudiandae sequi numquam consequatur vero in doloremque debitis voluptatibus nostrum quibusdam reiciendis cumque soluta quos ex eligendi autem deserunt totam id ducimus architecto. Dolorem, hic odit voluptatibus perspiciatis doloremque repudiandae culpa accusamus nam architecto ad recusandae repellendus animi atque quod. Perferendis illum obcaecati blanditiis aliquid quidem quos similique atque eum saepe? Distinctio culpa, animi, porro minima vitae maiores nostrum praesentium voluptatum optio non, ipsa ducimus laborum at consequuntur necessitatibus eaque magni. Obcaecati voluptate incidunt voluptatum vel quam fugiat soluta, dicta cum animi ab molestiae nulla esse autem asperiores mollitia repellendus, nihil exercitationem nemo dolores sit ipsum. Explicabo facilis corrupti saepe sed. Ratione, illum tempore in illo, ipsum iste blanditiis deserunt possimus magnam quia neque, nesciunt autem maxime iure dolore delectus fuga mollitia modi corporis. Officiis ipsa obcaecati nisi doloremque expedita, velit repellendus tenetur consequuntur, vero facilis atque nemo unde id? Odio soluta vero fugit aut quasi quidem ea dignissimos laboriosam, minima nihil sint earum natus officiis dolore? Maxime assumenda molestias harum perferendis consequuntur, nisi nam quidem iure repudiandae minima necessitatibus sit, qui ut dolorem non nulla recusandae dolor, ad numquam quia eos beatae aliquam ex! Eum quos esse facere, natus culpa, asperiores aliquid fugiat assumenda debitis odio deleniti quia dolor ex enim ipsum molestiae consequuntur quibusdam dignissimos placeat quaerat nostrum cum eaque aperiam possimus. A corrupti quam, odio sint cum impedit aliquam minus laudantium debitis saepe error perspiciatis repudiandae iusto sunt nihil vero, dolorem quas expedita hic distinctio iure, harum exercitationem obcaecati ut. Dolorem totam quibusdam velit numquam adipisci odit perspiciatis nihil neque repellendus. Aliquid
-      </Typography>
+    <Box
+      sx={{
+        border: '.5px solid',
+        borderColor: 'grey.400',
+        borderRadius: '1rem',
+        overflow: 'hidden',
+        padding: '1.5rem'
+      }}
+    >
+      <Stack justifyContent='space-between'>
+        <Stack
+          border='1.5px solid'
+          borderColor='grey.400'
+          color='text.primary'
+          borderRadius='0.5rem'
+          alignItems='center'
+          padding='0 .5rem'
+          gap='.5rem'
+        >
+          <Box color='#16151C'>
+            <SearchIcon />
+          </Box>
+          <input
+            type="text"
+            placeholder="Search"
+            className="focus:outline-none bg-transparent"
+          />
+        </Stack>
+        <Link href='/dashboard/all-products/add-new-product'>
+          <Button>
+            <Stack gap='.5rem' alignItems='center'>
+              <EditIcon /> Add Equipment
+            </Stack>
+          </Button>
+        </Link>
+      </Stack>
+
+      <Stack alignItems='center' gap='1rem' mt='1.5rem'>
+        {
+          tabData.map(data => <Box
+            key={data.category}
+            component='div'
+            sx={{
+              width: '100%',
+              padding: '1rem',
+              border: '1px solid',
+              borderRadius: '.8rem',
+              borderColor: data.category === currentCategory ? 'primary.main' : 'transparent',
+              cursor: 'pointer'
+            }}
+            onClick={() => setCurrentCategory(data.category as TProductCategory)}
+          >
+            <Box>
+              <Typography fontSize='1.25rem' fontWeight={700}>
+                {data.title}
+              </Typography>
+              <Typography color='text.secondary'>
+                {data.total} Equipment&apos;s
+              </Typography>
+            </Box>
+            <Stack justifyContent='space-between' mt='1.5rem'>
+              <Typography color='text.secondary'>
+                <Typography fontWeight={700} component='span'>
+                  {data.assigned}
+                </Typography> Assigned
+              </Typography>
+              <Typography color='text.secondary'>
+                <Typography fontWeight={700} component='span'>
+                  {data.unassigned}
+                </Typography> Unassigned
+              </Typography>
+            </Stack>
+          </Box>)
+        }
+      </Stack>
+
+      <Box mt='1.5rem'>
+        <Typography fontSize='1.25rem' fontWeight={700} mb='.8rem'>
+          Product Request
+        </Typography>
+        {
+          productsData ? <SMDDataTable
+            data={productsData.data}
+            columns={[
+              { label: 'Equipment ID', field: (row) => row.equipmentId },
+              { label: 'Equipment Name', field: (row) => row.equipmentName },
+              { label: 'Brand Name', field: (row) => row.brandName },
+              { label: 'Model', field: (row) => row.model },
+              { label: 'Status', field: (row) => row.status }
+            ]}
+            page={page}
+            limit={limit}
+            totalPages={productsData.mete.totalPage}
+            total={productsData.mete.total}
+            onPageChange={setPage}
+            onLimitChange={setLimit}
+            actions={(row) => (
+              <Stack gap='.2rem'>
+                <Link href={`/dashboard/all-products/${row.id}`}>
+                  <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                    <ViewIcon />
+                  </IconButton>
+                </Link>
+                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                  <TrashIcon />
+                </IconButton>
+              </Stack>
+            )}
+          /> :
+            <Box></Box>
+        }
+      </Box>
     </Box>
   );
 };
