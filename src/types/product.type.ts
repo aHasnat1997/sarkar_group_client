@@ -1,0 +1,41 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type TProduct = {
+  id: string;
+  equipmentId: string;
+  equipmentName: string;
+  equipmentImage: string[];
+  registrationNumber: string;
+  category: 'CIVIL' | 'MARIN' | 'ENGINEERING'; // Assuming category is an enum
+  status: "IN_REPAIR" | "AVAILABLE" | "IN_USE"; // Assuming status is an enum
+  createdAdminId: string;
+  ownerName: string;
+  ownerAddress: string;
+  ownerNumber: string;
+  charteredBy: string;
+  charteredPersonPhone: string;
+  charteredPersonAddress: string;
+  brandName: string;
+  model: string;
+  dimensions: string;
+  manufacturingYear: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  createdAdminInfo: {
+    id: string;
+    mobile: string;
+    employeeType: "FULL_TIME" | "PART_TIME" | "CONTRACTOR"; // Assuming employeeType is an enum
+    department: "ENGINEERING" | "SALES" | "HR" | "MARKETING"; // Assuming department is an enum
+    designation: string; // Assuming this is a freeform string or an enum like "UX_UI_DESIGN_LEAD"
+    officeLocation: string;
+    user: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      role: "ADMIN" | "SUPER_ADMIN" | "USER"; // Assuming role is an enum
+    };
+  };
+  projects: Record<string, unknown>[]; // Adjust this to the specific structure of projects if known
+  crews: Record<string, unknown>[]; // Adjust this to the specific structure of crews if known
+};
+
+export default TProduct;

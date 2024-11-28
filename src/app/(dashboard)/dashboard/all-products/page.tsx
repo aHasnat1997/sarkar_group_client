@@ -9,12 +9,16 @@ import TrashIcon from "@/assets/icons/trash.svg";
 import RequestIcon from "@/assets/icons/application.svg";
 import Link from "next/link";
 import SMDDataTable from "../../components/ui/SMDDataTable";
+import { TProduct } from "@/types";
+import ViewDialogs from "./components/viewDialog";
 
 export default function AllProduct() {
   type TProductCategory = 'CIVIL' | 'MARIN' | 'ENGINEERING';
   const [currentCategory, setCurrentCategory] = useState<TProductCategory>('CIVIL');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [open, setOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<TProduct | null>(null);
   const tabData = [
     {
       category: 'CIVIL',
@@ -462,6 +466,11 @@ export default function AllProduct() {
     ]
   };
 
+  const handleOpenModal = (row: TProduct) => {
+    setSelectedRow(row);
+    setOpen(true);
+  };
+
   return (
     <Box
       sx={{
@@ -573,9 +582,9 @@ export default function AllProduct() {
             total={productsData.mete.total}
             onPageChange={setPage}
             onLimitChange={setLimit}
-            actions={() => (
+            actions={(row) => (
               <Stack gap='.2rem'>
-                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                <IconButton onClick={() => handleOpenModal(row)} sx={{ border: 'none', color: 'text.primary' }}>
                   <ViewIcon />
                 </IconButton>
                 <IconButton sx={{ border: 'none', color: 'text.primary' }}>
@@ -590,6 +599,9 @@ export default function AllProduct() {
             <Box></Box>
         }
       </Box>
+      {
+        open && <ViewDialogs open={open} setOpen={setOpen} data={selectedRow} />
+      }
     </Box>
   );
 };
