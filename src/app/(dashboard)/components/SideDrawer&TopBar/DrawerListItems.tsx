@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import DashboardIcon from '@/assets/icons/dashboard.svg';
 import AllEmployeesIcon from '@/assets/icons/all-employees.svg';
 import AllProjectIcon from '@/assets/icons/all-projects.svg';
@@ -20,78 +21,180 @@ type TList = {
   hasChild: boolean
 }
 
+type TUserRole = 'SUPER_ADMIN' | 'ADMIN' | 'PROJECT_MANAGER' | 'ENGINEER' | 'CLIENT';
+
 export default function DrawerListItems(): TList[] {
-  // const [currentStoredUser, setCurrentStoredUser] = useState<TUser | null>(null);
+  const [currentStoredUserRole, setCurrentStoredUserRole] = useState<TUserRole | null>(null);
   // const storedUser = useAppSelector((state: RootState) => state.auth.user);
-  // useEffect(() => {
-  //   setCurrentStoredUser(storedUser);
-  // }, [storedUser]);
+  useEffect(() => {
+    setCurrentStoredUserRole('PROJECT_MANAGER');
+  }, []);
 
   const adminList: TList[] = [
     {
       icon: <DashboardIcon />,
       title: 'Dashboard',
-      path: '/dashboard',
+      path: '/dashboard/admin',
       hasChild: false
     },
     {
       icon: <AllEmployeesIcon />,
       title: 'All Employees',
-      path: '/dashboard/all-employees',
+      path: '/dashboard/admin/all-employees',
       hasChild: true
     },
     {
       icon: <AllProjectIcon />,
       title: 'All Projects',
-      path: '/dashboard/all-projects',
+      path: '/dashboard/admin/all-projects',
       hasChild: true
     },
     {
       icon: <ClientsIcon />,
       title: 'Clients',
-      path: '/dashboard/all-clients',
+      path: '/dashboard/admin/all-clients',
       hasChild: true
     },
     {
       icon: <PaymentIcon />,
       title: 'Payment',
-      path: '/dashboard/payment',
+      path: '/dashboard/admin/payment',
       hasChild: true
     },
     {
       icon: <ProductIcon />,
       title: 'Product',
-      path: '/dashboard/all-products',
+      path: '/dashboard/admin/all-products',
       hasChild: true
     },
     {
       icon: <RequisitionIcon />,
       title: 'Requisition',
-      path: '/dashboard/requisition',
+      path: '/dashboard/admin/requisition',
       hasChild: true
     },
     {
       icon: <ApplicationIcon />,
       title: 'Application',
-      path: '/dashboard/application',
+      path: '/dashboard/admin/application',
       hasChild: true
     },
     {
       icon: <MediaIcon />,
       title: 'Media',
-      path: '/dashboard/media',
+      path: '/dashboard/admin/media',
       hasChild: true
     },
     {
       icon: <DailyReportIcon />,
       title: 'Daily Report',
-      path: '/dashboard/daily-report',
+      path: '/dashboard/admin/daily-report',
       hasChild: true
     }
   ];
 
-  // const list = currentStoredUser?.role === 'ADMIN' ? adminList : currentStoredUser?.role === 'USER' ? userList : [];
-  const list = adminList;
+  const projectManagerList: TList[] = [
+    {
+      icon: <DashboardIcon />,
+      title: 'Dashboard',
+      path: '/dashboard/project-manager',
+      hasChild: false
+    },
+    {
+      icon: <AllProjectIcon />,
+      title: 'All Projects',
+      path: '/dashboard/project-manager/all-projects',
+      hasChild: true
+    },
+    {
+      icon: <PaymentIcon />,
+      title: 'Payment',
+      path: '/dashboard/project-manager/payment',
+      hasChild: true
+    },
+    {
+      icon: <ProductIcon />,
+      title: 'Product',
+      path: '/dashboard/project-manager/all-products',
+      hasChild: true
+    },
+    {
+      icon: <RequisitionIcon />,
+      title: 'Requisition',
+      path: '/dashboard/project-manager/requisition',
+      hasChild: true
+    },
+    {
+      icon: <ApplicationIcon />,
+      title: 'Application',
+      path: '/dashboard/project-manager/application',
+      hasChild: true
+    },
+    {
+      icon: <MediaIcon />,
+      title: 'Media',
+      path: '/dashboard/project-manager/media',
+      hasChild: true
+    },
+    {
+      icon: <DailyReportIcon />,
+      title: 'Daily Report',
+      path: '/dashboard/project-manager/daily-report',
+      hasChild: true
+    }
+  ];
+
+  const engineerList: TList[] = [
+    {
+      icon: <DashboardIcon />,
+      title: 'Dashboard',
+      path: '/dashboard/engineer',
+      hasChild: false
+    },
+    {
+      icon: <AllProjectIcon />,
+      title: 'All Projects',
+      path: '/dashboard/engineer/all-projects',
+      hasChild: true
+    },
+    {
+      icon: <PaymentIcon />,
+      title: 'Payment',
+      path: '/dashboard/engineer/payment',
+      hasChild: true
+    },
+    {
+      icon: <RequisitionIcon />,
+      title: 'Requisition',
+      path: '/dashboard/engineer/requisition',
+      hasChild: true
+    },
+    {
+      icon: <ApplicationIcon />,
+      title: 'Application',
+      path: '/dashboard/engineer/application',
+      hasChild: true
+    },
+    {
+      icon: <MediaIcon />,
+      title: 'Media',
+      path: '/dashboard/engineer/media',
+      hasChild: true
+    },
+    {
+      icon: <DailyReportIcon />,
+      title: 'Daily Report',
+      path: '/dashboard/engineer/daily-report',
+      hasChild: true
+    }
+  ];
+
+  const list = currentStoredUserRole === 'SUPER_ADMIN' ? adminList :
+    currentStoredUserRole === 'ADMIN' ? adminList :
+      currentStoredUserRole === 'PROJECT_MANAGER' ? projectManagerList :
+        currentStoredUserRole === 'ENGINEER' ? engineerList :
+          [];
+  // const list = adminList;
 
   return list;
 };
