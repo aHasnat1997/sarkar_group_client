@@ -238,7 +238,7 @@ export default function AddNewProduct() {
             </Stack>
 
             <Stack alignItems='center' gap='1rem' justifyContent='end'>
-              <Link href='/dashboard/project-manager/all-products'>
+              <Link href='/dashboard/project_manager/all-products'>
                 <Button
                   variant="outlined"
                   type="button"

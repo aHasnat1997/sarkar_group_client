@@ -26,7 +26,7 @@ export default function TabTwo({ payload }: { payload: TProject }) {
           ]}
           actions={(row) => (
             <Stack gap='.2rem'>
-              <Link href={`/dashboard/project-manager/all-employees/${row.id}`}>
+              <Link href={`/dashboard/project_manager/all-employees/${row.id}`}>
                 <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                   <ViewIcon />
                 </IconButton>

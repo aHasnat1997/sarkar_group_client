@@ -202,7 +202,7 @@ export default function AddNewProject() {
           </Stack>
 
           <Stack alignItems='center' gap='1rem' justifyContent='end'>
-            <Link href='/dashboard/project-manager/all-projects'>
+            <Link href='/dashboard/project_manager/all-projects'>
               <Button
                 variant="outlined"
                 type="button"

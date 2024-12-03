@@ -1,48 +1,19 @@
 'use client';
 
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import { useState } from "react";
+import { Box, IconButton, Stack } from "@mui/material";
+import Link from "next/link";
+import SMDDataTable from "@/app/(dashboard)/components/ui/SMDDataTable";
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from "@/assets/icons/edit.svg";
 import ViewIcon from "@/assets/icons/view.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
-import RequestIcon from "@/assets/icons/application.svg";
-import Link from "next/link";
-import SMDDataTable from "../../../components/ui/SMDDataTable";
-import { TProduct } from "@/types";
-import ViewDialogs from "./components/viewDialog";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-export default function AllProduct() {
-  type TProductCategory = 'CIVIL' | 'MARIN' | 'ENGINEERING';
-  const [currentCategory, setCurrentCategory] = useState<TProductCategory>('CIVIL');
+export default function AllProductRequest() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [open, setOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<TProduct | null>(null);
-  const tabData = [
-    {
-      category: 'CIVIL',
-      title: "Civil Equipment's",
-      assigned: '25',
-      unassigned: '12',
-      total: '37'
-    },
-    {
-      category: 'MARIN',
-      title: "Marine Equipment's",
-      assigned: '20',
-      unassigned: '8',
-      total: '28'
-    },
-    {
-      category: 'ENGINEERING',
-      title: "Engineering Service's",
-      assigned: '28',
-      unassigned: '14',
-      total: '42'
-    },
-  ];
-  const productsData = {
+  const productsRequestData = {
     "success": true,
     "statusCode": 200,
     "message": "All product found successfully.",
@@ -466,11 +437,6 @@ export default function AllProduct() {
     ]
   };
 
-  const handleOpenModal = (row: TProduct) => {
-    setSelectedRow(row);
-    setOpen(true);
-  };
-
   return (
     <Box
       sx={{
@@ -500,75 +466,16 @@ export default function AllProduct() {
             className="focus:outline-none bg-transparent"
           />
         </Stack>
-        <Stack gap='1rem'>
-          <Link href='/dashboard/project-manager/all-products/all-product-request'>
-            <Button variant='outlined'>
-              <Stack gap='.5rem' alignItems='center'>
-                <RequestIcon /> Product Request
-              </Stack>
-            </Button>
-          </Link>
-          <Link href='/dashboard/project-manager/all-products/add-new-product'>
-            <Button>
-              <Stack gap='.5rem' alignItems='center'>
-                <EditIcon /> Add Equipment
-              </Stack>
-            </Button>
-          </Link>
-        </Stack>
+        <Link href='/dashboard/project_manager/all-products'>
+          <IconButton>
+            <ArrowBackIcon />
+          </IconButton>
+        </Link>
       </Stack>
-
-      <Stack alignItems='center' gap='1rem' mt='1.5rem'>
-        {
-          tabData.map(data => <Box
-            key={data.category}
-            component='div'
-            sx={{
-              width: '100%',
-              padding: '1rem',
-              border: '1px solid',
-              borderRadius: '.8rem',
-              borderColor: data.category === currentCategory ? 'primary.main' : 'transparent',
-              cursor: 'pointer'
-            }}
-            onClick={() => setCurrentCategory(data.category as TProductCategory)}
-          >
-            <Box>
-              <Typography fontSize='1.25rem' fontWeight={700}>
-                {data.title}
-              </Typography>
-              <Typography color='text.secondary'>
-                {data.total} Equipment&apos;s
-              </Typography>
-            </Box>
-            <Stack justifyContent='space-between' mt='1.5rem'>
-              <Typography color='text.secondary'>
-                <Typography fontWeight={700} component='span'>
-                  {data.assigned}
-                </Typography> Assigned
-              </Typography>
-              <Typography color='text.secondary'>
-                <Typography fontWeight={700} component='span'>
-                  {data.unassigned}
-                </Typography> Unassigned
-              </Typography>
-            </Stack>
-          </Box>)
-        }
-      </Stack>
-
       <Box mt='1.5rem'>
-        <Typography fontSize='1.25rem' fontWeight={700} mb='.8rem'>
-          {
-            currentCategory === 'CIVIL' ? 'Civil Products' :
-              currentCategory === 'MARIN' ? 'Marine Products' :
-                currentCategory === 'ENGINEERING' ? 'Engineering Products' :
-                  ''
-          }
-        </Typography>
         {
-          productsData ? <SMDDataTable
-            data={productsData.data}
+          productsRequestData ? <SMDDataTable
+            data={productsRequestData.data}
             columns={[
               { label: 'Equipment ID', field: (row) => row.equipmentId },
               { label: 'Equipment Name', field: (row) => row.equipmentName },
@@ -578,15 +485,17 @@ export default function AllProduct() {
             ]}
             page={page}
             limit={limit}
-            totalPages={productsData.mete.totalPage}
-            total={productsData.mete.total}
+            totalPages={productsRequestData.mete.totalPage}
+            total={productsRequestData.mete.total}
             onPageChange={setPage}
             onLimitChange={setLimit}
             actions={(row) => (
               <Stack gap='.2rem'>
-                <IconButton onClick={() => handleOpenModal(row)} sx={{ border: 'none', color: 'text.primary' }}>
-                  <ViewIcon />
-                </IconButton>
+                <Link href={`/dashboard/project_manager/all-products/${row.id}`}>
+                  <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                    <ViewIcon />
+                  </IconButton>
+                </Link>
                 <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                   <EditIcon />
                 </IconButton>
@@ -599,9 +508,6 @@ export default function AllProduct() {
             <Box></Box>
         }
       </Box>
-      {
-        open && <ViewDialogs open={open} setOpen={setOpen} data={selectedRow} />
-      }
     </Box>
   );
 };

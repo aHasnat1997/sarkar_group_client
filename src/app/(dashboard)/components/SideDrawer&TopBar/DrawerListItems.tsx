@@ -11,6 +11,7 @@ import RequisitionIcon from '@/assets/icons/requisition.svg';
 import ApplicationIcon from '@/assets/icons/application.svg';
 import MediaIcon from '@/assets/icons/media.svg';
 import DailyReportIcon from '@/assets/icons/daily-report.svg';
+import { TUserRole } from '@/types';
 // import { useAppSelector } from '@/redux/hooks';
 // import { RootState } from '@/redux/store';
 
@@ -21,13 +22,11 @@ type TList = {
   hasChild: boolean
 }
 
-type TUserRole = 'SUPER_ADMIN' | 'ADMIN' | 'PROJECT_MANAGER' | 'ENGINEER' | 'CLIENT';
-
 export default function DrawerListItems(): TList[] {
   const [currentStoredUserRole, setCurrentStoredUserRole] = useState<TUserRole | null>(null);
   // const storedUser = useAppSelector((state: RootState) => state.auth.user);
   useEffect(() => {
-    setCurrentStoredUserRole('PROJECT_MANAGER');
+    setCurrentStoredUserRole('ADMIN');
   }, []);
 
   const adminList: TList[] = [
@@ -97,49 +96,49 @@ export default function DrawerListItems(): TList[] {
     {
       icon: <DashboardIcon />,
       title: 'Dashboard',
-      path: '/dashboard/project-manager',
+      path: '/dashboard/project_manager',
       hasChild: false
     },
     {
       icon: <AllProjectIcon />,
       title: 'All Projects',
-      path: '/dashboard/project-manager/all-projects',
+      path: '/dashboard/project_manager/all-projects',
       hasChild: true
     },
     {
       icon: <PaymentIcon />,
       title: 'Payment',
-      path: '/dashboard/project-manager/payment',
+      path: '/dashboard/project_manager/payment',
       hasChild: true
     },
     {
       icon: <ProductIcon />,
       title: 'Product',
-      path: '/dashboard/project-manager/all-products',
+      path: '/dashboard/project_manager/all-products',
       hasChild: true
     },
     {
       icon: <RequisitionIcon />,
       title: 'Requisition',
-      path: '/dashboard/project-manager/requisition',
+      path: '/dashboard/project_manager/requisition',
       hasChild: true
     },
     {
       icon: <ApplicationIcon />,
       title: 'Application',
-      path: '/dashboard/project-manager/application',
+      path: '/dashboard/project_manager/application',
       hasChild: true
     },
     {
       icon: <MediaIcon />,
       title: 'Media',
-      path: '/dashboard/project-manager/media',
+      path: '/dashboard/project_manager/media',
       hasChild: true
     },
     {
       icon: <DailyReportIcon />,
       title: 'Daily Report',
-      path: '/dashboard/project-manager/daily-report',
+      path: '/dashboard/project_manager/daily-report',
       hasChild: true
     }
   ];
