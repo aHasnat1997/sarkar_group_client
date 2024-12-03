@@ -1,8 +1,8 @@
-// import { cookies } from 'next/headers';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { TUserRole } from './types';
-// import { jwtDecode } from 'jwt-decode';
+import { TUser } from './types';
+import { jwtDecode } from 'jwt-decode';
 
 const commonPrivateRoutes = ['/dashboard'];
 const roleBasedPrivateRoutes = {
@@ -11,17 +11,14 @@ const roleBasedPrivateRoutes = {
   engineer: ['/dashboard/engineer'],
 };
 
-const role: TUserRole = 'SUPER_ADMIN';
-
-// This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  // const token = cookies().get('refreshToken')?.value;
-  // if (!token) {
-  //   return NextResponse.redirect(new URL('/login', request.url))
-  // };
+  const token = cookies().get('refreshToken')?.value;
+  if (!token) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  };
 
-  // const { role } = jwtDecode(token!) as TUser;
+  const { role } = jwtDecode(token!) as TUser;
 
   if (pathname === commonPrivateRoutes.find(r => r)) {
     let userRole = role.toLocaleLowerCase();

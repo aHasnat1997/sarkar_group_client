@@ -11,9 +11,9 @@ import RequisitionIcon from '@/assets/icons/requisition.svg';
 import ApplicationIcon from '@/assets/icons/application.svg';
 import MediaIcon from '@/assets/icons/media.svg';
 import DailyReportIcon from '@/assets/icons/daily-report.svg';
-import { TUserRole } from '@/types';
-// import { useAppSelector } from '@/redux/hooks';
-// import { RootState } from '@/redux/store';
+import { TUser, TUserRole } from '@/types';
+import { useAppSelector } from '@/redux/hooks';
+import { RootState } from '@/redux/store';
 
 type TList = {
   title: string,
@@ -24,10 +24,10 @@ type TList = {
 
 export default function DrawerListItems(): TList[] {
   const [currentStoredUserRole, setCurrentStoredUserRole] = useState<TUserRole | null>(null);
-  // const storedUser = useAppSelector((state: RootState) => state.auth.user);
+  const storedUser = useAppSelector((state: RootState) => state.auth.user) as TUser;
   useEffect(() => {
-    setCurrentStoredUserRole('ADMIN');
-  }, []);
+    setCurrentStoredUserRole(storedUser.role);
+  }, [storedUser]);
 
   const adminList: TList[] = [
     {
@@ -193,7 +193,6 @@ export default function DrawerListItems(): TList[] {
       currentStoredUserRole === 'PROJECT_MANAGER' ? projectManagerList :
         currentStoredUserRole === 'ENGINEER' ? engineerList :
           [];
-  // const list = adminList;
 
   return list;
 };

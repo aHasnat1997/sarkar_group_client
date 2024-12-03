@@ -9,6 +9,9 @@ import { useRouter } from "next/navigation";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useUserLoginMutation } from "@/redux/api/endpoints/authApi";
+import { useAppDispatch } from "@/redux/hooks";
+import { storeUserInfo } from "@/redux/slices/authSlice";
 
 const userZodSchema = z.object({
   email: z.string().email({ message: 'need valid email' }),
@@ -20,6 +23,8 @@ type FormValues = z.infer<typeof userZodSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
+  const [userLogin, { isLoading, isSuccess, isError }] = useUserLoginMutation();
+  const dispatch = useAppDispatch();
 
   const methods = useForm<FormValues>({
     resolver: zodResolver(userZodSchema),
@@ -30,10 +35,20 @@ export default function LoginPage() {
     }
   });
 
-  const formSubmit: SubmitHandler<FormValues> = (value) => {
-    router.push('/dashboard');
-    console.log(value);
-  }
+  const formSubmit: SubmitHandler<FormValues> = async (value) => {
+    const { remember, ...rest } = value;
+    console.log({ remember });
+
+    try {
+      const { data } = await userLogin(rest);
+      if (data.success) {
+        dispatch(storeUserInfo(data.data));
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  };
 
   return (
     <Stack
@@ -156,8 +171,14 @@ export default function LoginPage() {
             <Button
               type='submit'
               sx={{ width: '60%' }}
+              disabled={isLoading || isSuccess}
             >
-              Login
+              {
+                isLoading ? 'Loading...' :
+                  isSuccess ? 'Successful' :
+                    isError ? 'Error' :
+                      'Login'
+              }
             </Button>
           </form>
         </Form>

@@ -1,15 +1,16 @@
-import { AppBar, Box, Button, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import Image from "next/image";
 import assets from "@/assets";
-// import toast from "react-hot-toast";
-// import { useRouter } from "next/navigation";
-// import { useAppDispatch } from "@/redux/hooks";
-// import { removeUserInfo } from "@/redux/slices/authSlice";
-// import { useUserLogoutMutation } from "@/redux/api/endpoints/authApi";
+import { useEffect, useState } from "react";
+import { TUser } from "@/types";
+import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
+import capitalizeLetter from "@/utils/capitalizeLetter";
+
 
 type TTopBarPayload = {
   drawerWidth: number;
@@ -19,9 +20,11 @@ type TTopBarPayload = {
   setMobileOpen: any
 };
 export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOpen }: TTopBarPayload) {
-  // const router = useRouter();
-  // const dispatch = useAppDispatch();
-  // const [userLogout] = useUserLogoutMutation();
+  const [currentStoredUser, setCurrentStoredUser] = useState<TUser | null>(null);
+  const storedUser = useAppSelector((state: RootState) => state.auth.user) as TUser;
+  useEffect(() => {
+    setCurrentStoredUser(storedUser);
+  }, [storedUser]);
 
   const handleDrawerToggle = () => {
     if (!isClosing) {
@@ -57,8 +60,11 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
               fontWeight='600'
               color='text.primary'
             >
-              {/* to-do: dynamic role */}
-              Hello Admin👋🏻
+              {
+                currentStoredUser ?
+                  `Hello ${capitalizeLetter(currentStoredUser?.role.split('_').join(' '))}👋🏻` :
+                  ''
+              }
             </Typography>
             {/* to-do: make dynamic greeting */}
             <Typography
@@ -100,14 +106,16 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
               <NotificationsNoneIcon />
             </IconButton>
 
-            <Button
-              variant='outlined'
+            <Stack
               sx={{
+                width: '12rem',
                 border: '1.5px solid',
                 borderColor: 'grey.400',
                 borderRadius: '0.5rem',
                 boxShadow: 'none',
-                padding: '.3rem'
+                padding: '.3rem',
+                justifyContent: 'space-between',
+                alignItems: 'center'
               }}
             >
               <Box
@@ -116,31 +124,49 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
                 gap='0.5rem'
                 color='text.primary'
               >
-                <Image
-                  alt="profile-image"
-                  src={assets.images.profile}
-                  height={500}
-                  width={500}
-                  className="size-8"
-                />
+                {
+                  currentStoredUser && currentStoredUser.profileImage ?
+                    <Image
+                      alt="profile-image"
+                      src={currentStoredUser?.profileImage}
+                      height={500}
+                      width={500}
+                      className="size-8 rounded-md"
+                    /> :
+                    <Image
+                      alt="profile-image"
+                      src={assets.images.userPlaceholderImage}
+                      height={500}
+                      width={500}
+                      className="size-8 rounded-md"
+                    />
+                }
                 <Box textAlign='left'>
                   <Typography
                     fontSize='.75rem'
                     fontWeight='600'
                   >
-                    Shawkat Jamil
+                    {
+                      currentStoredUser ?
+                        `${currentStoredUser.firstName} ${currentStoredUser.lastName}` :
+                        ''
+                    }
                   </Typography>
                   <Typography
                     fontSize='0.5rem'
                     color="text.secondary"
                     fontWeight='300'
                   >
-                    CEO, SARKAR GROUP
+                    {
+                      currentStoredUser ?
+                        capitalizeLetter(currentStoredUser?.role.split('_').join(' ')) :
+                        ''
+                    }
                   </Typography>
                 </Box>
-                <KeyboardArrowDownIcon />
               </Box>
-            </Button>
+              <KeyboardArrowDownIcon />
+            </Stack>
 
           </Stack>
         </Stack>
