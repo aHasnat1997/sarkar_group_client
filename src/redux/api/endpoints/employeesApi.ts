@@ -3,9 +3,10 @@ import { baseApi } from "../baseApi";
 const employeesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     allEmployees: build.query({
-      query: () => ({
+      query: (params) => ({
         method: 'GET',
-        url: '/admin/employee/all'
+        url: '/admin/employee/all',
+        params
       }),
       providesTags: ['employees']
     })

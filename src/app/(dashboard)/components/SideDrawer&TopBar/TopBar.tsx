@@ -5,11 +5,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import Image from "next/image";
 import assets from "@/assets";
-import { useEffect, useState } from "react";
-import { TUser } from "@/types";
-import { useAppSelector } from "@/redux/hooks";
-import { RootState } from "@/redux/store";
 import capitalizeLetter from "@/utils/capitalizeLetter";
+import { useLoggedInUserInfoQuery } from "@/redux/api/endpoints/authApi";
 
 
 type TTopBarPayload = {
@@ -20,11 +17,7 @@ type TTopBarPayload = {
   setMobileOpen: any
 };
 export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOpen }: TTopBarPayload) {
-  const [currentStoredUser, setCurrentStoredUser] = useState<TUser | null>(null);
-  const storedUser = useAppSelector((state: RootState) => state.auth.user) as TUser;
-  useEffect(() => {
-    setCurrentStoredUser(storedUser);
-  }, [storedUser]);
+  const { data: currentStoredUser } = useLoggedInUserInfoQuery(undefined);
 
   const handleDrawerToggle = () => {
     if (!isClosing) {
@@ -62,7 +55,7 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
             >
               {
                 currentStoredUser ?
-                  `Hello ${capitalizeLetter(currentStoredUser?.role.split('_').join(' '))}👋🏻` :
+                  `Hello ${capitalizeLetter(currentStoredUser?.data?.role.split('_').join(' '))}👋🏻` :
                   ''
               }
             </Typography>
@@ -108,14 +101,14 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
 
             <Stack
               sx={{
-                width: '12rem',
                 border: '1.5px solid',
                 borderColor: 'grey.400',
                 borderRadius: '0.5rem',
                 boxShadow: 'none',
-                padding: '.3rem',
+                padding: '0 .25rem',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                gap: '1.5rem'
               }}
             >
               <Box
@@ -125,10 +118,10 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
                 color='text.primary'
               >
                 {
-                  currentStoredUser && currentStoredUser.profileImage ?
+                  currentStoredUser && currentStoredUser.data.profileImage ?
                     <Image
                       alt="profile-image"
-                      src={currentStoredUser?.profileImage}
+                      src={currentStoredUser.data.profileImage}
                       height={500}
                       width={500}
                       className="size-8 rounded-md"
@@ -143,23 +136,22 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
                 }
                 <Box textAlign='left'>
                   <Typography
-                    fontSize='.75rem'
                     fontWeight='600'
                   >
                     {
                       currentStoredUser ?
-                        `${currentStoredUser.firstName} ${currentStoredUser.lastName}` :
+                        `${currentStoredUser.data.firstName} ${currentStoredUser.data.lastName}` :
                         ''
                     }
                   </Typography>
                   <Typography
-                    fontSize='0.5rem'
+                    fontSize='0.75rem'
                     color="text.secondary"
                     fontWeight='300'
                   >
                     {
                       currentStoredUser ?
-                        capitalizeLetter(currentStoredUser?.role.split('_').join(' ')) :
+                        capitalizeLetter(currentStoredUser?.data?.profileData?.designation.split('_').join(' ')) :
                         ''
                     }
                   </Typography>

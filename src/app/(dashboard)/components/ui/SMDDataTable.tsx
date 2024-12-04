@@ -16,7 +16,7 @@ type TableComponentProps<T> = {
   columns: Column<T>[];
   page?: number;
   limit?: number;
-  total?: number;
+  total: number;
   totalPages?: number;
   sortBy?: keyof T;
   sortOrder?: SortOrder;
@@ -40,7 +40,7 @@ export default function SMDDataTable<T>({
   columns,
   page,
   limit,
-  totalPages,
+  total,
   sortBy,
   sortOrder,
   onSortChange,
@@ -103,13 +103,13 @@ export default function SMDDataTable<T>({
         </TableBody>
       </Table>
       {
-        page && limit && totalPages && onPageChange && onLimitChange ?
+        page && limit && total && onPageChange && onLimitChange ?
           <TablePagination
             component={'div'}
-            count={totalPages}
-            page={page}
-            onPageChange={(event, value) => onPageChange(value)}
-            rowsPerPage={limit}
+            count={total || 0}
+            page={(page || 1) - 1}
+            onPageChange={(event, value) => onPageChange(value + 1)}
+            rowsPerPage={limit || 10}
             rowsPerPageOptions={[5, 10, 25, 50]}
             onRowsPerPageChange={(event) => onLimitChange(Number(event.target?.value))}
             color="primary"
