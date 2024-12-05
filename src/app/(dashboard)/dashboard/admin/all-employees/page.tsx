@@ -16,7 +16,7 @@ import { TEmployeeData } from "@/types";
 export default function AllEmployees() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data: employeesData } = useAllEmployeesQuery({ page, limit });
+  const { data: employeesData, isLoading, isFetching } = useAllEmployeesQuery({ page, limit });
 
   return (
     <Box sx={{
@@ -61,19 +61,20 @@ export default function AllEmployees() {
         </Stack>
       </Stack>
       {
-        employeesData ? <SMDDataTable
-          data={employeesData.data}
+        isLoading || employeesData ? <SMDDataTable
+          data={employeesData?.data}
           columns={[
             { label: 'Employee ID', field: (row: TEmployeeData) => row?.employeeInfo?.employeeId },
             { label: "Name", field: (row: TEmployeeData) => (row.firstName + ' ' + row.lastName), isSortable: true },
             { label: 'Email', field: (row: TEmployeeData) => row.email, isSortable: true },
             { label: "Department", field: (row: TEmployeeData) => row.employeeInfo.department },
-            { label: "Employee Type", field: (row: TEmployeeData) => row.employeeInfo.department }
+            { label: "Employee Type", field: (row: TEmployeeData) => row.employeeInfo.employeeType }
           ]}
           page={page}
           limit={limit}
-          totalPages={employeesData.mete.totalPage}
-          total={employeesData.mete.total}
+          totalPages={employeesData?.mete.totalPage}
+          total={employeesData?.mete.total}
+          isLoading={isLoading || isFetching}
           onPageChange={setPage}
           onLimitChange={setLimit}
           actions={(row) => (

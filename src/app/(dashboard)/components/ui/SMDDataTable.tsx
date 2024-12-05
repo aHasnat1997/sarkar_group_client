@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Typography, Badge, TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Typography, Badge, TablePagination, Skeleton } from '@mui/material';
 import { styled } from '@mui/system';
 
 type SortOrder = 'asc' | 'desc';
@@ -20,6 +20,7 @@ type TableComponentProps<T> = {
   totalPages?: number;
   sortBy?: keyof T;
   sortOrder?: SortOrder;
+  isLoading?: boolean;
   onSortChange?: (field: keyof T) => void;
   onPageChange?: (page: number) => void;
   onLimitChange?: (page: number) => void;
@@ -43,6 +44,7 @@ export default function SMDDataTable<T>({
   total,
   sortBy,
   sortOrder,
+  isLoading = false,
   onSortChange,
   onPageChange,
   onLimitChange,
@@ -51,6 +53,79 @@ export default function SMDDataTable<T>({
   const handleSort = (field: keyof T) => {
     if (onSortChange) onSortChange(field);
   };
+
+  if (isLoading) {
+    return (
+      <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {columns.map((col, index) => (
+                <TableCell key={index}>
+                  {col.isSortable ? (
+                    <TableSortLabel
+                      active={sortBy === col.field}
+                      direction={sortBy === col.field ? sortOrder : 'asc'}
+                      onClick={() => handleSort(col.field as keyof T)}
+                    >
+                      <Typography variant="subtitle1" color='text.secondary'>{col.label}</Typography>
+                    </TableSortLabel>
+                  ) : (
+                    <Typography variant="subtitle1" color='text.secondary'>{col.label}</Typography>
+                  )}
+                </TableCell>
+              ))}
+              {actions && <TableCell>
+                <Typography variant="subtitle1" color='text.secondary'>Action</Typography>
+              </TableCell>}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              Array.from({ length: limit || 10 }).map((_, rowIndex) => (
+                <TableRow key={rowIndex}>
+                  {columns.map((col, colIndex) => (
+                    <TableCell key={colIndex}>
+                      <Skeleton
+                        height='2.5rem'
+                        variant="rectangular"
+                        animation="wave"
+                        sx={{ bgcolor: 'grey.400' }}
+                      />
+                    </TableCell>
+                  ))}
+                  {actions && (
+                    <TableCell>
+                      <Skeleton
+                        height='2.5rem'
+                        variant="rectangular"
+                        animation="wave"
+                        sx={{ bgcolor: 'grey.400' }}
+                      />
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))
+            }
+          </TableBody>
+        </Table>
+        {
+          page && limit && total && onPageChange && onLimitChange ?
+            <TablePagination
+              component={'div'}
+              count={total || 0}
+              page={(page || 1) - 1}
+              onPageChange={(event, value) => onPageChange(value + 1)}
+              rowsPerPage={limit || 10}
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              onRowsPerPageChange={(event) => onLimitChange(Number(event.target?.value))}
+              color="primary"
+            /> :
+            <></>
+        }
+      </TableContainer>
+    );
+  }
 
   return (
     <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>

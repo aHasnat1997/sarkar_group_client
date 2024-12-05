@@ -10,6 +10,7 @@ import TabTwo from "./tabs/tabTwo";
 import TabThree from "./tabs/tabThree";
 import { TProject } from "@/types";
 import ProjectDialogButtons from "./dialogs";
+import { useSingleClientsQuery } from "@/redux/api/endpoints/clientsApi";
 
 export default function ProjectDetails({ params }: { params: { id: string } }) {
   console.log(params);
@@ -165,6 +166,10 @@ export default function ProjectDetails({ params }: { params: { id: string } }) {
       }
     ]
   };
+  // to-do: use data to show info
+  const { data, isLoading } = useSingleClientsQuery(params.id);
+  console.log({ data, isLoading });
+
   const [value, setValue] = useState(0);
   const tebContent = [
     { index: 0, label: 'Client Details', icon: <EmployeeIcon /> },

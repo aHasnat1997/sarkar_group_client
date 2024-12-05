@@ -9,9 +9,17 @@ const employeesApi = baseApi.injectEndpoints({
         params
       }),
       providesTags: ['employees']
-    })
+    }),
+
+    singleEmployees: build.query({
+      query: (id) => ({
+        method: 'GET',
+        url: `/admin/employee/${id}`,
+      }),
+      providesTags: ['employees']
+    }),
   })
 });
 
-export const { useAllEmployeesQuery } = employeesApi;
+export const { useAllEmployeesQuery, useSingleEmployeesQuery } = employeesApi;
 export default employeesApi;

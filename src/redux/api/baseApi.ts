@@ -6,5 +6,5 @@ export const baseApi = createApi({
   reducerPath: 'baseApi',
   baseQuery: axiosBaseQuery({ baseUrl: 'http://localhost:3030/smd/api/v1' }),
   endpoints: () => ({}),
-  tagTypes: ['auth', 'employees']
+  tagTypes: ['auth', 'employees', 'projects', 'clients']
 });

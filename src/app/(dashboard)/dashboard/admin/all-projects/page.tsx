@@ -1,8 +1,12 @@
+'use client';
+
 import { Box, Button, Stack } from "@mui/material";
 import Link from "next/link";
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from "@/assets/icons/edit.svg";
 import ProjectCard from "../../../components/ui/ProjectCard";
+import { dateFormate } from "@/utils/dateFormate";
+// import { useAllProjectsQuery } from "@/redux/api/endpoints/projectsApi";
 
 export default function AllProjects() {
   const projectData = {
@@ -538,6 +542,7 @@ export default function AllProjects() {
       }
     ]
   };
+  // const {data, isLoading} = useAllProjectsQuery(undefined);
 
   return (
     <Box
@@ -590,8 +595,8 @@ export default function AllProjects() {
               clientImage={`${data.client.user.profileImage}`}
               projectManagerFullName={`${data.projectManager.user.firstName} ${data.projectManager.user.lastName}`}
               projectManagerImage={`${data.projectManager.user.profileImage}`}
-              startDate={`${data.startDate}`}
-              endDate={`${data.estimatedEndDate}`}
+              startDate={`${dateFormate(data.startDate)}`}
+              endDate={`${dateFormate(data.estimatedEndDate)}`}
               status={`${data.status}`}
             />
           </Box>)

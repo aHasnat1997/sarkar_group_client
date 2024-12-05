@@ -22,6 +22,7 @@ import { EmployeeFormValues, employeeZodSchema } from "./form/formZodSchema";
 export default function AddNewEmployee() {
   const router = useRouter();
   const [value, setValue] = useState(0);
+  const [image, setImage] = useState<File | null>(null);
   const tebContent = [
     { index: 0, label: 'Personal Information', icon: <UserIcon /> },
     { index: 1, label: 'Professional Information', icon: <BriefcaseIcon /> },
@@ -99,7 +100,7 @@ export default function AddNewEmployee() {
 
         <Box p={3}>
           {
-            value === 0 ? <TabOne methods /> :
+            value === 0 ? <TabOne methods image={image} setImage={setImage} /> :
               value === 1 ? <TabTwo methods /> :
                 value === 2 ? <TabThree /> :
                   value === 3 ? <TabFour methods /> :
