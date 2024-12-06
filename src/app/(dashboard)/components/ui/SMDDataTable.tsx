@@ -16,7 +16,7 @@ type TableComponentProps<T> = {
   columns: Column<T>[];
   page?: number;
   limit?: number;
-  total: number;
+  total?: number;
   totalPages?: number;
   sortBy?: keyof T;
   sortOrder?: SortOrder;

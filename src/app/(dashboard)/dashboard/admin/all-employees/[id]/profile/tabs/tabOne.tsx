@@ -1,5 +1,6 @@
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
 import { TEmployeeData } from "@/types";
+import { dateFormate } from "@/utils/dateFormate";
 import { Box, Stack } from "@mui/material";
 
 export default function TabOne({ payload }: { payload: TEmployeeData }) {
@@ -22,7 +23,7 @@ export default function TabOne({ payload }: { payload: TEmployeeData }) {
     },
     {
       title: 'Date of Birth',
-      data: payload.employeeInfo.dob
+      data: dateFormate(payload.employeeInfo.dob)
     },
     {
       title: 'Marital Status',

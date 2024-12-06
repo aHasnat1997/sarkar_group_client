@@ -1,7 +1,7 @@
 import RightDirectionIcon from "@/assets/icons/direction_right.svg";
 import UserIcon from "@/assets/icons/clients.svg";
 import Image from "next/image";
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Button, IconButton, Skeleton, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 
 type TProjectCard = {
@@ -14,7 +14,8 @@ type TProjectCard = {
   projectManagerImage: string;
   startDate: string;
   endDate: string;
-  status: string
+  status: string;
+  isLoading?: boolean
 };
 export default function ProjectCard({
   cardTitle,
@@ -26,7 +27,8 @@ export default function ProjectCard({
   projectManagerImage,
   startDate,
   endDate,
-  status
+  status,
+  isLoading = false
 }: TProjectCard) {
   const cardBody = [
     {
@@ -40,6 +42,124 @@ export default function ProjectCard({
       image: projectManagerImage
     }
   ];
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          border: '.5px solid',
+          borderColor: 'grey.400',
+          borderRadius: '1rem',
+          overflow: 'hidden',
+          padding: '1.5rem',
+          mt: '1.5rem'
+        }}
+      >
+        <Stack
+          alignItems='baseline'
+          justifyContent='space-between'
+          borderBottom='2px solid'
+          borderColor='grey.400'
+          paddingBottom='1.5rem'
+        >
+          <Box>
+            <Skeleton
+              width='15rem'
+              height='2rem'
+              variant="rounded"
+              animation="wave"
+              sx={{ bgcolor: 'grey.400' }}
+            />
+            <Skeleton
+              width='8rem'
+              variant="rounded"
+              animation="wave"
+              sx={{ bgcolor: 'grey.400', mt: '.5rem' }}
+            />
+          </Box>
+          <Box>
+            <Button variant='text'>View Project</Button>
+          </Box>
+        </Stack>
+        <Box my='1.5rem'>
+          {
+            cardBody.map((_, i) => <Box key={i}>
+              <Stack
+                alignItems='center'
+                justifyContent='space-between'
+                py='.5rem'
+              >
+                <Stack alignItems='center' gap='1rem'>
+                  <div className="size-10 rounded-full overflow-hidden">
+                    <Box width='100%' height='100%'>
+                      <Skeleton
+                        width='100%'
+                        height='100%'
+                        variant="rectangular"
+                        animation="wave"
+                        sx={{ bgcolor: 'grey.400' }}
+                      />
+                    </Box>
+                  </div>
+                  <Box>
+                    <Skeleton
+                      width='15rem'
+                      height='2rem'
+                      variant="rounded"
+                      animation="wave"
+                      sx={{ bgcolor: 'grey.400' }}
+                    />
+                    <Skeleton
+                      width='8rem'
+                      height='1rem'
+                      variant="rounded"
+                      animation="wave"
+                      sx={{ bgcolor: 'grey.400', mt: '.5rem' }}
+                    />
+                  </Box>
+                </Stack>
+                <IconButton sx={{ border: 'none' }}>
+                  <RightDirectionIcon />
+                </IconButton>
+              </Stack>
+            </Box>)
+          }
+        </Box>
+        <Stack alignItems='center' justifyContent='space-between'>
+          <Box>
+            <Typography color='text.secondary'>Start Date</Typography>
+            <Skeleton
+              width='8rem'
+              height='1rem'
+              variant="rounded"
+              animation="wave"
+              sx={{ bgcolor: 'grey.400', mt: '.5rem' }}
+            />
+          </Box>
+          <Box>
+            <Typography color='text.secondary'>Finish Date</Typography>
+            <Skeleton
+              width='8rem'
+              height='1rem'
+              variant="rounded"
+              animation="wave"
+              sx={{ bgcolor: 'grey.400', mt: '.5rem' }}
+            />
+          </Box>
+          <Box>
+            <Typography color='text.secondary'>Status</Typography>
+            <Skeleton
+              width='8rem'
+              height='1rem'
+              variant="rounded"
+              animation="wave"
+              sx={{ bgcolor: 'grey.400', mt: '.5rem' }}
+            />
+          </Box>
+        </Stack>
+      </Box>
+    );
+  }
 
   return (
     <Box

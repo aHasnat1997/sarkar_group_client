@@ -1,5 +1,6 @@
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
 import { TEmployeeData } from "@/types";
+import { dateFormate } from "@/utils/dateFormate";
 import { Box, Stack } from "@mui/material";
 
 export default function TabTwo({ payload }: { payload: TEmployeeData }) {
@@ -30,7 +31,7 @@ export default function TabTwo({ payload }: { payload: TEmployeeData }) {
     },
     {
       title: 'Joining Date',
-      data: payload.employeeInfo.joiningDate
+      data: dateFormate(payload.employeeInfo.joiningDate)
     },
     {
       title: 'Project Location',

@@ -16,7 +16,6 @@ export default function Clients() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const { data: clientData, isLoading, isFetching } = useAllClientsQuery({ page, limit });
-  console.log({ clientData, isLoading, isFetching });
 
   return (
     <Box sx={{
@@ -54,8 +53,8 @@ export default function Clients() {
         </Link>
       </Stack>
       {
-        clientData ? <SMDDataTable
-          data={clientData.data}
+        isLoading || clientData ? <SMDDataTable
+          data={clientData?.data}
           columns={[
             { label: 'Client Name', field: (row: TClient) => (row.user.firstName + ' ' + row.user.lastName) },
             { label: 'Email', field: (row: TClient) => row.user.email },
@@ -64,8 +63,8 @@ export default function Clients() {
           ]}
           page={page}
           limit={limit}
-          totalPages={clientData.mete.totalPage}
-          total={clientData.mete.total}
+          totalPages={clientData?.mete?.totalPage}
+          total={clientData?.mete?.total}
           isLoading={isLoading || isFetching}
           onPageChange={setPage}
           onLimitChange={setLimit}
