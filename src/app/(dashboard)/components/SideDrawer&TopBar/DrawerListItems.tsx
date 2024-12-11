@@ -26,7 +26,7 @@ export default function DrawerListItems(): TList[] {
   const [currentStoredUserRole, setCurrentStoredUserRole] = useState<TUserRole | null>(null);
   const storedUser = useAppSelector((state: RootState) => state.auth.user) as TUser;
   useEffect(() => {
-    setCurrentStoredUserRole(storedUser.role);
+    setCurrentStoredUserRole(storedUser?.role);
   }, [storedUser]);
 
   const adminList: TList[] = [

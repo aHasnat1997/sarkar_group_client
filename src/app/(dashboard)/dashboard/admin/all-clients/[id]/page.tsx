@@ -12,7 +12,7 @@ import { TProject } from "@/types";
 import ProjectDialogButtons from "./dialogs";
 import { useSingleClientsQuery } from "@/redux/api/endpoints/clientsApi";
 
-export default function ProjectDetails({ params }: { params: { id: string } }) {
+export default function ClientDetails({ params }: { params: { id: string } }) {
   console.log(params);
   const projectDetails: TProject = {
     "id": "66d76cca450b87d20857dc88",
@@ -166,7 +166,7 @@ export default function ProjectDetails({ params }: { params: { id: string } }) {
       }
     ]
   };
-  // to-do: use data to show info
+
   const { data, isLoading } = useSingleClientsQuery(params.id);
   console.log({ data, isLoading });
 
