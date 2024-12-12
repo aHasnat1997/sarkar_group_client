@@ -1,13 +1,27 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
+import { useRequisitionStatusUpdateMutation } from "@/redux/api/endpoints/requisitionsApi";
 
-export default function AcceptDialog({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
+export default function AcceptDialog(
+  { setOpen, requisitionId }:
+    { setOpen: Dispatch<SetStateAction<boolean>>, requisitionId: string }
+) {
   const [localOpen, setLocalOpen] = useState<boolean>(false);
+  const [isAccepted, { isLoading, isSuccess, isError }] = useRequisitionStatusUpdateMutation();
 
-  const buttonClickFn = () => {
-    setLocalOpen(false)
-    setOpen(false)
+  const buttonClickFn = async () => {
+    const statusData = { status: "APPROVED" };
+    try {
+      const { data } = await isAccepted({ requisitionId, data: statusData })
+      if (data.success) {
+        console.log(data);
+        setLocalOpen(false)
+        setOpen(false)
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return <>
@@ -29,8 +43,14 @@ export default function AcceptDialog({ setOpen }: { setOpen: Dispatch<SetStateAc
       <Button
         fullWidth
         onClick={buttonClickFn}
+        disabled={isLoading || isSuccess}
       >
-        Send
+        {
+          isLoading ? 'Loading...' :
+            isSuccess ? 'Successfully Accepted' :
+              isError ? 'Something Wrong, try again.' :
+                'Send'
+        }
       </Button>
     </ResponsiveDialog>
   </>

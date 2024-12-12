@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type TPayment = {
+export type TRequisition = {
   id: string;
   projectId: string;
   requestEmployeeId: string;
