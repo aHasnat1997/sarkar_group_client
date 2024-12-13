@@ -15,7 +15,6 @@ export default function AcceptDialog(
     try {
       const { data } = await isAccepted({ requisitionId, data: statusData })
       if (data.success) {
-        console.log(data);
         setLocalOpen(false)
         setOpen(false)
       }

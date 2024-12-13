@@ -19,7 +19,6 @@ export default function DeclineDialog(
     try {
       const { data } = await isDecline({ paymentId, data: statusData })
       if (data.success) {
-        console.log(data);
         setLocalOpen(false)
         setOpen(false)
       }

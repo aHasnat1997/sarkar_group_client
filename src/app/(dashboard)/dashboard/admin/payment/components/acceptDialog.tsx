@@ -15,7 +15,6 @@ export default function AcceptDialog(
     try {
       const { data } = await isAccepted({ paymentId, data: statusData })
       if (data.success) {
-        console.log(data);
         setLocalOpen(false)
         setOpen(false)
       }

@@ -19,7 +19,6 @@ export default function DeclineDialog(
     try {
       const { data } = await isDecline({ requisitionId, data: statusData })
       if (data.success) {
-        console.log(data);
         setLocalOpen(false)
         setOpen(false)
       }

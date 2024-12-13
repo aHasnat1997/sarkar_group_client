@@ -29,7 +29,7 @@ export default function ViewDialogs(
           } />
         </Stack>
         <DataViewField
-          title="Payment Description"
+          title="Requisition Description"
           data={data?.description}
         />
         <Stack gap='1rem'>

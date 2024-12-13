@@ -3,5 +3,7 @@ export * from './project.type';
 export * from './payment.type';
 export * from './requisition.type';
 export * from './product.type';
+export * from './media.type';
 export * from './user.type';
 export * from './client.type';
+export * from './application.type';
