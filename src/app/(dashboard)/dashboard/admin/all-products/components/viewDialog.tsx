@@ -2,7 +2,7 @@ import { Button, Stack } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
-import { TProduct } from "@/types";
+import TProduct from "@/types/product.type";
 
 export default function ViewDialogs(
   { open, setOpen, data }:
@@ -43,7 +43,7 @@ export default function ViewDialogs(
         </Stack>
         <Stack>
           <DataViewField title="Dimension" data={data?.dimensions} />
-          <DataViewField title="Total Number Of Crew" data='9' />
+          <DataViewField title="Total Number Of Crew" data={data?.crews.length} />
         </Stack>
         <Stack>
           <DataViewField title="Manufacturing Year" data={data?.manufacturingYear} />
