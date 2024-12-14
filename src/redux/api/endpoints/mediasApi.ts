@@ -12,7 +12,7 @@ const mediasApi = baseApi.injectEndpoints({
     }),
 
     singleMedias: build.query({
-      query: (id) => ({
+      query: (id: string) => ({
         method: 'GET',
         url: `/medias/${id}`,
       }),
@@ -47,7 +47,7 @@ const mediasApi = baseApi.injectEndpoints({
     }),
 
     mediaDelete: build.mutation({
-      query: (mediaId) => ({
+      query: (mediaId: string) => ({
         method: 'DELETE',
         url: `/medias/${mediaId}`
       }),
@@ -55,9 +55,9 @@ const mediasApi = baseApi.injectEndpoints({
     }),
 
     mediaCommentDelete: build.mutation({
-      query: (mediaId) => ({
+      query: (commentId: string) => ({
         method: 'DELETE',
-        url: `/medias/${mediaId}/comment`
+        url: `/medias/${commentId}/comment`
       }),
       invalidatesTags: ['medias']
     }),

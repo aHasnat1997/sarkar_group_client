@@ -44,6 +44,7 @@ export default function DeclineDialog(
     >
       <Stack direction='column' gap='1rem'>
         <TextField
+          multiline
           rows={6}
           onChange={(e) => setDeclineReason(e.target.value)}
         />

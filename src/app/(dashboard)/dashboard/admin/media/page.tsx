@@ -15,8 +15,8 @@ export default function MediaPage() {
   const [open, setOpen] = useState<boolean>(false);
   const [singleData, setSingleData] = useState<TMedia | null>(null);
   const [page, setPage] = useState(1);
-  const { data: mediaData, isLoading, isFetching } = useAllMediasQuery({ page });
-  console.log({ mediaData, isLoading, isFetching });
+  const limit = 13;
+  const { data: mediaData, isLoading, isFetching } = useAllMediasQuery({ page, limit });
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -85,7 +85,7 @@ export default function MediaPage() {
           >
             <LazyMediaCardTwo />
           </Grid2>) :
-            mediaData ? mediaData?.data.map((data: TMedia) => <Grid2
+            mediaData ? mediaData?.data.slice(3, mediaData?.data?.length).map((data: TMedia) => <Grid2
               size={6}
               key={data.id}
               onClick={() => {
@@ -108,6 +108,6 @@ export default function MediaPage() {
         />
       </Stack>
     </Box>
-    {open && <ViewDialog open={open} setOpen={setOpen} payload={singleData} />}
+    {open && <ViewDialog open={open} setOpen={setOpen} mediaId={singleData?.id} />}
   </>
 };

@@ -5,7 +5,7 @@ type TCommenter = {
   profileImage: string | null;
 };
 
-type TMediaComment = {
+export type TMediaComment = {
   id: string;
   mediaId: string;
   commenterId: string;
