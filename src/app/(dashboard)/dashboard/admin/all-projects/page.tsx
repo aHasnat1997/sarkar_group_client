@@ -1,8 +1,9 @@
 'use client';
 
-import { Box, Button, Pagination, Stack } from "@mui/material";
+import { Box, Button, Pagination, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import SearchIcon from '@mui/icons-material/Search';
+import UpcomingIcon from '@mui/icons-material/Upcoming';
 import EditIcon from "@/assets/icons/edit.svg";
 import ProjectCard from "../../../components/ui/ProjectCard";
 import { dateFormate } from "@/utils/dateFormate";
@@ -58,39 +59,45 @@ export default function AllProjects() {
       </Stack>
       <Stack flexWrap='wrap' gap='1rem'>
         {
-          isLoading || isFetching ? Array.from({ length: limit || 10 }).map((_, i) => <Box key={i} width='49%'>
-            <ProjectCard
-              cardTitle=''
-              cardSubTitle=''
-              detailsInfoPath=''
-              clientFullName=''
-              clientImage=''
-              projectManagerFullName=''
-              projectManagerImage=''
-              startDate=''
-              endDate=''
-              status=''
-              isLoading={isLoading || isFetching}
-            />
-          </Box>) :
-            projectData ? projectData.data.map((data: TProject, i: number) => <Box
-              key={i}
-              width='49%'
-            >
+          projectData?.data.length === 0 ? <Stack width='100%' height='50vh' alignItems='center' justifyContent='center' fontSize='5rem'>
+            <Box width='5rem'>
+              <UpcomingIcon fontSize='inherit' />
+              <Typography fontSize='1rem' textAlign='center'>No Data</Typography>
+            </Box>
+          </Stack> :
+            isLoading || isFetching ? Array.from({ length: limit || 10 }).map((_, i) => <Box key={i} width='49%'>
               <ProjectCard
-                cardTitle={data.projectName}
-                cardSubTitle='4 Members'
-                detailsInfoPath={`/dashboard/admin/all-projects/${data.id}`}
-                clientFullName={`${data.client.user.firstName} ${data.client.user.lastName}`}
-                clientImage={`${data.client.user.profileImage}`}
-                projectManagerFullName={`${data.projectManager.user.firstName} ${data.projectManager.user.lastName}`}
-                projectManagerImage={`${data.projectManager.user.profileImage}`}
-                startDate={`${dateFormate(data.startDate)}`}
-                endDate={`${dateFormate(data.estimatedEndDate)}`}
-                status={`${data.status}`}
+                cardTitle=''
+                cardSubTitle=''
+                detailsInfoPath=''
+                clientFullName=''
+                clientImage=''
+                projectManagerFullName=''
+                projectManagerImage=''
+                startDate=''
+                endDate=''
+                status=''
+                isLoading={isLoading || isFetching}
               />
             </Box>) :
-              <></>
+              projectData ? projectData.data.map((data: TProject, i: number) => <Box
+                key={i}
+                width='49%'
+              >
+                <ProjectCard
+                  cardTitle={data.projectName}
+                  cardSubTitle='4 Members'
+                  detailsInfoPath={`/dashboard/admin/all-projects/${data.id}`}
+                  clientFullName={`${data.client.user.firstName} ${data.client.user.lastName}`}
+                  clientImage={`${data.client.user.profileImage}`}
+                  projectManagerFullName={`${data.projectManager.user.firstName} ${data.projectManager.user.lastName}`}
+                  projectManagerImage={`${data.projectManager.user.profileImage}`}
+                  startDate={`${dateFormate(data.startDate)}`}
+                  endDate={`${dateFormate(data.estimatedEndDate)}`}
+                  status={`${data.status}`}
+                />
+              </Box>) :
+                <></>
         }
       </Stack>
       <Stack alignItems='center' justifyContent='center' mt='2rem'>

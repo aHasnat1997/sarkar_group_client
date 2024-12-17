@@ -1,6 +1,7 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Typography, Badge, TablePagination, Skeleton } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Typography, Badge, TablePagination, Skeleton, Stack, Box } from '@mui/material';
 import { styled } from '@mui/system';
+import UpcomingIcon from '@mui/icons-material/Upcoming';
 
 type SortOrder = 'asc' | 'desc';
 
@@ -123,6 +124,43 @@ export default function SMDDataTable<T>({
             /> :
             <></>
         }
+      </TableContainer>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {columns.map((col, index) => (
+                <TableCell key={index}>
+                  {col.isSortable ? (
+                    <TableSortLabel
+                      active={sortBy === col.field}
+                      direction={sortBy === col.field ? sortOrder : 'asc'}
+                      onClick={() => handleSort(col.field as keyof T)}
+                    >
+                      <Typography variant="subtitle1" color='text.secondary'>{col.label}</Typography>
+                    </TableSortLabel>
+                  ) : (
+                    <Typography variant="subtitle1" color='text.secondary'>{col.label}</Typography>
+                  )}
+                </TableCell>
+              ))}
+              {actions && <TableCell>
+                <Typography variant="subtitle1" color='text.secondary'>Action</Typography>
+              </TableCell>}
+            </TableRow>
+          </TableHead>
+        </Table>
+        <Stack width='100%' height='50vh' alignItems='center' justifyContent='center' fontSize='5rem'>
+          <Box width='5rem'>
+            <UpcomingIcon fontSize='inherit' />
+            <Typography fontSize='1rem' textAlign='center'>No Data</Typography>
+          </Box>
+        </Stack>
       </TableContainer>
     );
   }
