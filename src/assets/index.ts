@@ -7,7 +7,8 @@ const assets = {
   images: {
     profile: require('./images/super-admin-profile.png'),
     brokenImage: require('./images/broken-image.png'),
-    userPlaceholderImage: require('./images/user-placeholder.jpg')
+    userPlaceholderImage: require('./images/user-placeholder.jpg'),
+    error: require('./images/error.png')
   }
 };
 

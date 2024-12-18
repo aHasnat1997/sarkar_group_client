@@ -1,15 +1,15 @@
 'use client';
 
-import { Box, Button, Pagination, Stack, Typography } from "@mui/material";
+import { Box, Button, Pagination, Stack } from "@mui/material";
 import Link from "next/link";
 import SearchIcon from '@mui/icons-material/Search';
-import UpcomingIcon from '@mui/icons-material/Upcoming';
 import EditIcon from "@/assets/icons/edit.svg";
 import ProjectCard from "../../../components/ui/ProjectCard";
 import { dateFormate } from "@/utils/dateFormate";
 import { useAllProjectsQuery } from "@/redux/api/endpoints/projectsApi";
 import { TProject } from "@/types";
 import { useState } from "react";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
 export default function AllProjects() {
   const limit = 6;
@@ -59,12 +59,7 @@ export default function AllProjects() {
       </Stack>
       <Stack flexWrap='wrap' gap='1rem'>
         {
-          projectData?.data.length === 0 ? <Stack width='100%' height='50vh' alignItems='center' justifyContent='center' fontSize='5rem'>
-            <Box width='5rem'>
-              <UpcomingIcon fontSize='inherit' />
-              <Typography fontSize='1rem' textAlign='center'>No Data</Typography>
-            </Box>
-          </Stack> :
+          !projectData || projectData?.data.length === 0 ? <DataNotFound /> :
             isLoading || isFetching ? Array.from({ length: limit || 10 }).map((_, i) => <Box key={i} width='49%'>
               <ProjectCard
                 cardTitle=''

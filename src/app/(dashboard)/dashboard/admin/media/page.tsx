@@ -2,15 +2,15 @@
 'use client';
 
 import { useState } from "react";
-import { Box, Grid2, Pagination, Stack, Typography } from "@mui/material";
+import { Box, Grid2, Pagination, Stack } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import UpcomingIcon from '@mui/icons-material/Upcoming';
 import ViewDialog from "./components/viewDialog";
 import MediaCardOne, { LazyMediaCardOne } from "./components/mediaCardOne";
 import FormDialog from "./components/formDialog";
 import { useAllMediasQuery } from "@/redux/api/endpoints/mediasApi";
 import { TMedia } from "@/types";
 import MediaCardTwo, { LazyMediaCardTwo } from "./components/mediaCardTwo";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
 export default function MediaPage() {
   const [open, setOpen] = useState<boolean>(false);
@@ -58,12 +58,7 @@ export default function MediaPage() {
         gap='1.5rem'
       >
         {
-          mediaData?.data.length === 0 ? <Stack width='100%' height='50vh' alignItems='center' justifyContent='center' fontSize='5rem'>
-            <Box width='5rem'>
-              <UpcomingIcon fontSize='inherit' />
-              <Typography fontSize='1rem' textAlign='center'>No Data</Typography>
-            </Box>
-          </Stack> :
+          mediaData?.data.length === 0 ? <DataNotFound /> :
             isLoading || isFetching ? Array.from({ length: 3 }).map((_, i) => <Box
               key={i}
               width='100%'

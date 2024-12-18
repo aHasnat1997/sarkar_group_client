@@ -12,11 +12,14 @@ import EditIcon from "@/assets/icons/edit.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
 import { useAllEmployeesQuery } from "@/redux/api/endpoints/employeesApi";
 import { TEmployeeData } from "@/types";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
+// import Image from "next/image";
+// import assets from "@/assets";
 
 export default function AllEmployees() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data: employeesData, isLoading, isFetching } = useAllEmployeesQuery({ page, limit });
+  const { data: employeesData, isLoading, isFetching, isError } = useAllEmployeesQuery({ page, limit });
 
   return (
     <Box sx={{
@@ -60,41 +63,45 @@ export default function AllEmployees() {
           </Button>
         </Stack>
       </Stack>
-      {
-        isLoading || employeesData ? <SMDDataTable
-          data={employeesData?.data}
-          columns={[
-            { label: 'Employee ID', field: (row: TEmployeeData) => row?.employeeInfo?.employeeId },
-            { label: "Name", field: (row: TEmployeeData) => (row.firstName + ' ' + row.lastName), isSortable: true },
-            { label: 'Email', field: (row: TEmployeeData) => row.email, isSortable: true },
-            { label: "Department", field: (row: TEmployeeData) => row.employeeInfo.department },
-            { label: "Employee Type", field: (row: TEmployeeData) => row.employeeInfo.employeeType }
-          ]}
-          page={page}
-          limit={limit}
-          totalPages={employeesData?.mete.totalPage}
-          total={employeesData?.mete.total}
-          isLoading={isLoading || isFetching}
-          onPageChange={setPage}
-          onLimitChange={setLimit}
-          actions={(row) => (
-            <Stack gap='.2rem'>
-              <Link href={`/dashboard/admin/all-employees/${row.id}`}>
+
+      <Box>
+        {
+          isLoading || employeesData ? <SMDDataTable
+            data={employeesData?.data}
+            columns={[
+              { label: 'Employee ID', field: (row: TEmployeeData) => row?.employeeInfo?.employeeId },
+              { label: "Name", field: (row: TEmployeeData) => (row.firstName + ' ' + row.lastName), isSortable: true },
+              { label: 'Email', field: (row: TEmployeeData) => row.email, isSortable: true },
+              { label: "Department", field: (row: TEmployeeData) => row.employeeInfo.department },
+              { label: "Employee Type", field: (row: TEmployeeData) => row.employeeInfo.employeeType }
+            ]}
+            page={page}
+            limit={limit}
+            totalPages={employeesData?.mete.totalPage}
+            total={employeesData?.mete.total}
+            isLoading={isLoading || isFetching}
+            onPageChange={setPage}
+            onLimitChange={setLimit}
+            actions={(row) => (
+              <Stack gap='.2rem'>
+                <Link href={`/dashboard/admin/all-employees/${row.id}`}>
+                  <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                    <ViewIcon />
+                  </IconButton>
+                </Link>
                 <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                  <ViewIcon />
+                  <EditIcon />
                 </IconButton>
-              </Link>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <EditIcon />
-              </IconButton>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <TrashIcon />
-              </IconButton>
-            </Stack>
-          )}
-        /> :
-          <Box></Box>
-      }
+                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                  <TrashIcon />
+                </IconButton>
+              </Stack>
+            )}
+          /> :
+            isError ? <DataNotFound /> :
+              <></>
+        }
+      </Box>
     </Box>
   );
 };
