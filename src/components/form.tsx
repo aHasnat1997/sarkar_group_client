@@ -5,9 +5,22 @@ import {
   FieldPath,
   FieldValues,
   FormProvider,
-  useFormContext,
+  useFormContext
 } from "react-hook-form";
-import { Box, TextField, Typography, FormControl, InputAdornment, OutlinedInput, IconButton, InputLabel } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Typography,
+  FormControl,
+  InputAdornment,
+  OutlinedInput,
+  IconButton,
+  Select,
+  InputLabel,
+  SelectProps
+} from "@mui/material";
+import { DatePicker, DatePickerProps, TimePicker, TimePickerProps, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 /**
@@ -43,10 +56,16 @@ const FormField = <
   name,
   control,
   render,
+  ...props
 }: ControllerProps<TFieldValues, TName>) => {
   return (
     <FormFieldContext.Provider value={{ name }}>
-      <Controller name={name} control={control} render={render} />
+      <Controller
+        name={name}
+        control={control}
+        render={render}
+        {...props}
+      />
     </FormFieldContext.Provider>
   );
 };
@@ -221,13 +240,86 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = "FormMessage";
 
+/**
+ * Component for a controlled MUI Select input.
+ * @param {React.ComponentPropsWithoutRef<typeof Select>} props - Props for the Select component.
+ * @returns {JSX.Element} The Select component.
+ */
+const FormSelect = React.forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
+  const { name, error } = useFormField();
+
+  return (
+    <FormControl fullWidth error={!!error}>
+      <InputLabel id={`${name}-label`}>{props.label}</InputLabel>
+      <Select ref={ref} labelId={`${name}-label`} id={name} {...props}>
+        {props.children}
+      </Select>
+    </FormControl>
+  );
+});
+FormSelect.displayName = "FormSelect";
+
+/**
+ * Component for a controlled MUI Date Picker.
+ * @param {React.ComponentPropsWithoutRef<typeof DatePicker>} props - Props for the DatePicker component.
+ * @returns {JSX.Element} The Date Picker component.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const FormDatePicker = React.forwardRef<HTMLDivElement, DatePickerProps<any>>(
+  (props, ref) => {
+    const { name, error } = useFormField();
+
+    return (
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          ref={ref}
+          {...props}
+          slotProps={{
+            textField: { id: name, error: !!error, helperText: error?.message },
+          }}
+        />
+      </LocalizationProvider>
+    );
+  }
+);
+FormDatePicker.displayName = "FormDatePicker";
+
+/**
+ * Component for a controlled MUI Time Picker.
+ * @param {React.ComponentPropsWithoutRef<typeof TimePicker>} props - Props for the TimePicker component.
+ * @returns {JSX.Element} The Time Picker component.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const FormTimePicker = React.forwardRef<HTMLDivElement, TimePickerProps<any>>(
+  (props, ref) => {
+    const { name, error } = useFormField();
+
+    return (
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <TimePicker
+          ref={ref}
+          {...props}
+          slotProps={{
+            textField: { id: name, error: !!error, helperText: error?.message },
+          }}
+        />
+      </LocalizationProvider>
+    );
+  }
+);
+FormTimePicker.displayName = "FormTimePicker";
+
 export {
   useFormField,
   FormProvider as Form,
+  FormField,
   FormItem,
   FormLabel,
   FormInputPassword,
   FormInput,
   FormMessage,
-  FormField,
+  FormSelect,
+  FormDatePicker,
+  FormTimePicker
 };
+

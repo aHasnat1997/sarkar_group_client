@@ -1,28 +1,27 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
+import cloudinary from 'cloudinary';
 
-export async function POST(req: Request) {
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData();
-    const img = formData.get("file");
-    if (!img) {
-      return NextResponse.json({ success: false, message: "no image found" });
+    const { file } = await req.json();
+
+    if (!file) {
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    const uploadResponse = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    const uploadedImageData = await uploadResponse.json();
-    return NextResponse.json({
-      uploadedImageData,
-      message: "Success",
-      status: 200,
+    const uploadResponse = await cloudinary.v2.uploader.upload(file, {
+      resource_type: 'auto'
     });
+
+    return NextResponse.json(uploadResponse, { status: 200 });
   } catch (error) {
-    console.log(error);
-    return NextResponse.json({ message: "Error", status: 500 });
+    console.error('Error uploading to Cloudinary:', error);
+    return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
   }
 };

@@ -7,3 +7,4 @@ export * from './media.type';
 export * from './user.type';
 export * from './client.type';
 export * from './application.type';
+export * from './uploadedFile.type';

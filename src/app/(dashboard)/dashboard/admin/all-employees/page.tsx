@@ -13,8 +13,7 @@ import TrashIcon from "@/assets/icons/trash.svg";
 import { useAllEmployeesQuery } from "@/redux/api/endpoints/employeesApi";
 import { TEmployeeData } from "@/types";
 import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
-// import Image from "next/image";
-// import assets from "@/assets";
+import MenuButton from "@/components/menuButton";
 
 export default function AllEmployees() {
   const [page, setPage] = useState(1);
@@ -49,13 +48,18 @@ export default function AllEmployees() {
           />
         </Stack>
         <Stack gap='.5rem'>
-          <Link href='/dashboard/admin/all-employees/add-new-employee'>
-            <Button>
+          <MenuButton
+            buttonTitle={
               <Stack gap='.5rem' alignItems='center'>
                 <AddIcon /> Add New Employee
               </Stack>
-            </Button>
-          </Link>
+            }
+            menuList={[
+              { list: <Link href={`/dashboard/admin/all-employees/add-new-employee/admin`}>Admin</Link> },
+              { list: <Link href='/dashboard/admin/all-employees/add-new-employee/project-manager'>Project Manager</Link> },
+              { list: <Link href='/dashboard/admin/all-employees/add-new-employee/engineer'>Engineer</Link> }
+            ]}
+          />
           <Button variant="outlined">
             <Stack gap='.5rem' alignItems='center'>
               <FilterIcon /> Filter

@@ -1,13 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { FormField, FormInput, FormItem } from "@/components/form";
-import { Box, Stack, styled } from "@mui/material";
+import { FormDatePicker, FormField, FormInput, FormItem, FormSelect } from "@/components/form";
+import { Box, MenuItem, Stack, styled } from "@mui/material";
 import { CameraAltOutlined } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
+import { imageRemove, imageUpload } from "@/utils/imageFn";
+import { TUploadedFile } from "@/types";
+import assets from "@/assets";
 
 export default function TabOne(
-  { methods, image, setImage }: { methods: any, image: File | null, setImage: Dispatch<SetStateAction<File | null>> }
+  { methods, image, setImage }:
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { methods: any, image: Partial<TUploadedFile> | null, setImage: Dispatch<SetStateAction<Partial<TUploadedFile> | null>> }
 ) {
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -21,15 +25,21 @@ export default function TabOne(
     width: 1,
   });
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
     if (fileList && fileList.length > 0) {
-      setImage(fileList[0]);
+      const uploadedImage = await imageUpload(fileList[0]);
+      console.log({ uploadedImage });
+      setImage(uploadedImage);
     }
   };
 
-  const handleImageRemove = () => {
-    setImage(null);
+  const handleImageRemove = async () => {
+    if (image && image.public_id) {
+      const deletedImage = await imageRemove(image.public_id);
+      console.log({ deletedImage });
+      setImage(null);
+    }
   }
 
   return (
@@ -71,7 +81,7 @@ export default function TabOne(
               </div>
               <Image
                 alt="Selected Image"
-                src={URL.createObjectURL(image)} // Pass the single file
+                src={image.secure_url ? image.secure_url : assets.images.brokenImage}
                 width={100}
                 height={100}
                 className="h-[6.3rem] rounded-md"
@@ -141,9 +151,10 @@ export default function TabOne(
             name="dob"
             control={methods.control}
             render={({ field }) => (
-              <FormInput
+              <FormDatePicker
                 {...field}
                 label="Date of Birth"
+                disableFuture
               />
             )}
           />
@@ -153,10 +164,10 @@ export default function TabOne(
             name='maritalStatus'
             control={methods.control}
             render={({ field }) => (
-              <FormInput
-                {...field}
-                label='Marital Status'
-              />
+              <FormSelect {...field} label="Marital Status">
+                <MenuItem value={'MARRIED'}>Married</MenuItem>
+                <MenuItem value={'SINGLE'}>Single</MenuItem>
+              </FormSelect>
             )}
           />
         </FormItem>
@@ -168,10 +179,10 @@ export default function TabOne(
             name="gender"
             control={methods.control}
             render={({ field }) => (
-              <FormInput
-                {...field}
-                label="Gender"
-              />
+              <FormSelect {...field} label="Gender">
+                <MenuItem value={'MALE'}>Male</MenuItem>
+                <MenuItem value={'FEMALE'}>Female</MenuItem>
+              </FormSelect>
             )}
           />
         </FormItem>
@@ -234,7 +245,9 @@ export default function TabOne(
             render={({ field }) => (
               <FormInput
                 {...field}
+                type="number"
                 label='ZIP Code'
+                onChange={(event) => field.onChange(event.target.value ? Number(event.target.value) : '')}
               />
             )}
           />

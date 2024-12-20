@@ -2,29 +2,6 @@ import { IconButton, Stack, Typography } from "@mui/material";
 import UploadIcon from "@/assets/icons/upload.svg";
 
 export default function TabThree() {
-  // const boxData = [
-  //   {
-  //     index: 1,
-  //     label: 'Upload Appointment Letter',
-  //     field: 'appointmentLetter'
-  //   },
-  //   {
-  //     index: 2,
-  //     label: 'Upload Salary Slips',
-  //     field: 'salarySlips'
-  //   },
-  //   {
-  //     index: 3,
-  //     label: 'Upload Reliving Letter',
-  //     field: 'relivingLetter'
-  //   },
-  //   {
-  //     index: 4,
-  //     label: 'Upload Experience Letter',
-  //     field: 'experienceLetter'
-  //   },
-  // ];
-
   const DockUpload = ({ label }: { label: string }) => <Stack
     width='100%'
     direction='column'
@@ -64,14 +41,7 @@ export default function TabThree() {
       direction='column'
       gap='1.25rem'
     >
-      <Stack gap='1.25rem'>
-        <DockUpload label="Upload Appointment Letter" />
-        <DockUpload label="Upload Salary Slips" />
-      </Stack>
-      <Stack gap='1.25rem'>
-        <DockUpload label="Upload Reliving Letter" />
-        <DockUpload label="Upload Experience Letter" />
-      </Stack>
+      <DockUpload label="Upload Dock" />
     </Stack>
   );
 };

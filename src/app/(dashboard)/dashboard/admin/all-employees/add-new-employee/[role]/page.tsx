@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { Box } from "@mui/material";
@@ -7,66 +8,40 @@ import { useState } from "react";
 import UserIcon from '@/assets/icons/user.svg';
 import BriefcaseIcon from "@/assets/icons/briefcase-04.svg";
 import DocumentIcon from '@/assets/icons/document-text.svg';
-import LockIcon from "@/assets/icons/lock.svg";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/form";
-import { useRouter } from "next/navigation";
-import TabOne from "./form/tabOne";
-import TabTwo from "./form/tabTwo";
-import TabThree from "./form/tabThree";
-import TabFour from "./form/tabFour";
-import FormButton from "./form/formButton";
-import { EmployeeFormValues, employeeZodSchema } from "./form/formZodSchema";
+// import { useRouter } from "next/navigation";
+import TabOne from "../form/tabOne";
+import TabTwo from "../form/tabTwo";
+import TabThree from "../form/tabThree";
+import FormButton from "../form/formButton";
+import { EmployeeFormValues, employeeZodSchema } from "../form/formZodSchema";
+import { useCrateAdminMutation, useCrateEngineerMutation, useCrateProjectManagerMutation } from "@/redux/api/endpoints/employeesApi";
+import { TUploadedFile } from "@/types";
 
-export default function AddNewEmployee() {
-  const router = useRouter();
+export default function AddNewEmployee({ params }: { params: { role: string } }) {
+  // const router = useRouter();
   const [value, setValue] = useState(0);
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<Partial<TUploadedFile> | null>(null);
+
+  const [createAdmin] = useCrateAdminMutation();
+  const [createProjectManager] = useCrateProjectManagerMutation();
+  const [createEngineer] = useCrateEngineerMutation();
+
   const tebContent = [
     { index: 0, label: 'Personal Information', icon: <UserIcon /> },
     { index: 1, label: 'Professional Information', icon: <BriefcaseIcon /> },
-    { index: 2, label: 'Documents', icon: <DocumentIcon /> },
-    { index: 3, label: 'Assign Role', icon: <LockIcon /> }
+    { index: 2, label: 'Documents', icon: <DocumentIcon /> }
   ];
 
   const methods = useForm<EmployeeFormValues>({
-    resolver: zodResolver(employeeZodSchema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      mobileNumber: '',
-      email: '',
-      dob: '',
-      maritalStatus: '',
-      gender: '',
-      nationality: '',
-      address: '',
-      city: '',
-      state: '',
-      zip: '',
-      employeeId: '',
-      userName: '',
-      employeeType: '',
-      department: '',
-      designation: '',
-      workingDays: '',
-      joiningDate: '',
-      officeLocation: '',
-      appointmentLetter: '',
-      salarySlips: '',
-      relivingLetter: '',
-      experienceLetter: '',
-      projectName: '',
-      role: '',
-      roleDesignation: '',
-      optionalMessage: ''
-    }
+    resolver: zodResolver(employeeZodSchema)
   });
 
   const formSubmit: SubmitHandler<EmployeeFormValues> = (data) => {
     console.log("Form submitted with:", data);
-    router.push('/dashboard/admin/all-employees');
+    // router.push('/dashboard/admin/all-employees');
   };
 
   return (
@@ -103,8 +78,7 @@ export default function AddNewEmployee() {
             value === 0 ? <TabOne methods image={image} setImage={setImage} /> :
               value === 1 ? <TabTwo methods /> :
                 value === 2 ? <TabThree /> :
-                  value === 3 ? <TabFour methods /> :
-                    <></>
+                  <></>
           }
         </Box>
 

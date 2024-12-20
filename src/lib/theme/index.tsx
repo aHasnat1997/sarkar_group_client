@@ -65,9 +65,9 @@ const theme = createTheme({
     MuiBackdrop: {
       styleOverrides: {
         root: {
-          backdropFilter: 'blur(10px)',
+          backdropFilter: 'blur(15px)',
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        }
+        },
       }
     }
   },
