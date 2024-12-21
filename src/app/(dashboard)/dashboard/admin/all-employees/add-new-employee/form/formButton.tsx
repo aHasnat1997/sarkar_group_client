@@ -6,9 +6,12 @@ import Link from "next/link";
 type FormButtonType = {
   value: number,
   setValue: Dispatch<SetStateAction<number>>,
-  tebCount: number
+  tebCount: number,
+  isLoading?: boolean,
+  isSuccess?: boolean,
+  isError?: boolean
 }
-export default function FormButton({ value, setValue, tebCount }: FormButtonType) {
+export default function FormButton({ value, setValue, tebCount, isLoading, isSuccess, isError }: FormButtonType) {
   const handleNext = () => {
     if (value < tebCount) {
       setValue(value + 1);
@@ -51,9 +54,10 @@ export default function FormButton({ value, setValue, tebCount }: FormButtonType
         <Button
           variant="contained"
           type="submit"
+          disabled={isLoading || isSuccess}
           sx={{ display: `${value < tebCount ? 'none' : 'block'}` }}
         >
-          Submit
+          {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Submit'}
         </Button>
       </Stack>
     </>

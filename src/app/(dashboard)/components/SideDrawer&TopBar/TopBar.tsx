@@ -118,10 +118,10 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
                 color='text.primary'
               >
                 {
-                  currentStoredUser && currentStoredUser.data.profileImage ?
+                  currentStoredUser && currentStoredUser.data.profileImage.secure_url ?
                     <Image
                       alt="profile-image"
-                      src={currentStoredUser.data.profileImage}
+                      src={currentStoredUser.data.profileImage.secure_url}
                       height={500}
                       width={500}
                       className="size-8 rounded-md"

@@ -67,7 +67,7 @@ export default function SMDDataTable<T>({
                     <TableCell key={colIndex}>
                       <Skeleton
                         height='2.5rem'
-                        variant="rectangular"
+                        variant="rounded"
                         animation="wave"
                         sx={{ bgcolor: 'grey.400' }}
                       />
@@ -77,7 +77,7 @@ export default function SMDDataTable<T>({
                     <TableCell>
                       <Skeleton
                         height='2.5rem'
-                        variant="rectangular"
+                        variant="rounded"
                         animation="wave"
                         sx={{ bgcolor: 'grey.400' }}
                       />

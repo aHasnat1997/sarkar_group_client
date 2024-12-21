@@ -1,18 +1,20 @@
 import { FormDatePicker, FormField, FormInput, FormItem, FormSelect } from "@/components/form";
-import { Box, MenuItem, Stack, styled } from "@mui/material";
+import { Box, MenuItem, Skeleton, Stack, styled } from "@mui/material";
 import { CameraAltOutlined } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
-import { imageRemove, imageUpload } from "@/utils/imageFn";
+import { Dispatch, SetStateAction, useState } from "react";
 import { TUploadedFile } from "@/types";
 import assets from "@/assets";
+import { cloudinaryRemove, cloudinaryUpload } from "@/utils/cloudinaryFn";
 
 export default function TabOne(
   { methods, image, setImage }:
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     { methods: any, image: Partial<TUploadedFile> | null, setImage: Dispatch<SetStateAction<Partial<TUploadedFile> | null>> }
 ) {
+  const [isUploadLoading, setIsUploadLoading] = useState<boolean>(false);
+
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -28,18 +30,20 @@ export default function TabOne(
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
     if (fileList && fileList.length > 0) {
-      const uploadedImage = await imageUpload(fileList[0]);
-      console.log({ uploadedImage });
+      setIsUploadLoading(true);
+      const uploadedImage = await cloudinaryUpload(fileList[0]);
       setImage(uploadedImage);
+      setIsUploadLoading(false);
     }
   };
 
   const handleImageRemove = async () => {
+    setIsUploadLoading(true);
     if (image && image.public_id) {
-      const deletedImage = await imageRemove(image.public_id);
-      console.log({ deletedImage });
+      await cloudinaryRemove(image.public_id, 'image');
       setImage(null);
     }
+    setIsUploadLoading(false);
   }
 
   return (
@@ -69,25 +73,40 @@ export default function TabOne(
           </Stack>
         </Box>
         <Box>
-          {image && (
-            <Box
-              position='relative'
-            >
-              <div
-                className="absolute right-1 top-1 bg-slate-300 p-1 rounded-full"
-                onClick={handleImageRemove}
+          {isUploadLoading ? <Stack
+            width='100%'
+            height='6.3rem'
+            alignItems='center'
+            justifyContent='center'
+          >
+            <Skeleton
+              width='6.3rem'
+              height='6.3rem'
+              variant="rounded"
+              animation="wave"
+              sx={{ bgcolor: 'grey.400' }}
+            />
+          </Stack> :
+            image ? (
+              <Box
+                position='relative'
               >
-                <CloseIcon />
-              </div>
-              <Image
-                alt="Selected Image"
-                src={image.secure_url ? image.secure_url : assets.images.brokenImage}
-                width={100}
-                height={100}
-                className="h-[6.3rem] rounded-md"
-              />
-            </Box>
-          )}
+                <div
+                  className="absolute right-1 top-1 bg-slate-300 p-1 rounded-full"
+                  onClick={handleImageRemove}
+                >
+                  <CloseIcon />
+                </div>
+                <Image
+                  alt="Selected Image"
+                  src={image.secure_url ? image.secure_url : assets.images.brokenImage}
+                  width={100}
+                  height={100}
+                  className="h-[6.3rem] rounded-md"
+                />
+              </Box>) :
+              <></>
+          }
         </Box>
       </Stack>
 
@@ -121,7 +140,7 @@ export default function TabOne(
       <Stack gap='1.25rem'>
         <FormItem style={{ width: "100%" }}>
           <FormField
-            name="mobileNumber"
+            name='mobile'
             control={methods.control}
             render={({ field }) => (
               <FormInput
@@ -202,12 +221,12 @@ export default function TabOne(
 
       <FormItem style={{ width: "100%" }}>
         <FormField
-          name="address"
+          name="street"
           control={methods.control}
           render={({ field }) => (
             <FormInput
               {...field}
-              label="Address"
+              label="Street"
             />
           )}
         />

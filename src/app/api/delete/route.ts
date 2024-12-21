@@ -9,14 +9,14 @@ cloudinary.v2.config({
 
 export async function DELETE(req: NextRequest) {
   try {
-    const { public_id } = await req.json();
+    const { publicId, resourceType } = await req.json();
 
-    if (!public_id) {
-      return NextResponse.json({ error: 'No public ID provided' }, { status: 400 });
+    if (!publicId || !resourceType) {
+      return NextResponse.json({ error: 'No public ID or resource type provided' }, { status: 400 });
     }
 
-    const deleteResponse = await cloudinary.v2.uploader.destroy(public_id, {
-      resource_type: 'auto',
+    const deleteResponse = await cloudinary.v2.uploader.destroy(publicId, {
+      resource_type: resourceType,
     });
 
     if (deleteResponse.result !== 'ok') {

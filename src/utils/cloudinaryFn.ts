@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const imageUpload = async (file: File) => {
+export const cloudinaryUpload = async (file: File) => {
   if (!file) return;
 
   const toBase64 = (file: File) => new Promise((resolve, reject) => {
@@ -40,15 +40,14 @@ export const imageUpload = async (file: File) => {
   }
 };
 
-// to-do: fix remove an image from Cloudinary
-export const imageRemove = async (public_id: string) => {
-  if (!public_id) return;
+export const cloudinaryRemove = async (publicId: string, resourceType: string) => {
+  if (!publicId || !resourceType) return;
 
   try {
     const response = await fetch('/api/delete', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ public_id }),
+      body: JSON.stringify({ publicId, resourceType }),
     });
 
     const textResponse = await response.text();
