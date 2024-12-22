@@ -1,5 +1,6 @@
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
 import { TEmployeeData } from "@/types";
+import capitalizeLetter from "@/utils/capitalizeLetter";
 import { dateFormate } from "@/utils/dateFormate";
 import { Box, Stack } from "@mui/material";
 
@@ -15,15 +16,15 @@ export default function TabTwo({ payload }: { payload: TEmployeeData }) {
     },
     {
       title: 'Employee Type',
-      data: payload.employeeInfo.employeeType
+      data: capitalizeLetter(payload.employeeInfo.employeeType.split('_').join(' '))
     },
     {
       title: 'Department',
-      data: payload.employeeInfo.department
+      data: capitalizeLetter(payload.employeeInfo.department.split('_').join(' '))
     },
     {
       title: 'Designation',
-      data: payload.employeeInfo.designation
+      data: capitalizeLetter(payload.employeeInfo.designation.split('_').join(' '))
     },
     {
       title: 'Working Month',

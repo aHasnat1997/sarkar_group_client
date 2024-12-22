@@ -1,32 +1,20 @@
-import { Box, Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material";
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material";
 import React from "react";
 import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
 import DrawerListItems from "./DrawerListItems";
-import { usePathname, useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/hooks";
-import { useUserLogoutMutation } from "@/redux/api/endpoints/authApi";
-import { removeUserInfo } from "@/redux/slices/authSlice";
+import { usePathname } from "next/navigation";
+
 
 function DrawerList() {
-  const router = useRouter();
   const pathname = usePathname();
   const drawerLists = DrawerListItems();
-  const dispatch = useAppDispatch();
-  const [userLogout] = useUserLogoutMutation();
 
   const isActive = (path: string, hasChild: boolean) => {
     if (hasChild && pathname.startsWith(path)) return true;
     if (!hasChild && pathname === path) return true;
   }
-
-  async function handelLogout() {
-    dispatch(removeUserInfo())
-    await userLogout('');
-    router.refresh();
-    router.push('/');
-  };
 
   return (
     <Box sx={{
@@ -92,15 +80,6 @@ function DrawerList() {
             ))}
           </List>
         </Box>
-
-        <Button
-          fullWidth
-          variant="outlined"
-          color="warning"
-          onClick={handelLogout}
-        >
-          Logout
-        </Button>
       </Stack>
     </Box>
   );

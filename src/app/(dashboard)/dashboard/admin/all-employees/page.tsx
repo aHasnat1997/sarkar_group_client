@@ -14,6 +14,7 @@ import { useAllEmployeesQuery } from "@/redux/api/endpoints/employeesApi";
 import { TEmployeeData } from "@/types";
 import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 import MenuButton from "@/components/menuButton";
+import capitalizeLetter from "@/utils/capitalizeLetter";
 
 export default function AllEmployees() {
   const [page, setPage] = useState(1);
@@ -50,14 +51,37 @@ export default function AllEmployees() {
         <Stack gap='.5rem'>
           <MenuButton
             buttonTitle={
-              <Stack gap='.5rem' alignItems='center'>
-                <AddIcon /> Add New Employee
-              </Stack>
+              <Button>
+                <Stack gap='.5rem' alignItems='center'>
+                  <AddIcon /> Add New Employee
+                </Stack>
+              </Button>
             }
             menuList={[
-              { list: <Link href={`/dashboard/admin/all-employees/add-new-employee/admin`}>Admin</Link> },
-              { list: <Link href='/dashboard/admin/all-employees/add-new-employee/project-manager'>Project Manager</Link> },
-              { list: <Link href='/dashboard/admin/all-employees/add-new-employee/engineer'>Engineer</Link> }
+              {
+                list: <Link
+                  className="w-full"
+                  href={`/dashboard/admin/all-employees/add-new-employee/admin`}
+                >
+                  Admin
+                </Link>
+              },
+              {
+                list: <Link
+                  className="w-full"
+                  href='/dashboard/admin/all-employees/add-new-employee/project-manager'
+                >
+                  Project Manager
+                </Link>
+              },
+              {
+                list: <Link
+                  className="w-full"
+                  href='/dashboard/admin/all-employees/add-new-employee/engineer'
+                >
+                  Engineer
+                </Link>
+              }
             ]}
           />
           <Button variant="outlined">
@@ -73,11 +97,28 @@ export default function AllEmployees() {
           isLoading || employeesData ? <SMDDataTable
             data={employeesData?.data}
             columns={[
-              { label: 'Employee ID', field: (row: TEmployeeData) => row?.employeeInfo?.employeeId },
-              { label: "Name", field: (row: TEmployeeData) => (row.firstName + ' ' + row.lastName), isSortable: true },
-              { label: 'Email', field: (row: TEmployeeData) => row.email, isSortable: true },
-              { label: "Department", field: (row: TEmployeeData) => row.employeeInfo.department },
-              { label: "Employee Type", field: (row: TEmployeeData) => row.employeeInfo.employeeType }
+              {
+                label: 'Employee ID',
+                field: (row: TEmployeeData) => row?.employeeInfo?.employeeId
+              },
+              {
+                label: "Name",
+                field: (row: TEmployeeData) => (row.firstName + ' ' + row.lastName),
+                isSortable: true
+              },
+              {
+                label: 'Email',
+                field: (row: TEmployeeData) => row.email,
+                isSortable: true
+              },
+              {
+                label: "Department",
+                field: (row: TEmployeeData) => capitalizeLetter(row.employeeInfo.department.split('_').join(' '))
+              },
+              {
+                label: "Employee Type",
+                field: (row: TEmployeeData) => capitalizeLetter(row.employeeInfo.employeeType.split('_').join(' '))
+              }
             ]}
             page={page}
             limit={limit}

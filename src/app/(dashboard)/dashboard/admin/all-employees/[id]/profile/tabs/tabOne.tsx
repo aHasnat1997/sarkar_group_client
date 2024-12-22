@@ -1,5 +1,6 @@
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
 import { TEmployeeData } from "@/types";
+import capitalizeLetter from "@/utils/capitalizeLetter";
 import { dateFormate } from "@/utils/dateFormate";
 import { Box, Stack } from "@mui/material";
 
@@ -27,11 +28,11 @@ export default function TabOne({ payload }: { payload: TEmployeeData }) {
     },
     {
       title: 'Marital Status',
-      data: payload.employeeInfo.maritalStatus
+      data: capitalizeLetter(payload.employeeInfo.maritalStatus)
     },
     {
       title: 'Gender',
-      data: payload.employeeInfo.gender
+      data: capitalizeLetter(payload.employeeInfo.gender)
     },
     {
       title: 'Nationality',

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -7,12 +6,11 @@ type TMenuList = {
   list: React.ReactNode
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function MenuButton({ buttonTitle, menuList }: { buttonTitle: any, menuList: TMenuList[] }) {
+export default function MenuButton({ buttonTitle, menuList }: { buttonTitle: React.ReactNode, menuList: TMenuList[] }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -21,15 +19,9 @@ export default function MenuButton({ buttonTitle, menuList }: { buttonTitle: any
 
   return (
     <>
-      <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
+      <div onClick={handleClick} id="basic-button" className='cursor-pointer'>
         {buttonTitle}
-      </Button>
+      </div>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}

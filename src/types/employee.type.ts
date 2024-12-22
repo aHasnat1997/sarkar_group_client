@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { TUploadedFile } from "./uploadedFile.type";
+
 type TEmployeeInfo = {
   id: string;
   employeeId: string;
@@ -19,11 +21,7 @@ type TEmployeeInfo = {
   city: string;
   state: string;
   zip: number;
-  appointmentLetter: string;
-  salarySlips: any[]; // Define the type of salary slips if needed
-  relivingLetter: string;
-  experienceLetter: string;
-  assignProjects: any[]; // Define the type of assigned projects if needed
+  documents: Partial<TUploadedFile>[] | [];
   createdAt: string;
   updatedAt: string;
 };
@@ -32,7 +30,7 @@ export type TEmployeeData = {
   id: string;
   firstName: string;
   lastName: string;
-  profileImage: string;
+  profileImage: Partial<TUploadedFile> | null;
   email: string;
   isActive: boolean;
   isDeleted: boolean;
