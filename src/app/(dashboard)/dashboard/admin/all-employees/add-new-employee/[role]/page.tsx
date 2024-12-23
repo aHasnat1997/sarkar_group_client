@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { Box } from "@mui/material";
@@ -61,19 +60,40 @@ export default function AddNewEmployee({ params }: { params: { role: string } })
       ...rest
     };
 
-    console.log("Form submitted with:", employeeData);
-
     if (params.role === 'admin') {
-      await createAdmin(employeeData);
-      router.push('/dashboard/admin/all-employees');
+      try {
+        const admin = await createAdmin(employeeData);
+        if (admin.data.success) {
+          router.push('/dashboard/admin/all-employees');
+        } else {
+          console.error("Error adding admin:", admin.data.message);
+        }
+      } catch (error) {
+        console.error("Error adding admin:", error);
+      }
     } else if (params.role === 'project-manager') {
-      await createProjectManager(employeeData);
-      router.push('/dashboard/admin/all-employees');
+      try {
+        const pm = await createProjectManager(employeeData);
+        if (pm.data.success) {
+          router.push('/dashboard/admin/all-employees');
+        } else {
+          console.error("Error adding project manager:", pm.data.message);
+        }
+      } catch (error) {
+        console.error("Error adding project manager:", error);
+      }
     } else if (params.role === 'engineer') {
-      await createEngineer(employeeData);
-      router.push('/dashboard/admin/all-employees');
+      try {
+        const engineer = await createEngineer(employeeData);
+        if (engineer.data.success) {
+          router.push('/dashboard/admin/all-employees');
+        } else {
+          console.error("Error adding engineer:", engineer.data.message);
+        }
+      } catch (error) {
+        console.error("Error adding engineer:", error);
+      }
     }
-
   };
 
   return (
@@ -107,8 +127,8 @@ export default function AddNewEmployee({ params }: { params: { role: string } })
 
         <Box p={3}>
           {
-            value === 0 ? <TabOne methods image={image} setImage={setImage} /> :
-              value === 1 ? <TabTwo methods /> :
+            value === 0 ? <TabOne methods={methods} image={image} setImage={setImage} /> :
+              value === 1 ? <TabTwo methods={methods} /> :
                 value === 2 ? <TabThree files={files} setFiles={setFiles} /> :
                   <></>
           }

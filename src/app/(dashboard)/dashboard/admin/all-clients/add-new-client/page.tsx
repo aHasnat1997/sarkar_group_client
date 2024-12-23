@@ -1,20 +1,63 @@
 'use client';
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ClientFormValues, clientZodSchema } from "./form/formZodSchema";
-import { Form, FormField, FormInput, FormItem } from "@/components/form";
+import { Form } from "@/components/form";
 import Link from "next/link";
+import { TUploadedFile } from "@/types";
+import { useAddClientMutation } from "@/redux/api/endpoints/clientsApi";
+import FormInputFields from "./form";
+import ProfileImageUpload from "@/app/(dashboard)/components/ui/ProfileImageUpload";
+import DockUpload from "@/app/(dashboard)/components/ui/DockUpload";
+import ViewFile from "@/app/(dashboard)/components/ui/ViewFile";
+import { cloudinaryRemove, cloudinaryUpload } from "@/utils/cloudinaryFn";
+import { useRouter } from "next/navigation";
 
 export default function AddNewClient() {
+  const router = useRouter();
+  const [image, setImage] = useState<Partial<TUploadedFile> | null>(null);
+  const [files, setFiles] = useState<Partial<TUploadedFile>[]>([]);
+
+  const [createClient, { isLoading, isSuccess, isError }] = useAddClientMutation();
+
   const methods = useForm<ClientFormValues>({
-    resolver: zodResolver(clientZodSchema),
-    defaultValues: {}
+    resolver: zodResolver(clientZodSchema)
   });
 
-  const formSubmit: SubmitHandler<ClientFormValues> = (data) => {
-    console.log("Form submitted with:", data);
+  const formSubmit: SubmitHandler<ClientFormValues> = async (data) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { profileImage, documents, ...rest } = data;
+    const clientData = {
+      profileImage: image,
+      documents: files,
+      ...rest
+    };
+    if (clientData) {
+      try {
+        const client = await createClient(clientData);
+        if (client.data.success) {
+          router.push('/dashboard/admin/all-clients');
+        } else {
+          console.error("Error adding client:", client.data.message);
+        }
+      } catch (error) {
+        console.error("Error adding client:", error);
+      }
+    }
+  };
+
+  const handleFileChange = async (file: File) => {
+    const uploadedFile = await cloudinaryUpload(file);
+    setFiles((prevFiles) => [...prevFiles, uploadedFile]);
+  };
+
+  const handleFileRemove = async (public_id: string) => {
+    await cloudinaryRemove(public_id, 'image');
+    const newFiles = files.filter((file) => file.public_id !== public_id);
+    setFiles(newFiles);
   };
 
   return (
@@ -31,6 +74,10 @@ export default function AddNewClient() {
         <Typography fontSize='1.25rem' fontWeight={600}>Add Client</Typography>
       </Box>
 
+      <Box mb='1.5rem'>
+        <ProfileImageUpload image={image} setImage={setImage} />
+      </Box>
+
       <Form {...methods}>
         <Box
           component="form"
@@ -41,165 +88,34 @@ export default function AddNewClient() {
             gap: '1.5rem'
           }}
         >
-          <Stack gap='1.5rem'>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name="projectName"
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label="Project Name"
-                  />
-                )}
-              />
-            </FormItem>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name='department'
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label='Department'
-                  />
-                )}
-              />
-            </FormItem>
-          </Stack>
+          <Box>
+            <FormInputFields methods={methods} />
+          </Box>
 
-          <Stack gap='1.5rem'>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name="client"
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label="Client"
-                  />
-                )}
-              />
-            </FormItem>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name='email'
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label='Email Address'
-                  />
-                )}
-              />
-            </FormItem>
-          </Stack>
-
-          <Stack gap='1.5rem'>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name="startingDate"
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label="Starting Date"
-                  />
-                )}
-              />
-            </FormItem>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name='estimatedFinishDate'
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label='Estimated Finish Date'
-                  />
-                )}
-              />
-            </FormItem>
-          </Stack>
-
-          <Stack gap='1.5rem'>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name="productType"
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label="Product Type"
-                  />
-                )}
-              />
-            </FormItem>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name='projectType'
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label='Project Type'
-                  />
-                )}
-              />
-            </FormItem>
-          </Stack>
-
-          <FormItem style={{ width: "100%" }}>
-            <FormField
-              name="address"
-              control={methods.control}
-              render={({ field }) => (
-                <FormInput
-                  {...field}
-                  label="Address"
-                />
-              )}
-            />
-          </FormItem>
-
-          <Stack gap='1.5rem'>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name='city'
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label='City'
-                  />
-                )}
-              />
-            </FormItem>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name="state"
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label="State"
-                  />
-                )}
-              />
-            </FormItem>
-            <FormItem style={{ width: "100%" }}>
-              <FormField
-                name='zip'
-                control={methods.control}
-                render={({ field }) => (
-                  <FormInput
-                    {...field}
-                    label='ZIP Code'
-                  />
-                )}
-              />
-            </FormItem>
-          </Stack>
+          <Box>
+            <Stack
+              gap='1.5rem'
+              alignItems='start'
+            >
+              <Box width='50%'>
+                <DockUpload onFileSelect={handleFileChange} />
+              </Box>
+              <Box width='50%'>
+                {
+                  files.length > 0 ? files?.map((file, i) => (
+                    <Box key={i}>
+                      <ViewFile
+                        file={file}
+                        handleImageRemove={() => file.public_id && handleFileRemove(file.public_id)}
+                        downloadable={false}
+                      />
+                    </Box>
+                  )) :
+                    <></>
+                }
+              </Box>
+            </Stack>
+          </Box>
 
           <Stack alignItems='center' gap='1rem' justifyContent='end'>
             <Link href='/dashboard/admin/all-clients'>
@@ -213,11 +129,11 @@ export default function AddNewClient() {
             <Button
               variant="contained"
               type="submit"
+              disabled={isLoading || isSuccess}
             >
-              Add Client
+              {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Submit'}
             </Button>
           </Stack>
-
         </Box>
       </Form>
     </Box>

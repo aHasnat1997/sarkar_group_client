@@ -18,8 +18,40 @@ const clientsApi = baseApi.injectEndpoints({
       }),
       providesTags: ['clients']
     }),
+
+    addClient: build.mutation({
+      query: (data) => ({
+        method: 'POST',
+        url: '/user/registration/client',
+        data
+      }),
+      invalidatesTags: ['clients']
+    }),
+
+    updateClient: build.mutation({
+      query: ({ data, userId }) => ({
+        method: 'PATCH',
+        url: `/client/${userId}/update`,
+        data
+      }),
+      invalidatesTags: ['clients']
+    }),
+
+    deleteClient: build.mutation({
+      query: (userId) => ({
+        method: 'DELETE',
+        url: `/user/${userId}/soft-delete`,
+      }),
+      invalidatesTags: ['clients']
+    }),
   })
 });
 
-export const { useAllClientsQuery, useSingleClientsQuery } = clientsApi;
+export const {
+  useAllClientsQuery,
+  useSingleClientsQuery,
+  useAddClientMutation,
+  useUpdateClientMutation,
+  useDeleteClientMutation
+} = clientsApi;
 export default clientsApi;

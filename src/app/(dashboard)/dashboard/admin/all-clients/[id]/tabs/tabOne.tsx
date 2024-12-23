@@ -1,41 +1,16 @@
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
-import { TProject } from "@/types";
-import capitalizeLetter from "@/utils/capitalizeLetter";
+import { TClient } from "@/types";
 import { Box, Stack } from "@mui/material";
 
-export default function TabOne({ payload }: { payload: TProject }) {
+export default function TabOne({ payload }: { payload: TClient }) {
   const tabData = [
     {
-      title: 'Project Name',
-      data: payload.projectName
-    },
-    {
-      title: 'Department',
-      data: capitalizeLetter(payload.department.split('_').join(' '))
-    },
-    {
-      title: 'Client',
-      data: `${payload.client.user.firstName} ${payload.client.user.lastName}`
-    },
-    {
       title: 'Email Address',
-      data: payload.client.user.email
+      data: payload.user.email
     },
     {
-      title: 'Start Date',
-      data: payload.startDate
-    },
-    {
-      title: 'Estimated Finish date',
-      data: payload.estimatedEndDate
-    },
-    {
-      title: 'Product Type',
-      data: payload.productType
-    },
-    {
-      title: 'Project Type',
-      data: payload.projectType
+      title: 'Mobile',
+      data: payload.mobile
     },
     {
       title: 'Address',

@@ -1,30 +1,29 @@
 import SMDDataTable from "@/app/(dashboard)/components/ui/SMDDataTable";
-import { TProject } from "@/types";
+import { TClient } from "@/types";
 import { Box, IconButton, Stack } from "@mui/material";
 import Link from "next/link";
 import ViewIcon from "@/assets/icons/view.svg";
 import EditIcon from "@/assets/icons/edit.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
 import capitalizeLetter from "@/utils/capitalizeLetter";
+import { dateFormate } from "@/utils/dateFormate";
 
-export default function TabTwo({ payload }: { payload: TProject }) {
-  const { projectManager, engineers } = payload;
-  const employeeData = [projectManager, ...engineers];
-
+export default function TabTwo({ payload }: { payload: TClient }) {
   return <>
     <Box>
       {
-        employeeData ? <SMDDataTable
-          data={employeeData}
+        payload ? <SMDDataTable
+          data={payload.projects}
           columns={[
-            { label: 'Employee Name', field: (row) => (row.user.firstName + ' ' + row.user.lastName) },
-            { label: 'Designation', field: (row) => capitalizeLetter(row.designation.split('_').join(' ')) },
+            { label: 'Project Name', field: (row) => (row.projectName) },
             { label: 'Department', field: (row) => capitalizeLetter(row.department.split('_').join(' ')) },
-            { label: 'Type', field: (row) => capitalizeLetter(row.employeeType.split('_').join(' ')) }
+            { label: 'Start Date', field: (row) => dateFormate(row.startDate) },
+            { label: 'Estimated End Date', field: (row) => dateFormate(row.estimatedEndDate) },
+            { label: 'Status', field: (row) => capitalizeLetter(row.status.split('_').join(' ')) },
           ]}
           actions={(row) => (
             <Stack gap='.2rem'>
-              <Link href={`/dashboard/admin/all-employees/${row.id}`}>
+              <Link href={`/dashboard/admin/all-projects/${row.id}`}>
                 <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                   <ViewIcon />
                 </IconButton>

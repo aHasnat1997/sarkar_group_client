@@ -40,7 +40,6 @@ export default function ViewFile(
       borderColor='grey.400'
       borderRadius='.5rem'
       padding='1.5rem'
-      margin='1rem'
     >
       <Box>
         <Typography>{file?.filename || 'No File Name.'}</Typography>

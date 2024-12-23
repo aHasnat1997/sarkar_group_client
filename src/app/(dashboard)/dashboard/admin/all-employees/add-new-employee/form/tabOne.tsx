@@ -1,114 +1,29 @@
 import { FormDatePicker, FormField, FormInput, FormItem, FormSelect } from "@/components/form";
-import { Box, MenuItem, Skeleton, Stack, styled } from "@mui/material";
-import { CameraAltOutlined } from '@mui/icons-material';
-import CloseIcon from '@mui/icons-material/Close';
-import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Box, MenuItem, Stack } from "@mui/material";
+import { Dispatch, SetStateAction } from "react";
 import { TUploadedFile } from "@/types";
-import assets from "@/assets";
-import { cloudinaryRemove, cloudinaryUpload } from "@/utils/cloudinaryFn";
+import ProfileImageUpload from "@/app/(dashboard)/components/ui/ProfileImageUpload";
+import { UseFormReturn } from "react-hook-form";
+import { EmployeeFormValues } from "./formZodSchema";
 
 export default function TabOne(
   { methods, image, setImage }:
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    { methods: any, image: Partial<TUploadedFile> | null, setImage: Dispatch<SetStateAction<Partial<TUploadedFile> | null>> }
+    {
+      methods: UseFormReturn<EmployeeFormValues> | undefined,
+      image: Partial<TUploadedFile> | null,
+      setImage: Dispatch<SetStateAction<Partial<TUploadedFile> | null>>
+    }
 ) {
-  const [isUploadLoading, setIsUploadLoading] = useState<boolean>(false);
-
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-  });
-
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = event.target.files;
-    if (fileList && fileList.length > 0) {
-      setIsUploadLoading(true);
-      const uploadedImage = await cloudinaryUpload(fileList[0]);
-      setImage(uploadedImage);
-      setIsUploadLoading(false);
-    }
-  };
-
-  const handleImageRemove = async () => {
-    setIsUploadLoading(true);
-    if (image && image.public_id) {
-      await cloudinaryRemove(image.public_id, 'image');
-      setImage(null);
-    }
-    setIsUploadLoading(false);
-  }
+  if (!methods) return null;
 
   return (
     <Stack
       direction='column'
       gap='1.25rem'
     >
-      <Stack gap='1rem'>
-        <Box>
-          <Stack
-            width="6.25rem"
-            height="6.25rem"
-            border="1px solid"
-            borderColor="#aba1a8"
-            borderRadius="0.375rem"
-            justifyContent="center"
-            alignItems="center"
-            className="cursor-pointer"
-            component="label"
-          >
-            <CameraAltOutlined />
-            <VisuallyHiddenInput
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-          </Stack>
-        </Box>
-        <Box>
-          {isUploadLoading ? <Stack
-            width='100%'
-            height='6.3rem'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Skeleton
-              width='6.3rem'
-              height='6.3rem'
-              variant="rounded"
-              animation="wave"
-              sx={{ bgcolor: 'grey.400' }}
-            />
-          </Stack> :
-            image ? (
-              <Box
-                position='relative'
-              >
-                <div
-                  className="absolute right-1 top-1 bg-slate-300 p-1 rounded-full"
-                  onClick={handleImageRemove}
-                >
-                  <CloseIcon />
-                </div>
-                <Image
-                  alt="Selected Image"
-                  src={image.secure_url ? image.secure_url : assets.images.brokenImage}
-                  width={100}
-                  height={100}
-                  className="h-[6.3rem] rounded-md"
-                />
-              </Box>) :
-              <></>
-          }
-        </Box>
-      </Stack>
+      <Box mb='1.5rem'>
+        <ProfileImageUpload image={image} setImage={setImage} />
+      </Box>
 
       <Stack gap='1.25rem'>
         <FormItem style={{ width: "100%" }}>

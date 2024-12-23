@@ -32,7 +32,9 @@ export default function TabThree(
       gap='1.25rem'
       alignItems='center'
     >
-      <DockUpload onFileSelect={handleImageChange} />
+      <Box width='60%'>
+        <DockUpload onFileSelect={handleImageChange} />
+      </Box>
       {
         isUploadLoading ? <Box>
           <Skeleton

@@ -1,9 +1,11 @@
+import { TUploadedFile } from "./uploadedFile.type";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type TUser = {
   firstName: string;
   lastName: string;
   email: string;
-  profileImage: string | null;
+  profileImage: TUploadedFile | null;
   role: string;
   isActive: boolean;
   isDeleted: boolean;
@@ -33,14 +35,14 @@ export type TClient = {
   id: string;
   userId: string;
   mobile: string;
-  productList: any[];
   street: string;
   city: string;
   state: string;
   zip: number;
-  documents: any[];
+  documents: TUploadedFile[];
   createdAt: string;
   updatedAt: string;
   user: TUser;
   projects: TProject[];
+  product: any[];
 };

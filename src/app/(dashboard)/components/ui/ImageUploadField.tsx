@@ -1,18 +1,17 @@
-import React from 'react';
-import { Box, Stack, Typography } from '@mui/material';
-import UploadIcon from '@/assets/icons/upload.svg';
+import { Box, Stack, Typography } from "@mui/material";
+import UploadIcon from "@/assets/icons/upload.svg";
 
 interface DockUploadProps {
   onFileSelect: (file: File) => void;
 }
 
-const DockUpload: React.FC<DockUploadProps> = ({ onFileSelect }) => {
+export default function ImageUploadField({ onFileSelect }: DockUploadProps) {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
+    if (file && (file.type.startsWith('image/'))) {
       onFileSelect(file);
     } else {
-      console.log('Please select a PDF file.');
+      console.log('Please select a valid image file (jpg, jpeg, png).');
     }
   };
 
@@ -20,6 +19,8 @@ const DockUpload: React.FC<DockUploadProps> = ({ onFileSelect }) => {
     direction='column'
     gap='.5rem'
     alignItems='center'
+    p='1rem'
+    textAlign='center'
   >
     <Box sx={{
       padding: '.5rem',
@@ -32,10 +33,10 @@ const DockUpload: React.FC<DockUploadProps> = ({ onFileSelect }) => {
     </Box>
     <Typography>
       Click here for
-      <Typography component='span' color="primary.main"> choose file </Typography>
+      <Typography component='span' color="primary.main"> choose image </Typography>
       to upload
     </Typography>
-    <Typography color="text.secondary">Supported formats : pdf</Typography>
+    <Typography color="text.secondary">Supported formats : jpg, jpeg, png</Typography>
   </Stack>);
 
   return (
@@ -52,12 +53,10 @@ const DockUpload: React.FC<DockUploadProps> = ({ onFileSelect }) => {
       <UploadIconFn />
       <input
         type="file"
-        accept="application/pdf"
+        accept="image/*"
         onChange={handleFileChange}
         style={{ display: 'none' }}
       />
     </Stack>
   );
 };
-
-export default DockUpload;

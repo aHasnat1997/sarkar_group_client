@@ -13,8 +13,16 @@ import ViewDialogs from "./components/viewDialog";
 import { useAllProductsQuery } from "@/redux/api/endpoints/productsApi";
 import TProduct from "@/types/product.type";
 
+type TProductCategory = 'CIVIL' | 'MARIN' | 'ENGINEERING';
+type TProductMetaData = {
+  category: TProductCategory;
+  title: string;
+  assigned: string;
+  unassigned: string;
+  total: string;
+};
+
 export default function AllProduct() {
-  type TProductCategory = 'CIVIL' | 'MARIN' | 'ENGINEERING';
   const [currentCategory, setCurrentCategory] = useState<TProductCategory>('CIVIL');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -22,29 +30,29 @@ export default function AllProduct() {
   const [selectedRow, setSelectedRow] = useState<TProduct | null>(null);
   const { data: productsData, isLoading, isFetching } = useAllProductsQuery({ page, limit, category: currentCategory });
 
-  const tabData = [
-    {
-      category: 'CIVIL',
-      title: "Civil Equipment's",
-      assigned: '25',
-      unassigned: '12',
-      total: '37'
-    },
-    {
-      category: 'MARIN',
-      title: "Marine Equipment's",
-      assigned: '20',
-      unassigned: '8',
-      total: '28'
-    },
-    {
-      category: 'ENGINEERING',
-      title: "Engineering Service's",
-      assigned: '28',
-      unassigned: '14',
-      total: '42'
-    },
-  ];
+  // const tabData = [
+  //   {
+  //     category: 'CIVIL',
+  //     title: "Civil Equipment's",
+  //     assigned: '25',
+  //     unassigned: '12',
+  //     total: '37'
+  //   },
+  //   {
+  //     category: 'MARIN',
+  //     title: "Marine Equipment's",
+  //     assigned: '20',
+  //     unassigned: '8',
+  //     total: '28'
+  //   },
+  //   {
+  //     category: 'ENGINEERING',
+  //     title: "Engineering Service's",
+  //     assigned: '28',
+  //     unassigned: '14',
+  //     total: '42'
+  //   },
+  // ];
 
   const handleOpenModal = (row: TProduct) => {
     setSelectedRow(row);
@@ -100,7 +108,7 @@ export default function AllProduct() {
 
       <Stack alignItems='center' gap='1rem' mt='1.5rem'>
         {
-          tabData.map(data => <Box
+          productsData ? productsData?.data?.productMetaData?.map((data: TProductMetaData) => <Box
             key={data.category}
             component='div'
             sx={{
@@ -133,7 +141,8 @@ export default function AllProduct() {
                 </Typography> Unassigned
               </Typography>
             </Stack>
-          </Box>)
+          </Box>) :
+            <></>
         }
       </Stack>
 
@@ -148,7 +157,7 @@ export default function AllProduct() {
         </Typography>
         {
           isLoading || productsData ? <SMDDataTable
-            data={productsData?.data as TProduct[]}
+            data={productsData?.data?.products as TProduct[]}
             columns={[
               { label: 'Equipment ID', field: (row) => row.equipmentId },
               { label: 'Equipment Name', field: (row) => row.equipmentName },

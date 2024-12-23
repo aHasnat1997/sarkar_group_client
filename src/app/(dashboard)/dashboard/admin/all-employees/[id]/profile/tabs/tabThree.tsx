@@ -3,9 +3,7 @@ import ViewFile from "@/app/(dashboard)/components/ui/ViewFile";
 import { TEmployeeData } from "@/types";
 import { Box, Stack } from "@mui/material";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function TabThree({ payload }: { payload: TEmployeeData }) {
-
   return <>
     <Box>
       <Stack

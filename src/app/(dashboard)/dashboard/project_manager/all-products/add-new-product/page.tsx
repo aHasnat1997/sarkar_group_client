@@ -1,6 +1,6 @@
 'use client';
 
-import DockUploadField from "@/app/(dashboard)/components/ui/DockUploadField";
+import DockUploadField from "@/app/(dashboard)/components/ui/ImageUploadField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";

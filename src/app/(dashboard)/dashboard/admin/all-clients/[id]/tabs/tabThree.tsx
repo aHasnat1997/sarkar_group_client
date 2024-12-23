@@ -1,45 +1,27 @@
-import { TProject } from "@/types";
-import { Box, IconButton, Stack } from "@mui/material";
-import ViewIcon from "@/assets/icons/view.svg";
-import EditIcon from "@/assets/icons/edit.svg";
-import TrashIcon from "@/assets/icons/trash.svg";
-import SMDDataTable from "@/app/(dashboard)/components/ui/SMDDataTable";
-import Link from "next/link";
-import capitalizeLetter from "@/utils/capitalizeLetter";
+import { Box, Stack } from "@mui/material";
+import { TUploadedFile } from "@/types";
+import ViewFile from "@/app/(dashboard)/components/ui/ViewFile";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
-export default function TabThree({ payload }: { payload: TProject }) {
-  const { products } = payload;
-
+export default function TabThree({ payload }: { payload: TUploadedFile[] }) {
   return <>
     <Box>
-      {
-        products ? <SMDDataTable
-          data={products}
-          columns={[
-            { label: 'Equipment ID', field: (row) => row.equipmentId },
-            { label: 'Equipment Name', field: (row) => row.equipmentName },
-            { label: 'Brand Name', field: (row) => row.brandName },
-            { label: 'Model', field: (row) => row.model },
-            { label: 'Status', field: (row) => capitalizeLetter(row.status.split('_').join(' ')) }
-          ]}
-          actions={(row) => (
-            <Stack gap='.2rem'>
-              <Link href={`/dashboard/admin/all-employees/${row.id}`}>
-                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                  <ViewIcon />
-                </IconButton>
-              </Link>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <EditIcon />
-              </IconButton>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <TrashIcon />
-              </IconButton>
-            </Stack>
-          )}
-        /> :
-          <Box></Box>
-      }
+      <Stack
+        mt='1.5rem'
+        flexWrap='wrap'
+        justifyContent='space-between'
+        gap='1rem'
+      >
+        {
+          payload.length > 0 ?
+            payload.map((doc, i) => (
+              <Box key={i} width='48%'>
+                <ViewFile file={doc} downloadable={true} />
+              </Box>
+            )) :
+            <DataNotFound />
+        }
+      </Stack>
     </Box>
   </>;
 };
