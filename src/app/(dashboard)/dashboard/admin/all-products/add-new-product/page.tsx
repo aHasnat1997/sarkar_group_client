@@ -46,7 +46,6 @@ export default function AddNewProduct() {
       equipmentImage: images,
       ...rest
     };
-    console.log("Form submitted with:", productData);
     try {
       const product = await createProduct(productData);
       if (product.data.success) {

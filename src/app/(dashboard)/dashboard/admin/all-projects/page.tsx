@@ -14,7 +14,7 @@ import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 export default function AllProjects() {
   const limit = 6;
   const [page, setPage] = useState(1);
-  const { data: projectData, isLoading, isFetching } = useAllProjectsQuery({ page, limit });
+  const { data: projectData, isLoading, isFetching, isError } = useAllProjectsQuery({ page, limit });
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -59,7 +59,7 @@ export default function AllProjects() {
       </Stack>
       <Stack flexWrap='wrap' gap='1rem'>
         {
-          !projectData || projectData?.data.length === 0 ? <DataNotFound /> :
+          isError || projectData?.data.length === 0 ? <DataNotFound /> :
             isLoading || isFetching ? Array.from({ length: limit || 10 }).map((_, i) => <Box key={i} width='49%'>
               <ProjectCard
                 cardTitle=''

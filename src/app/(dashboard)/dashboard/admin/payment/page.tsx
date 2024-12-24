@@ -8,13 +8,14 @@ import ViewIcon from "@/assets/icons/view.svg";
 import ViewDialogs from "./components/viewDialog";
 import { TPayment } from "@/types";
 import { useAllPaymentsQuery } from "@/redux/api/endpoints/paymentsApi";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
 export default function Payment() {
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<TPayment | null>(null);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data: paymentData, isLoading, isFetching } = useAllPaymentsQuery({ page, limit });
+  const { data: paymentData, isLoading, isFetching, isError } = useAllPaymentsQuery({ page, limit });
 
   const handleOpenModal = (row: TPayment) => {
     setSelectedRow(row);
@@ -77,7 +78,8 @@ export default function Payment() {
             )}
           />
         </> :
-          <Box></Box>
+          isError ? <DataNotFound /> :
+            <></>
       }
       {
         open && <ViewDialogs open={open} setOpen={setOpen} data={selectedRow} />

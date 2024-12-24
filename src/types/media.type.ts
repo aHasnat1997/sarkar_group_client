@@ -1,8 +1,10 @@
+import { TUploadedFile } from "./uploadedFile.type";
+
 type TCommenter = {
   id: string;
   firstName: string;
   lastName: string;
-  profileImage: string | null;
+  profileImage: TUploadedFile | null;
 };
 
 export type TMediaComment = {
@@ -19,7 +21,7 @@ type Uploader = {
   id: string;
   firstName: string;
   lastName: string;
-  profileImage: string | null;
+  profileImage: TUploadedFile | null;
 };
 
 export type TMedia = {
@@ -27,10 +29,10 @@ export type TMedia = {
   uploaderId: string;
   title: string;
   description: string;
-  image: string;
+  image: TUploadedFile | null;
   keyword: string;
   createdAt: string;
   updatedAt: string;
-  mediaComments: TMediaComment[];
+  comments: TMediaComment[];
   uploader: Uploader;
 };

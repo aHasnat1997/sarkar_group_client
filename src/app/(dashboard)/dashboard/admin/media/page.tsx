@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { useState } from "react";
@@ -17,7 +16,7 @@ export default function MediaPage() {
   const [singleData, setSingleData] = useState<TMedia | null>(null);
   const [page, setPage] = useState(1);
   const limit = 13;
-  const { data: mediaData, isLoading, isFetching } = useAllMediasQuery({ page, limit });
+  const { data: mediaData, isLoading, isFetching, isError } = useAllMediasQuery({ page, limit });
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -53,62 +52,72 @@ export default function MediaPage() {
         <FormDialog />
       </Stack>
 
-      <Stack
-        mt='1.5rem'
-        gap='1.5rem'
-      >
-        {
-          mediaData?.data.length === 0 ? <DataNotFound /> :
-            isLoading || isFetching ? Array.from({ length: 3 }).map((_, i) => <Box
-              key={i}
-              width='100%'
-            >
-              <LazyMediaCardOne />
-            </Box>) :
-              mediaData ? mediaData?.data.slice(0, 3).map((data: TMedia) => <Box
-                key={data.id}
-                width='100%'
-                onClick={() => {
-                  setOpen(true)
-                  setSingleData(data)
-                }}
-              >
-                <MediaCardOne payload={data} />
-              </Box>) :
-                <></>
-        }
-      </Stack>
-
-      <Grid2 container mt='1.5rem' spacing='1.5rem'>
-        {
-          isLoading || isFetching ? Array.from({ length: 10 }).map((_, i) => <Grid2
-            key={i}
-            size={6}
+      {
+        <>
+          <Stack
+            mt='1.5rem'
+            gap='1.5rem'
           >
-            <LazyMediaCardTwo />
-          </Grid2>) :
-            mediaData ? mediaData?.data.slice(3, mediaData?.data?.length).map((data: TMedia) => <Grid2
-              size={6}
-              key={data.id}
-              onClick={() => {
-                setOpen(true)
-                setSingleData(data)
-              }}
-            >
-              <MediaCardTwo payload={data} />
-            </Grid2>) :
-              <></>
-        }
-      </Grid2>
+            {
+              isError || mediaData?.data.length === 0 ? <DataNotFound /> :
+                isLoading || isFetching ? Array.from({ length: 3 }).map((_, i) => <Box
+                  key={i}
+                  width='100%'
+                >
+                  <LazyMediaCardOne />
+                </Box>) :
+                  mediaData ? <Stack
+                    gap='1.5rem'
+                  >
+                    {
+                      mediaData?.data.slice(0, 3).map((data: TMedia) => <Box
+                        key={data.id}
+                        width='100%'
+                        onClick={() => {
+                          setOpen(true)
+                          setSingleData(data)
+                        }}
+                      >
+                        <MediaCardOne payload={data} />
+                      </Box>)
+                    }
+                  </Stack> :
+                    <></>
+            }
+          </Stack>
 
-      <Stack alignItems='center' justifyContent='center' mt='2rem'>
-        <Pagination
-          count={mediaData?.mete?.totalPage}
-          page={page}
-          onChange={handleChange}
-          color="primary"
-        />
-      </Stack>
+          <Grid2 container mt='1.5rem' spacing='1.5rem'>
+            {
+              isLoading || isFetching ? Array.from({ length: 10 }).map((_, i) => <Grid2
+                key={i}
+                size={6}
+              >
+                <LazyMediaCardTwo />
+              </Grid2>) :
+                mediaData ? mediaData?.data.slice(3, mediaData?.data?.length).map((data: TMedia) => <Grid2
+                  size={6}
+                  key={data.id}
+                  onClick={() => {
+                    setOpen(true)
+                    setSingleData(data)
+                  }}
+                >
+                  <MediaCardTwo payload={data} />
+                </Grid2>) :
+                  <></>
+            }
+          </Grid2>
+
+          <Stack alignItems='center' justifyContent='center' mt='2rem'>
+            <Pagination
+              count={mediaData?.mete?.totalPage}
+              page={page}
+              onChange={handleChange}
+              color="primary"
+            />
+          </Stack>
+        </>
+      }
     </Box>
     {open && <ViewDialog open={open} setOpen={setOpen} mediaId={singleData?.id} />}
   </>

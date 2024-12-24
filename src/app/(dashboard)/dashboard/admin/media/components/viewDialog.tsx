@@ -11,6 +11,8 @@ import { dateFormate } from "@/utils/dateFormate";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { useAddMediaCommentMutation, useMediaCommentDeleteMutation, useMediaDeleteMutation, useSingleMediasQuery } from "@/redux/api/endpoints/mediasApi";
+import { cloudinaryRemove } from "@/utils/cloudinaryFn";
+import Link from "next/link";
 
 export default function ViewDialog(
   { open, setOpen, mediaId }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, mediaId: string | undefined }
@@ -30,11 +32,14 @@ export default function ViewDialog(
   }, [storedUser]);
   let commentArray: TMediaComment[] = [];
 
-  if (singleMediaData?.mediaComments) {
-    commentArray = [...singleMediaData?.mediaComments].reverse()
+  if (singleMediaData?.comments) {
+    commentArray = [...singleMediaData?.comments].reverse()
   };
 
   const handelDeleteMedia = async () => {
+    if (singleMediaData.image?.public_id) {
+      await cloudinaryRemove(singleMediaData.image?.public_id, 'image');
+    }
     await deleteMedia(singleMediaData.id);
     setOpen(false);
   };
@@ -68,9 +73,7 @@ export default function ViewDialog(
           <Box>
             <Image
               alt="media image"
-              // to-do: fix image
-              // src={singleMediaData?.image || assets.images.brokenImage}
-              src={assets.images.brokenImage}
+              src={singleMediaData?.image?.secure_url || assets.images.brokenImage}
               width={500}
               height={500}
               className="rounded"
@@ -115,7 +118,7 @@ export default function ViewDialog(
           <Stack gap='.5rem' alignItems='center'>
             <Image
               alt="author image"
-              src={singleMediaData?.uploader?.profileImage || assets.images.userPlaceholderImage}
+              src={singleMediaData?.uploader?.profileImage?.secure_url || assets.images.userPlaceholderImage}
               width={200}
               height={200}
               className="size-10 rounded"
@@ -172,15 +175,17 @@ export default function ViewDialog(
                     <Stack gap='.5rem' alignItems='start'>
                       <Image
                         alt="author image"
-                        src={data?.commenter?.profileImage || assets.images.userPlaceholderImage}
+                        src={data?.commenter?.profileImage?.secure_url || assets.images.userPlaceholderImage}
                         width={200}
                         height={200}
                         className="size-12 rounded"
                       />
                       <Box>
-                        <Typography color="text.secondary" fontSize='.8rem'>
-                          {data?.commenter?.firstName} {data?.commenter?.lastName}
-                        </Typography>
+                        <Link href={`/dashboard/admin/all-employees/${data?.commenter?.id}`}>
+                          <Typography color="text.secondary" fontSize='.8rem'>
+                            {data?.commenter?.firstName} {data?.commenter?.lastName}
+                          </Typography>
+                        </Link>
                         <Typography>
                           {data?.comment}
                         </Typography>

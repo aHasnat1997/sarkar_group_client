@@ -11,11 +11,12 @@ import EditIcon from "@/assets/icons/edit.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
 import { useAllClientsQuery } from "@/redux/api/endpoints/clientsApi";
 import { TClient } from "@/types";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
 export default function Clients() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data: clientData, isLoading, isFetching } = useAllClientsQuery({ page, limit });
+  const { data: clientData, isLoading, isFetching, isError } = useAllClientsQuery({ page, limit });
 
   return (
     <Box sx={{
@@ -84,7 +85,8 @@ export default function Clients() {
             </Stack>
           )}
         /> :
-          <Box></Box>
+          isError ? <DataNotFound /> :
+            <></>
       }
     </Box>
   );

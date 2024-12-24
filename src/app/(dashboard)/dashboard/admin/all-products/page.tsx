@@ -12,6 +12,7 @@ import SMDDataTable from "../../../components/ui/SMDDataTable";
 import ViewDialogs from "./components/viewDialog";
 import { useAllProductsQuery } from "@/redux/api/endpoints/productsApi";
 import TProduct from "@/types/product.type";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
 type TProductCategory = 'CIVIL' | 'MARIN' | 'ENGINEERING';
 type TProductMetaData = {
@@ -28,31 +29,7 @@ export default function AllProduct() {
   const [limit, setLimit] = useState(10);
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<TProduct | null>(null);
-  const { data: productsData, isLoading, isFetching } = useAllProductsQuery({ page, limit, category: currentCategory });
-
-  // const tabData = [
-  //   {
-  //     category: 'CIVIL',
-  //     title: "Civil Equipment's",
-  //     assigned: '25',
-  //     unassigned: '12',
-  //     total: '37'
-  //   },
-  //   {
-  //     category: 'MARIN',
-  //     title: "Marine Equipment's",
-  //     assigned: '20',
-  //     unassigned: '8',
-  //     total: '28'
-  //   },
-  //   {
-  //     category: 'ENGINEERING',
-  //     title: "Engineering Service's",
-  //     assigned: '28',
-  //     unassigned: '14',
-  //     total: '42'
-  //   },
-  // ];
+  const { data: productsData, isLoading, isFetching, isError } = useAllProductsQuery({ page, limit, category: currentCategory });
 
   const handleOpenModal = (row: TProduct) => {
     setSelectedRow(row);
@@ -108,7 +85,7 @@ export default function AllProduct() {
 
       <Stack alignItems='center' gap='1rem' mt='1.5rem'>
         {
-          productsData ? productsData?.data?.productMetaData?.map((data: TProductMetaData) => <Box
+          productsData && !isError ? productsData?.data?.productMetaData?.map((data: TProductMetaData) => <Box
             key={data.category}
             component='div'
             sx={{
@@ -186,7 +163,8 @@ export default function AllProduct() {
               </Stack>
             )}
           /> :
-            <Box></Box>
+            isError ? <DataNotFound /> :
+              <></>
         }
       </Box>
       {

@@ -8,13 +8,14 @@ import ViewIcon from "@/assets/icons/view.svg";
 import ViewDialogs from "./components/viewDialog";
 import { TRequisition } from "@/types";
 import { useAllRequisitionsQuery } from "@/redux/api/endpoints/requisitionsApi";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
 export default function Requisition() {
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<TRequisition | null>(null);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data: requisitionData, isLoading, isFetching } = useAllRequisitionsQuery({ page, limit });
+  const { data: requisitionData, isLoading, isFetching, isError } = useAllRequisitionsQuery({ page, limit });
 
   const handleOpenModal = (row: TRequisition) => {
     setSelectedRow(row);
@@ -77,7 +78,8 @@ export default function Requisition() {
             )}
           />
         </> :
-          <Box></Box>
+          isError ? <DataNotFound /> :
+            <></>
       }
       {
         open && <ViewDialogs open={open} setOpen={setOpen} data={selectedRow} />

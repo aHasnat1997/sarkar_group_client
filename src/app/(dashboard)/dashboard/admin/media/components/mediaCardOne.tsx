@@ -3,7 +3,6 @@ import { Box, Skeleton, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import { TMedia } from "@/types";
-import capitalizeLetter from "@/utils/capitalizeLetter";
 import { dateFormate } from "@/utils/dateFormate";
 
 export function LazyMediaCardOne() {
@@ -78,9 +77,8 @@ export default function MediaCardOne({ payload }: { payload: TMedia }) {
       <Box position='relative'>
         <Image
           alt="media image"
-          // to-do: fix image
-          // src={payload?.image || assets.images.brokenImage}
-          src={assets.images.brokenImage}
+          src={payload?.image?.secure_url || assets.images.brokenImage}
+          // src={assets.images.brokenImage}
           width={500}
           height={500}
           className="rounded-2xl"
@@ -99,7 +97,7 @@ export default function MediaCardOne({ payload }: { payload: TMedia }) {
             p: '.5rem',
             borderRadius: '1rem'
           }}>
-            {capitalizeLetter(payload?.keyword)}
+            {payload?.keyword}
           </Box>
           <Box sx={{
             bgcolor: 'text.primary',
@@ -119,14 +117,14 @@ export default function MediaCardOne({ payload }: { payload: TMedia }) {
       </Typography>
       <Stack justifyContent='space-between' alignItems='center'>
         <Stack gap='.5rem' alignItems='center'>
+          <Typography color='text.secondary'>By {payload?.uploader?.firstName} {payload?.uploader?.lastName}</Typography>
           <Image
             alt="author image"
-            src={payload?.uploader?.profileImage || assets.images.userPlaceholderImage}
+            src={payload?.uploader?.profileImage?.secure_url || assets.images.userPlaceholderImage}
             width={100}
             height={100}
             className="size-5 rounded"
           />
-          <Typography color='text.secondary'>By {payload?.uploader?.firstName} {payload?.uploader?.lastName}</Typography>
         </Stack>
         <Typography color='text.secondary'>{dateFormate(payload?.createdAt)}</Typography>
       </Stack>

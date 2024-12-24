@@ -22,7 +22,7 @@ const mediasApi = baseApi.injectEndpoints({
     crateMedia: build.mutation({
       query: (data) => ({
         method: 'POST',
-        url: '/media/create',
+        url: '/medias/create',
         data: data
       }),
       invalidatesTags: ['medias']

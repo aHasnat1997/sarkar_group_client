@@ -9,6 +9,7 @@ import ViewDialogs from "./components/viewDialog";
 import { useAllApplicationsQuery } from "@/redux/api/endpoints/applicationsApi";
 import { TApplication } from "@/types";
 import capitalizeLetter from "@/utils/capitalizeLetter";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
 export default function Application() {
   const [open, setOpen] = useState(false);
@@ -85,7 +86,7 @@ export default function Application() {
   //   ]
   // };
 
-  const { data: applicationData, isLoading, isFetching } = useAllApplicationsQuery({ page, limit });
+  const { data: applicationData, isLoading, isFetching, isError } = useAllApplicationsQuery({ page, limit });
 
   const handleOpenModal = (row: TApplication) => {
     setSelectedRow(row);
@@ -148,7 +149,8 @@ export default function Application() {
             )}
           />
         </> :
-          <Box></Box>
+          isError ? <DataNotFound /> :
+            <></>
       }
       {
         open && <ViewDialogs open={open} setOpen={setOpen} data={selectedRow} />
