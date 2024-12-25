@@ -66,29 +66,29 @@ export default function AllProjects() {
                 cardSubTitle=''
                 detailsInfoPath=''
                 clientFullName=''
-                clientImage=''
+                clientImage={null}
                 projectManagerFullName=''
-                projectManagerImage=''
+                projectManagerImage={null}
                 startDate=''
                 endDate=''
                 status=''
                 isLoading={isLoading || isFetching}
               />
             </Box>) :
-              projectData ? projectData.data.map((data: TProject, i: number) => <Box
+              projectData ? projectData?.data.map((data: TProject, i: number) => <Box
                 key={i}
                 width='49%'
               >
                 <ProjectCard
-                  cardTitle={data.projectName}
+                  cardTitle={data?.projectName}
                   cardSubTitle='4 Members'
-                  detailsInfoPath={`/dashboard/admin/all-projects/${data.id}`}
+                  detailsInfoPath={`/dashboard/admin/all-projects/${data?.id}`}
                   clientFullName={`${data.client.user.firstName} ${data.client.user.lastName}`}
-                  clientImage={`${data.client.user.profileImage}`}
-                  projectManagerFullName={`${data.projectManager.user.firstName} ${data.projectManager.user.lastName}`}
-                  projectManagerImage={`${data.projectManager.user.profileImage}`}
-                  startDate={`${dateFormate(data.startDate)}`}
-                  endDate={`${dateFormate(data.estimatedEndDate)}`}
+                  clientImage={`${data?.client?.user.profileImage?.secure_url}`}
+                  projectManagerFullName={`${data?.projectManager?.user?.firstName} ${data?.projectManager?.user?.lastName}`}
+                  projectManagerImage={`${data?.projectManager?.user.profileImage}`}
+                  startDate={`${dateFormate(data?.startDate)}`}
+                  endDate={`${dateFormate(data?.estimatedEndDate)}`}
                   status={`${data.status}`}
                 />
               </Box>) :

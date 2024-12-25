@@ -78,7 +78,6 @@ export default function MediaCardOne({ payload }: { payload: TMedia }) {
         <Image
           alt="media image"
           src={payload?.image?.secure_url || assets.images.brokenImage}
-          // src={assets.images.brokenImage}
           width={500}
           height={500}
           className="rounded-2xl"

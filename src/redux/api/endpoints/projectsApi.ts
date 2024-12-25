@@ -18,8 +18,70 @@ const projectsApi = baseApi.injectEndpoints({
       }),
       providesTags: ['projects']
     }),
+
+    createProjects: build.mutation({
+      query: (data) => ({
+        method: 'POST',
+        url: '/project/create',
+        data
+      }),
+      invalidatesTags: ['projects']
+    }),
+
+    addEngineerToProject: build.mutation({
+      query: ({ data, projectId }) => ({
+        method: 'POST',
+        url: `/project/${projectId}/add-engineer`,
+        data
+      }),
+      invalidatesTags: ['projects']
+    }),
+
+    addProductToProject: build.mutation({
+      query: ({ data, projectId }) => ({
+        method: 'POST',
+        url: `/project/${projectId}/add-product`,
+        data
+      })
+    }),
+
+    removeEngineerFromProject: build.mutation({
+      query: ({ data, projectId }) => ({
+        method: 'POST',
+        url: `/project/${projectId}/remove-engineer`,
+        data
+      })
+    }),
+
+    removeProductFromProject: build.mutation({
+      query: ({ data, projectId }) => ({
+        method: 'POST',
+        url: `/project/${projectId}/remove-product`,
+        data
+      })
+    }),
+
+    updateProject: build.mutation({
+      query: ({ data, projectId }) => ({
+        method: 'POST',
+        url: `/project/${projectId}/remove-product`,
+        data
+      })
+    }),
+
+
+
   })
 });
 
-export const { useAllProjectsQuery, useSingleProjectsQuery } = projectsApi;
+export const {
+  useAllProjectsQuery,
+  useSingleProjectsQuery,
+  useCreateProjectsMutation,
+  useAddEngineerToProjectMutation,
+  useAddProductToProjectMutation,
+  useRemoveEngineerFromProjectMutation,
+  useRemoveProductFromProjectMutation,
+  useUpdateProjectMutation
+} = projectsApi;
 export default projectsApi;

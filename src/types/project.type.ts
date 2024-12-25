@@ -1,10 +1,12 @@
+import { TUploadedFile } from "./uploadedFile.type";
+
 // User type
 type TUser = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  profileImage: string | null;
+  profileImage: TUploadedFile | null;
 };
 
 // Employee type
@@ -30,7 +32,7 @@ export type TProduct = {
   id: string;
   equipmentId: string;
   equipmentName: string;
-  equipmentImage: string[];
+  equipmentImage: TUploadedFile[];
   registrationNumber: string;
   category: string;
   status: string;
@@ -55,7 +57,7 @@ export type TProjectGalleryComment = {
   firstName: string;
   lastName: string;
   email: string;
-  profileImage: string | null;
+  profileImage: TUploadedFile | null;
   role: string;
   comment: string;
 };
@@ -65,7 +67,7 @@ export type TProjectGallery = {
   id: string;
   projectId: string;
   title: string;
-  image: string;
+  image: TUploadedFile;
   uploaderId: string;
   comments: TProjectGalleryComment[];
   createdAt: string; // ISO Date string

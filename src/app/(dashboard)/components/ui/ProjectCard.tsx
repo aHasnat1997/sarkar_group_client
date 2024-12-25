@@ -1,17 +1,18 @@
 import RightDirectionIcon from "@/assets/icons/direction_right.svg";
-import UserIcon from "@/assets/icons/clients.svg";
-import Image from "next/image";
+// import Image from "next/image";
 import { Box, Button, IconButton, Skeleton, Stack, Typography } from "@mui/material";
 import Link from "next/link";
+// import assets from "@/assets";
+import capitalizeLetter from "@/utils/capitalizeLetter";
 
 type TProjectCard = {
   cardTitle: string;
   cardSubTitle: string;
   detailsInfoPath: string;
   clientFullName: string;
-  clientImage: string;
+  clientImage: string | null;
   projectManagerFullName: string;
-  projectManagerImage: string;
+  projectManagerImage: string | null;
   startDate: string;
   endDate: string;
   status: string;
@@ -22,9 +23,9 @@ export default function ProjectCard({
   cardSubTitle,
   detailsInfoPath,
   clientFullName,
-  clientImage,
+  clientImage = null,
   projectManagerFullName,
-  projectManagerImage,
+  projectManagerImage = null,
   startDate,
   endDate,
   status,
@@ -42,6 +43,9 @@ export default function ProjectCard({
       image: projectManagerImage
     }
   ];
+
+  console.log(cardBody);
+
 
   if (isLoading) {
     return (
@@ -201,19 +205,24 @@ export default function ProjectCard({
             >
               <Stack alignItems='center' gap='1rem'>
                 <Box>
-                  {
-                    data.image !== 'null' || null ?
-                      <Image
+                  {/* to-do: fix image */}
+                  {/* {
+                    !data.image ? <Image
+                      alt='client image'
+                      src={assets.images.userPlaceholderImage}
+                      width={200}
+                      height={200}
+                      className='rounded-full size-8'
+                    /> :
+                      data?.image ? <Image
                         alt='client image'
-                        src={data.image}
+                        src={data?.image}
                         width={200}
                         height={200}
-                        className='rounded-full'
+                        className='rounded-full size-8'
                       /> :
-                      <Box>
-                        <UserIcon />
-                      </Box>
-                  }
+                        <></>
+                  } */}
                 </Box>
                 <Box>
                   <Typography>{data.fullName}</Typography>
@@ -238,7 +247,7 @@ export default function ProjectCard({
         </Box>
         <Box>
           <Typography color='text.secondary'>Status</Typography>
-          <Typography>{status}</Typography>
+          <Typography>{capitalizeLetter(status.split('_').join(' '))}</Typography>
         </Box>
       </Stack>
     </Box>

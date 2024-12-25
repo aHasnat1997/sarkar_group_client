@@ -44,7 +44,7 @@ export default function EmployeeDetails({ params }: { params: { id: string } }) 
         paddingBottom='1.5rem'
       >
         <Stack alignItems='center' gap='1rem'>
-          {employeeData?.data?.profileImage.secure_url ?
+          {employeeData?.data?.profileImage ?
             <Image
               src={employeeData?.data?.profileImage?.secure_url}
               alt='Profile Image'

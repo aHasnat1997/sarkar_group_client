@@ -11,6 +11,24 @@ const employeesApi = baseApi.injectEndpoints({
       providesTags: ['employees']
     }),
 
+    allProjectManagers: build.query({
+      query: (params) => ({
+        method: 'GET',
+        url: '/project-manager/all',
+        params
+      }),
+      providesTags: ['employees']
+    }),
+
+    allEngineers: build.query({
+      query: (params) => ({
+        method: 'GET',
+        url: '/engineer/all',
+        params
+      }),
+      providesTags: ['employees']
+    }),
+
     singleEmployees: build.query({
       query: (id) => ({
         method: 'GET',
@@ -51,6 +69,8 @@ const employeesApi = baseApi.injectEndpoints({
 
 export const {
   useAllEmployeesQuery,
+  useAllProjectManagersQuery,
+  useAllEngineersQuery,
   useSingleEmployeesQuery,
   useCrateAdminMutation,
   useCrateProjectManagerMutation,
