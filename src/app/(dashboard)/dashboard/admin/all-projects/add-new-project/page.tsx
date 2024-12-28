@@ -36,12 +36,10 @@ export default function AddNewProject() {
       startDate: new Date(startDate).toISOString(),
       estimatedEndDate: new Date(estimatedEndDate).toISOString()
     };
-    console.log("Form submitted with:", { projectData });
     try {
       const project = await createProject(projectData);
-      console.log({ project });
       if (project?.data?.success) {
-        router.push(`/dashboard/admin/all-projects/${project.data.id}`)
+        router.push(`/dashboard/admin/all-projects/${project.data.data.id}`)
       } else {
         console.log({ project });
       }

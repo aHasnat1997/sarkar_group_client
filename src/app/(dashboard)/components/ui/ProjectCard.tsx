@@ -44,9 +44,6 @@ export default function ProjectCard({
     }
   ];
 
-  console.log(cardBody);
-
-
   if (isLoading) {
     return (
       <Box

@@ -81,12 +81,12 @@ export default function AllProjects() {
               >
                 <ProjectCard
                   cardTitle={data?.projectName}
-                  cardSubTitle='4 Members'
+                  cardSubTitle={`${data?.engineers?.length + 2} Members`}
                   detailsInfoPath={`/dashboard/admin/all-projects/${data?.id}`}
-                  clientFullName={`${data.client.user.firstName} ${data.client.user.lastName}`}
+                  clientFullName={`${data.client.user.firstName} ${data?.client?.user?.lastName}`}
                   clientImage={`${data?.client?.user.profileImage?.secure_url}`}
                   projectManagerFullName={`${data?.projectManager?.user?.firstName} ${data?.projectManager?.user?.lastName}`}
-                  projectManagerImage={`${data?.projectManager?.user.profileImage}`}
+                  projectManagerImage={`${data?.engineers?.length + 2}`}
                   startDate={`${dateFormate(data?.startDate)}`}
                   endDate={`${dateFormate(data?.estimatedEndDate)}`}
                   status={`${data.status}`}

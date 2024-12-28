@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
     }
 
     const uploadResponse = await cloudinary.v2.uploader.upload(file, {
-      resource_type: 'auto'
+      resource_type: 'auto',
+      folder: process.env.CLOUDINARY_FOLDER_NAME
     });
 
     return NextResponse.json(uploadResponse, { status: 200 });

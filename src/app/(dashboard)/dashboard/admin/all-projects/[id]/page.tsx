@@ -15,8 +15,6 @@ import { useSingleProjectsQuery } from "@/redux/api/endpoints/projectsApi";
 import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
 export default function ProjectDetails({ params }: { params: { id: string } }) {
-  console.log({ params });
-
   const { data: projectDetails, isLoading, isError } = useSingleProjectsQuery(params.id);
   console.log({ projectDetails, isLoading });
 
@@ -59,11 +57,11 @@ export default function ProjectDetails({ params }: { params: { id: string } }) {
                 {projectDetails?.data?.projectName}
               </Typography>
               <Typography color='text.secondary'>
-                4 Members
+                {projectDetails?.data?.engineers?.length + 2} Members
               </Typography>
             </Box>
           </Stack>
-          <ProjectDialogButtons value={value} />
+          <ProjectDialogButtons value={value} projectId={projectDetails?.data?.id} />
         </Stack>
       </Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

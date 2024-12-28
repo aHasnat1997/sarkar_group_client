@@ -4,11 +4,11 @@ import DialogTwo from "./dialogTwo";
 import DialogThree from "./dialogThree";
 import DialogFour from "./dialogFour";
 
-export default function ProjectDialogButtons({ value }: { value: number }) {
+export default function ProjectDialogButtons({ value, projectId }: { value: number, projectId: string }) {
   const [open, setOpen] = useState(false);
 
   if (value === 0) return <DialogOne open={open} setOpen={setOpen} />
-  else if (value === 1) return <DialogTwo open={open} setOpen={setOpen} />
+  else if (value === 1) return <DialogTwo open={open} setOpen={setOpen} projectId={projectId} />
   else if (value === 2) return <DialogThree open={open} setOpen={setOpen} />
   else if (value === 3) return <DialogFour open={open} setOpen={setOpen} />
   else return <></>
