@@ -7,6 +7,7 @@ type TUser = {
   lastName: string;
   email: string;
   profileImage: TUploadedFile | null;
+  role: string
 };
 
 // Employee type
@@ -30,13 +31,14 @@ type TClient = {
 // Product type
 export type TProduct = {
   id: string;
+  createdAdminId: string;
+  clientsId: string | null;
   equipmentId: string;
-  equipmentName: string;
   equipmentImage: TUploadedFile[];
   registrationNumber: string;
+  equipmentName: string;
   category: string;
   status: string;
-  createdAdminId: string;
   ownerName: string;
   ownerAddress: string;
   ownerNumber: string;
@@ -53,13 +55,9 @@ export type TProduct = {
 
 // ProjectGalleryComment type
 export type TProjectGalleryComment = {
-  userId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  profileImage: TUploadedFile | null;
-  role: string;
+  id: string;
   comment: string;
+  commenter: TUser
 };
 
 // ProjectGallery type
@@ -67,8 +65,9 @@ export type TProjectGallery = {
   id: string;
   projectId: string;
   title: string;
-  image: TUploadedFile;
+  images: TUploadedFile[];
   uploaderId: string;
+  uploader: TUser;
   comments: TProjectGalleryComment[];
   createdAt: string; // ISO Date string
   updatedAt: string; // ISO Date string

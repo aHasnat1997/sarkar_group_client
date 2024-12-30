@@ -1,21 +1,58 @@
 import { Dispatch, SetStateAction } from "react";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, MenuItem, Stack, Typography } from "@mui/material";
 import EditIcon from "@/assets/icons/edit.svg";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Form, FormField, FormInput, FormItem } from "@/components/form";
-import { ProjectFormValues, projectZodSchema } from "../../add-new-project/form/formZodSchema";
+import { Form, FormDatePicker, FormField, FormInput, FormItem, FormSelect } from "@/components/form";
+import { ProjectUpdateFormValues, projectUpdateSchema } from "../../add-new-project/form/formZodSchema";
+import capitalizeLetter from "@/utils/capitalizeLetter";
+import Link from "next/link";
+import { useUpdateProjectMutation } from "@/redux/api/endpoints/projectsApi";
+import { TProject } from "@/types";
+import dayjs from "dayjs";
 
-export default function DialogOne({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
-  const methods = useForm<ProjectFormValues>({
-    resolver: zodResolver(projectZodSchema),
-    defaultValues: {}
+export default function DialogOne(
+  { open, setOpen, payload }:
+    { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, payload: TProject }
+) {
+  const enumsType = ['CIVIL', 'MARIN', 'ENGINEERING'];
+
+  const [updateProjectData, { isLoading, isError, isSuccess }] = useUpdateProjectMutation();
+
+  const methods = useForm<ProjectUpdateFormValues>({
+    resolver: zodResolver(projectUpdateSchema),
+    defaultValues: {
+      projectName: payload?.projectName,
+      department: payload?.department as "CIVIL" | "MARIN" | "ENGINEERING",
+      startDate: dayjs(payload?.startDate),
+      estimatedEndDate: dayjs(payload?.estimatedEndDate),
+      productType: payload?.productType as "CIVIL" | "MARIN" | "ENGINEERING",
+      projectType: payload?.projectType as "CIVIL" | "MARIN" | "ENGINEERING",
+      street: payload?.street,
+      city: payload?.city,
+      state: payload?.state,
+      zip: payload?.zip
+    }
   });
 
-  const formSubmit: SubmitHandler<ProjectFormValues> = (data) => {
-    console.log("Form submitted with:", data);
-    setOpen(false);
+  const formSubmit: SubmitHandler<ProjectUpdateFormValues> = async (data) => {
+    const { startDate, estimatedEndDate, ...rest } = data;
+    const projectData = {
+      ...rest,
+      startDate: new Date(startDate).toISOString(),
+      estimatedEndDate: new Date(estimatedEndDate).toISOString()
+    };
+    try {
+      const project = await updateProjectData({ data: projectData, projectId: payload?.id });
+      if (project?.data?.success) {
+        setOpen(false)
+      } else {
+        console.log({ project });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return <>
@@ -71,10 +108,15 @@ export default function DialogOne({ open, setOpen }: { open: boolean, setOpen: D
                   name='department'
                   control={methods.control}
                   render={({ field }) => (
-                    <FormInput
-                      {...field}
-                      label='Department'
-                    />
+                    <FormSelect {...field} label="Select Department">
+                      {
+                        enumsType.map((data, i) => <MenuItem key={i} value={data}>
+                          {
+                            capitalizeLetter(data)
+                          }
+                        </MenuItem>)
+                      }
+                    </FormSelect>
                   )}
                 />
               </FormItem>
@@ -83,37 +125,10 @@ export default function DialogOne({ open, setOpen }: { open: boolean, setOpen: D
             <Stack gap='1.5rem'>
               <FormItem style={{ width: "100%" }}>
                 <FormField
-                  name="client"
+                  name="startDate"
                   control={methods.control}
                   render={({ field }) => (
-                    <FormInput
-                      {...field}
-                      label="Client"
-                    />
-                  )}
-                />
-              </FormItem>
-              <FormItem style={{ width: "100%" }}>
-                <FormField
-                  name='email'
-                  control={methods.control}
-                  render={({ field }) => (
-                    <FormInput
-                      {...field}
-                      label='Email Address'
-                    />
-                  )}
-                />
-              </FormItem>
-            </Stack>
-
-            <Stack gap='1.5rem'>
-              <FormItem style={{ width: "100%" }}>
-                <FormField
-                  name="startingDate"
-                  control={methods.control}
-                  render={({ field }) => (
-                    <FormInput
+                    <FormDatePicker
                       {...field}
                       label="Starting Date"
                     />
@@ -122,12 +137,12 @@ export default function DialogOne({ open, setOpen }: { open: boolean, setOpen: D
               </FormItem>
               <FormItem style={{ width: "100%" }}>
                 <FormField
-                  name='estimatedFinishDate'
+                  name='estimatedEndDate'
                   control={methods.control}
                   render={({ field }) => (
-                    <FormInput
+                    <FormDatePicker
                       {...field}
-                      label='Estimated Finish Date'
+                      label="Estimated Finish Date"
                     />
                   )}
                 />
@@ -140,10 +155,15 @@ export default function DialogOne({ open, setOpen }: { open: boolean, setOpen: D
                   name="productType"
                   control={methods.control}
                   render={({ field }) => (
-                    <FormInput
-                      {...field}
-                      label="Product Type"
-                    />
+                    <FormSelect {...field} label="Product Type">
+                      {
+                        enumsType.map((data, i) => <MenuItem key={i} value={data}>
+                          {
+                            capitalizeLetter(data)
+                          }
+                        </MenuItem>)
+                      }
+                    </FormSelect>
                   )}
                 />
               </FormItem>
@@ -152,10 +172,15 @@ export default function DialogOne({ open, setOpen }: { open: boolean, setOpen: D
                   name='projectType'
                   control={methods.control}
                   render={({ field }) => (
-                    <FormInput
-                      {...field}
-                      label='Project Type'
-                    />
+                    <FormSelect {...field} label="Project Type">
+                      {
+                        enumsType.map((data, i) => <MenuItem key={i} value={data}>
+                          {
+                            capitalizeLetter(data)
+                          }
+                        </MenuItem>)
+                      }
+                    </FormSelect>
                   )}
                 />
               </FormItem>
@@ -163,12 +188,12 @@ export default function DialogOne({ open, setOpen }: { open: boolean, setOpen: D
 
             <FormItem style={{ width: "100%" }}>
               <FormField
-                name="address"
+                name="street"
                 control={methods.control}
                 render={({ field }) => (
                   <FormInput
                     {...field}
-                    label="Address"
+                    label="Street"
                   />
                 )}
               />
@@ -207,6 +232,8 @@ export default function DialogOne({ open, setOpen }: { open: boolean, setOpen: D
                     <FormInput
                       {...field}
                       label='ZIP Code'
+                      type='number'
+                      onChange={(event) => field.onChange(event.target.value ? Number(event.target.value) : '')}
                     />
                   )}
                 />
@@ -214,18 +241,20 @@ export default function DialogOne({ open, setOpen }: { open: boolean, setOpen: D
             </Stack>
 
             <Stack alignItems='center' gap='1rem' justifyContent='end'>
-              <Button
-                variant="outlined"
-                type="button"
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </Button>
+              <Link href='/dashboard/admin/all-projects'>
+                <Button
+                  variant="outlined"
+                  type="button"
+                >
+                  Cancel
+                </Button>
+              </Link>
               <Button
                 variant="contained"
                 type="submit"
+                disabled={isLoading || isSuccess}
               >
-                Save
+                {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Update Project'}
               </Button>
             </Stack>
 

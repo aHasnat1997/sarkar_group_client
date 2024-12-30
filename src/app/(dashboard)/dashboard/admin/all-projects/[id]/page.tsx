@@ -16,7 +16,6 @@ import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 
 export default function ProjectDetails({ params }: { params: { id: string } }) {
   const { data: projectDetails, isLoading, isError } = useSingleProjectsQuery(params.id);
-  console.log({ projectDetails, isLoading });
 
   const [value, setValue] = useState(0);
   const tebContent = [
@@ -61,7 +60,7 @@ export default function ProjectDetails({ params }: { params: { id: string } }) {
               </Typography>
             </Box>
           </Stack>
-          <ProjectDialogButtons value={value} projectId={projectDetails?.data?.id} />
+          <ProjectDialogButtons value={value} project={projectDetails?.data} />
         </Stack>
       </Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

@@ -13,7 +13,6 @@ export default function DialogTwo(
   const [openAutocomplete, setOpenAutocomplete] = useState<boolean>(false);
   const [selectedEngineers, setSelectedEngineers] = useState<{ id: string }[]>([]);
   const engineerIds = selectedEngineers.map(data => data.id);
-  console.log({ engineerIds });
 
   const [
     addEngineerToProject,
@@ -23,7 +22,7 @@ export default function DialogTwo(
     data: engineersData,
     isLoading: engineersDataLoading,
     isFetching: engineersDataFetching
-  } = useAllEngineersQuery({ 'user.email': engineerEmail, limit: 10 });
+  } = useAllEngineersQuery({ 'user.email': engineerEmail, limit: 5 });
 
   const handleAutocompleteChange = (event: React.ChangeEvent<unknown>, newValue: any[]) => {
     setSelectedEngineers(newValue);

@@ -9,7 +9,7 @@ import TrashIcon from "@/assets/icons/trash.svg";
 import RequestIcon from "@/assets/icons/application.svg";
 import Link from "next/link";
 import SMDDataTable from "../../../components/ui/SMDDataTable";
-import ViewDialogs from "./components/viewDialog";
+import ViewProductDialogs from "./components/viewProductDialogs";
 import { useAllProductsQuery } from "@/redux/api/endpoints/productsApi";
 import TProduct from "@/types/product.type";
 import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
@@ -168,7 +168,7 @@ export default function AllProduct() {
         }
       </Box>
       {
-        open && <ViewDialogs open={open} setOpen={setOpen} data={selectedRow} />
+        open && <ViewProductDialogs open={open} setOpen={setOpen} data={selectedRow} />
       }
     </Box>
   );
