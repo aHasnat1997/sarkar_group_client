@@ -2,7 +2,7 @@
 
 import capitalizeLetter from "@/utils/capitalizeLetter";
 import { useState } from "react";
-import { Box, Button, CircularProgress, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import ProductIcon from "@/assets/icons/product.svg";
 import MailIcon from "@/assets/icons/gmail.svg";
@@ -13,7 +13,6 @@ import ProfileTab from "./profile";
 import ProjectTab from "./project";
 import { useSingleEmployeesQuery } from "@/redux/api/endpoints/employeesApi";
 import assets from "@/assets";
-// import { TEmployeeData } from "@/types";
 
 export default function EmployeeDetails({ params }: { params: { id: string } }) {
   const [value, setValue] = useState(0);
@@ -87,22 +86,20 @@ export default function EmployeeDetails({ params }: { params: { id: string } }) 
 
       <Stack mt='1.5rem' gap='1.5rem' alignItems='start'>
         <Box width='15%'>
-          <Tabs
-            orientation="vertical"
-            value={value}
-            onChange={(e, newValue) => setValue(newValue)}
+          <Button
+            fullWidth
+            variant={value === 0 ? 'contained' : 'outlined'}
+            onClick={() => setValue(0)}
           >
-            <Tab
-              icon={<UserIcon />}
-              iconPosition="start"
-              label='Profile'
-            />
-            <Tab
-              icon={<ProjectIcon />}
-              iconPosition="start"
-              label='Project'
-            />
-          </Tabs>
+            <UserIcon /> <span className='ml-4'>Profile</span>
+          </Button>
+          <Button
+            fullWidth
+            variant={value === 1 ? 'contained' : 'outlined'}
+            onClick={() => setValue(1)}
+          >
+            <ProjectIcon /> <span className='ml-4'>Project</span>
+          </Button>
         </Box>
         <Box width='85%'>
           {

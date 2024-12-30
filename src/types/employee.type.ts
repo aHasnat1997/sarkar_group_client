@@ -2,6 +2,14 @@
 
 import { TUploadedFile } from "./uploadedFile.type";
 
+type TProject = {
+  id: string;
+  projectName: string;
+  startDate: string;
+  estimatedEndDate: string;
+  status: string;
+}
+
 type TEmployeeInfo = {
   id: string;
   employeeId: string;
@@ -22,6 +30,8 @@ type TEmployeeInfo = {
   state: string;
   zip: number;
   documents: Partial<TUploadedFile>[] | [];
+  createProjects?: TProject[] | [];
+  assignProjects?: TProject[] | [];
   createdAt: string;
   updatedAt: string;
 };
