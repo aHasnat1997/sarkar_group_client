@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { Box, Button, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import SMDDataTable from "../../../components/ui/SMDDataTable";
 import ViewIcon from "@/assets/icons/view.svg";
@@ -9,6 +9,7 @@ import ViewDialogs from "./components/viewDialog";
 import { TPayment } from "@/types";
 import { useMyPaymentsQuery } from "@/redux/api/endpoints/paymentsApi";
 import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
+import CreateDialog from "./components/createDialog";
 
 export default function Payment() {
   const [open, setOpen] = useState(false);
@@ -50,9 +51,9 @@ export default function Payment() {
           />
         </Stack>
 
-        <Button>
-          Create Payment
-        </Button>
+        <Box>
+          <CreateDialog />
+        </Box>
       </Stack>
       {
         isLoading || paymentData ? <>

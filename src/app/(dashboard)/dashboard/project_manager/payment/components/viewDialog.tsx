@@ -1,11 +1,10 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Grid2, Stack } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
 import { TPayment } from "@/types";
-import AcceptDialog from "./acceptDialog";
-import DeclineDialog from "./declineDialog";
 import capitalizeLetter from "@/utils/capitalizeLetter";
+import ViewFile from "@/app/(dashboard)/components/ui/ViewFile";
 
 export default function ViewDialogs(
   { open, setOpen, data }:
@@ -38,33 +37,42 @@ export default function ViewDialogs(
         </Stack>
         <Box>
           {
-            data?.status === 'PENDING' ? <Stack gap='1rem'>
-              <AcceptDialog setOpen={setOpen} paymentId={data?.id} />
-              <DeclineDialog setOpen={setOpen} paymentId={data?.id} />
+            data?.status === 'APPROVED' ? <Stack gap='1rem'>
+              <DataViewField title="Approved By" data={`${data?.admin?.user?.firstName} ${data?.admin?.user?.lastName}`} />
+              <DataViewField title="Designation" data={capitalizeLetter(data?.admin?.designation.split('_').join(' '))} />
             </Stack> :
-              data?.status === 'APPROVED' ? <Stack gap='1rem'>
-                <DataViewField title="Approved By" data={`${data?.admin?.user?.firstName} ${data?.admin?.user?.lastName}`} />
-                <DataViewField title="Designation" data={capitalizeLetter(data?.admin?.designation.split('_').join(' '))} />
-              </Stack> :
-                data?.status === 'REJECTED' ? <Stack gap='1rem' direction='column'>
-                  <Stack gap='1rem'>
-                    <DataViewField
-                      title="Rejected By"
-                      data={`${data?.admin?.user?.firstName} ${data?.admin?.user?.lastName}`}
-                    />
-                    <DataViewField
-                      title="Designation"
-                      data={capitalizeLetter(data?.admin?.designation.split('_').join(' '))}
-                    />
-                  </Stack>
+              data?.status === 'REJECTED' ? <Stack gap='1rem' direction='column'>
+                <Stack gap='1rem'>
                   <DataViewField
-                    title="Decline Reason"
-                    data={data?.declineReason}
+                    title="Rejected By"
+                    data={`${data?.admin?.user?.firstName} ${data?.admin?.user?.lastName}`}
                   />
-                </Stack> :
-                  <></>
+                  <DataViewField
+                    title="Designation"
+                    data={capitalizeLetter(data?.admin?.designation.split('_').join(' '))}
+                  />
+                </Stack>
+                <DataViewField
+                  title="Decline Reason"
+                  data={data?.declineReason}
+                />
+              </Stack> :
+                <></>
           }
         </Box>
+        <Grid2 container spacing='1.5rem'>
+          {
+            data?.documents ? data?.documents.map(doc => <Grid2
+              key={doc.public_id}
+              size={6}
+            >
+              <ViewFile
+                file={doc}
+                downloadable={true}
+              />
+            </Grid2>) : <></>
+          }
+        </Grid2>
       </Stack>
     </ResponsiveDialog>
   </>

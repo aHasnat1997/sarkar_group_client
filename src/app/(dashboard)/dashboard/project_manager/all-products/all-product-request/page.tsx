@@ -466,7 +466,7 @@ export default function AllProductRequest() {
             className="focus:outline-none bg-transparent"
           />
         </Stack>
-        <Link href='/dashboard/project_manager/all-products'>
+        <Link href='/dashboard/admin/all-products'>
           <IconButton>
             <ArrowBackIcon />
           </IconButton>
@@ -491,7 +491,7 @@ export default function AllProductRequest() {
             onLimitChange={setLimit}
             actions={(row) => (
               <Stack gap='.2rem'>
-                <Link href={`/dashboard/project_manager/all-products/${row.id}`}>
+                <Link href={`/dashboard/admin/all-products/${row.id}`}>
                   <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                     <ViewIcon />
                   </IconButton>

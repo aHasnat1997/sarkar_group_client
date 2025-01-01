@@ -11,6 +11,15 @@ const projectsApi = baseApi.injectEndpoints({
       providesTags: ['projects']
     }),
 
+    allEmployeeProjects: build.query({
+      query: (params) => ({
+        method: 'GET',
+        url: '/project/all/employee',
+        params
+      }),
+      providesTags: ['projects']
+    }),
+
     singleProjects: build.query({
       query: (id) => ({
         method: 'GET',
@@ -121,6 +130,7 @@ const projectsApi = baseApi.injectEndpoints({
 
 export const {
   useAllProjectsQuery,
+  useAllEmployeeProjectsQuery,
   useSingleProjectsQuery,
   useCreateProjectsMutation,
   useAddEngineerToProjectMutation,

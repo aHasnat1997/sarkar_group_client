@@ -1,3 +1,5 @@
+import { TUploadedFile } from "./uploadedFile.type";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type TPayment = {
   id: string;
@@ -9,7 +11,7 @@ export type TPayment = {
   actionByAdminId: string;
   declineReason: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  documents: string[];
+  documents?: Partial<TUploadedFile>[];
   createdAt: string;
   updatedAt: string;
   admin: {
