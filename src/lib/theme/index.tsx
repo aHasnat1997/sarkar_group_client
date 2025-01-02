@@ -69,6 +69,13 @@ const theme = createTheme({
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
         },
       }
+    },
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          borderRadius: '1.5rem'
+        }
+      }
     }
   },
   typography: {

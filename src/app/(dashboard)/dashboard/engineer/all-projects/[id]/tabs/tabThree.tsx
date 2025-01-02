@@ -1,14 +1,30 @@
-import { TProject } from "@/types";
+import { TProduct, TProject } from "@/types";
 import { Box, IconButton, Stack } from "@mui/material";
-import ViewIcon from "@/assets/icons/view.svg";
-import EditIcon from "@/assets/icons/edit.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
 import SMDDataTable from "@/app/(dashboard)/components/ui/SMDDataTable";
-import Link from "next/link";
 import capitalizeLetter from "@/utils/capitalizeLetter";
+import ViewProductDialogs from "@/app/(dashboard)/components/ProductViewDialog";
+import { useRouter } from "next/navigation";
+import { useRemoveProductFromProjectMutation } from "@/redux/api/endpoints/projectsApi";
 
 export default function TabThree({ payload }: { payload: TProject }) {
   const { products } = payload;
+  const router = useRouter();
+
+  const [removeProduct] = useRemoveProductFromProjectMutation();
+
+  const handelRemoveProductFromProject = async (productId: string) => {
+    const removeData = {
+      data: { productId },
+      projectId: payload?.id
+    };
+    try {
+      await removeProduct(removeData)
+      router.push(`/dashboard/admin/all-projects/${payload?.id}`)
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return <>
     <Box>
@@ -24,15 +40,13 @@ export default function TabThree({ payload }: { payload: TProject }) {
           ]}
           actions={(row) => (
             <Stack gap='.2rem'>
-              <Link href={`/dashboard/engineer/all-employees/${row.id}`}>
-                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                  <ViewIcon />
-                </IconButton>
-              </Link>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <EditIcon />
-              </IconButton>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+              <Box>
+                <ViewProductDialogs data={row as unknown as TProduct} />
+              </Box>
+              <IconButton
+                sx={{ border: 'none', color: 'text.primary' }}
+                onClick={() => handelRemoveProductFromProject(row.id)}
+              >
                 <TrashIcon />
               </IconButton>
             </Stack>
