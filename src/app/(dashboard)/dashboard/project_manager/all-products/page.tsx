@@ -66,17 +66,10 @@ export default function AllProduct() {
           />
         </Stack>
         <Stack gap='1rem'>
-          <Link href='/dashboard/admin/all-products/all-product-request'>
+          <Link href='/dashboard/project_manager/all-products/all-product-request'>
             <Button variant='outlined'>
               <Stack gap='.5rem' alignItems='center'>
                 <RequestIcon /> Product Request
-              </Stack>
-            </Button>
-          </Link>
-          <Link href='/dashboard/admin/all-products/add-new-product'>
-            <Button>
-              <Stack gap='.5rem' alignItems='center'>
-                <EditIcon /> Add Equipment
               </Stack>
             </Button>
           </Link>

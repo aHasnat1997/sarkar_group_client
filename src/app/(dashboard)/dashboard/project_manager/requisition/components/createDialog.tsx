@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { Autocomplete, Box, Button, Stack } from "@mui/material";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
-import { useCratePaymentMutation } from "@/redux/api/endpoints/paymentsApi";
+import { useCrateRequisitionMutation } from "@/redux/api/endpoints/requisitionsApi";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PaymentFormValues, paymentSchema } from "./formZodSchema";
 import { Form, FormField, FormInput, FormItem } from "@/components/form";
 import { cloudinaryRemove, cloudinaryUpload } from "@/utils/cloudinaryFn";
 import { TUploadedFile } from "@/types";
 import DockUpload from "@/app/(dashboard)/components/ui/DockUpload";
 import ViewFile from "@/app/(dashboard)/components/ui/ViewFile";
 import { useAllEmployeeProjectsQuery } from "@/redux/api/endpoints/projectsApi";
+import { RequisitionFormValues, requisitionSchema } from "./formZodSchema";
 
 export default function CreateDialog() {
   const [localOpen, setLocalOpen] = useState<boolean>(false);
   const [files, setFiles] = useState<Partial<TUploadedFile[] | []>>([]);
   const [projectName, setProjectName] = useState<string>('');
-  const [cratePayment, { isLoading, isError, isSuccess }] = useCratePaymentMutation();
+  const [crateRequisition, { isLoading, isError, isSuccess }] = useCrateRequisitionMutation();
   const { data: projectData } = useAllEmployeeProjectsQuery({ projectName });
 
   const handleImageChange = async (file: File) => {
@@ -30,18 +30,18 @@ export default function CreateDialog() {
     setFiles(newFiles);
   };
 
-  const methods = useForm<PaymentFormValues>({
-    resolver: zodResolver(paymentSchema)
+  const methods = useForm<RequisitionFormValues>({
+    resolver: zodResolver(requisitionSchema)
   });
 
-  const formSubmit: SubmitHandler<PaymentFormValues> = async (data) => {
-    const paymentBodyData = {
+  const formSubmit: SubmitHandler<RequisitionFormValues> = async (data) => {
+    const requisitionBodyData = {
       ...data,
       documents: files
     }
     try {
-      const payment = await cratePayment(paymentBodyData);
-      if (payment.data.success) {
+      const requisition = await crateRequisition(requisitionBodyData);
+      if (requisition.data.success) {
         setLocalOpen(false);
       }
     } catch (error) {
@@ -54,13 +54,13 @@ export default function CreateDialog() {
       fullWidth
       onClick={() => setLocalOpen(true)}
     >
-      Create Payment
+      Create Requisition
     </Button>
 
     <ResponsiveDialog
       open={localOpen}
       onClose={() => setLocalOpen(false)}
-      title='Create Payment'
+      title='Create Requisition'
     >
       <Form {...methods}>
         <Box
@@ -79,7 +79,7 @@ export default function CreateDialog() {
               render={({ field }) => (
                 <FormInput
                   {...field}
-                  label="Payment Title"
+                  label="Requisition Title"
                 />
               )}
             />
@@ -94,7 +94,7 @@ export default function CreateDialog() {
                   {...field}
                   multiline
                   rows={5}
-                  label="Payment Description"
+                  label="Requisition Description"
                 />
               )}
             />

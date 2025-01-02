@@ -466,7 +466,7 @@ export default function AllProductRequest() {
             className="focus:outline-none bg-transparent"
           />
         </Stack>
-        <Link href='/dashboard/admin/all-products'>
+        <Link href='/dashboard/project_manager/all-products'>
           <IconButton>
             <ArrowBackIcon />
           </IconButton>
