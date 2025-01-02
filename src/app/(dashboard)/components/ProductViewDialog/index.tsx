@@ -1,19 +1,23 @@
-import { Button, Stack } from "@mui/material";
-import { Dispatch, SetStateAction } from "react";
+import { Button, IconButton, Stack } from "@mui/material";
+import { useState } from "react";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
-import TProduct from "@/types/product.type";
 import capitalizeLetter from "@/utils/capitalizeLetter";
+import Image from "next/image";
+import assets from "@/assets";
+import ViewIcon from "@/assets/icons/view.svg";
+import { TProduct } from "@/types";
 
-export default function ViewProductDialogs(
-  { open, setOpen, data }:
-    {
-      open: boolean,
-      setOpen: Dispatch<SetStateAction<boolean>>,
-      data: TProduct | null
-    }
-) {
+export default function ViewProductDialogs({ data }: { data: TProduct | null }) {
+  const [open, setOpen] = useState<boolean>(false);
   return <>
+    <IconButton
+      onClick={() => setOpen(true)}
+      sx={{ border: 'none', color: 'text.primary' }}
+    >
+      <ViewIcon />
+    </IconButton>
+
     <ResponsiveDialog
       open={open}
       onClose={() => setOpen(false)}
@@ -21,6 +25,13 @@ export default function ViewProductDialogs(
       title='Product Details'
     >
       <Stack direction='column' gap='1rem'>
+        <Image
+          alt="product image"
+          src={data?.equipmentImage[0]?.secure_url ? data?.equipmentImage[0]?.secure_url : assets.images.brokenImage}
+          width={500}
+          height={500}
+          className="rounded-2xl"
+        />
         <DataViewField title="Equipment Name" data={data?.equipmentName} />
         <Stack>
           <DataViewField title="Equipment ID" data={data?.equipmentId} />

@@ -6,6 +6,8 @@ export type TApplication = {
   subject: string;
   description: string;
   applicationType: string;
+  startData: string;
+  endData: string;
   actionByAdminId: string | null;
   declineReason: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';

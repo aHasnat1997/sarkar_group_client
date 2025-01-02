@@ -4,15 +4,14 @@ import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from "@/assets/icons/edit.svg";
-import ViewIcon from "@/assets/icons/view.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
 import RequestIcon from "@/assets/icons/application.svg";
 import Link from "next/link";
 import SMDDataTable from "../../../components/ui/SMDDataTable";
-import ViewProductDialogs from "./components/viewProductDialogs";
+import ViewProductDialogs from "@/app/(dashboard)/components/ProductViewDialog";
 import { useAllProductsQuery } from "@/redux/api/endpoints/productsApi";
-import TProduct from "@/types/product.type";
 import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
+import { TProduct } from "@/types";
 
 type TProductCategory = 'CIVIL' | 'MARIN' | 'ENGINEERING';
 type TProductMetaData = {
@@ -27,14 +26,7 @@ export default function AllProduct() {
   const [currentCategory, setCurrentCategory] = useState<TProductCategory>('CIVIL');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [open, setOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<TProduct | null>(null);
   const { data: productsData, isLoading, isFetching, isError } = useAllProductsQuery({ page, limit, category: currentCategory });
-
-  const handleOpenModal = (row: TProduct) => {
-    setSelectedRow(row);
-    setOpen(true);
-  };
 
   return (
     <Box
@@ -144,9 +136,9 @@ export default function AllProduct() {
             onLimitChange={setLimit}
             actions={(row) => (
               <Stack gap='.2rem'>
-                <IconButton onClick={() => handleOpenModal(row)} sx={{ border: 'none', color: 'text.primary' }}>
-                  <ViewIcon />
-                </IconButton>
+                <Box>
+                  <ViewProductDialogs data={row as unknown as TProduct} />
+                </Box>
                 <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                   <EditIcon />
                 </IconButton>
@@ -160,9 +152,6 @@ export default function AllProduct() {
               <></>
         }
       </Box>
-      {
-        open && <ViewProductDialogs open={open} setOpen={setOpen} data={selectedRow} />
-      }
     </Box>
   );
 };

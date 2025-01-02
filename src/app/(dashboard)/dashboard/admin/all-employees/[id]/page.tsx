@@ -17,7 +17,6 @@ import assets from "@/assets";
 export default function EmployeeDetails({ params }: { params: { id: string } }) {
   const [value, setValue] = useState(0);
   const { data: employeeData, isLoading } = useSingleEmployeesQuery(params.id);
-  console.log({ employeeData });
 
   if (isLoading) {
     return <Stack width='100%' height='80vh' alignItems='center' justifyContent='center'>

@@ -101,7 +101,7 @@ export default function DrawerListItems(): TList[] {
     },
     {
       icon: <AllProjectIcon />,
-      title: 'All Projects',
+      title: 'My Projects',
       path: '/dashboard/project_manager/all-projects',
       hasChild: true
     },
@@ -152,7 +152,7 @@ export default function DrawerListItems(): TList[] {
     },
     {
       icon: <AllProjectIcon />,
-      title: 'All Projects',
+      title: 'My Projects',
       path: '/dashboard/engineer/all-projects',
       hasChild: true
     },

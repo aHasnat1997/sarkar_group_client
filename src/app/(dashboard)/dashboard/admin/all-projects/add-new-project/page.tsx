@@ -40,8 +40,6 @@ export default function AddNewProject() {
       const project = await createProject(projectData);
       if (project?.data?.success) {
         router.push(`/dashboard/admin/all-projects/${project.data.data.id}`)
-      } else {
-        console.log({ project });
       }
     } catch (error) {
       console.error(error);

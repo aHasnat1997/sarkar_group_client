@@ -6,6 +6,7 @@ import { TApplication } from "@/types";
 import AcceptDialog from "./acceptDialog";
 import DeclineDialog from "./declineDialog";
 import capitalizeLetter from "@/utils/capitalizeLetter";
+import { dateFormate } from "@/utils/dateFormate";
 
 export default function ViewDialogs(
   { open, setOpen, data }:
@@ -28,10 +29,9 @@ export default function ViewDialogs(
               data?.employee?.projectManagers ? capitalizeLetter(data?.employee?.projectManagers.designation.split('_').join(' ')) : ''
           } />
         </Stack>
-        {/* to-do: application api start date and end date */}
         <Stack gap='1rem'>
-          <DataViewField title="From This Date" data='12/12/25' />
-          <DataViewField title="To This Date" data='18/12/25' />
+          <DataViewField title="From This Date" data={dateFormate(data?.startData as string)} />
+          <DataViewField title="To This Date" data={dateFormate(data?.endData as string)} />
         </Stack>
         <DataViewField
           title="Subject"

@@ -1,3 +1,4 @@
+import { TProduct } from "./product.type";
 import { TUploadedFile } from "./uploadedFile.type";
 
 // User type
@@ -26,31 +27,6 @@ type TClient = {
   id: string;
   mobile: string;
   user: TUser;
-};
-
-// Product type
-export type TProduct = {
-  id: string;
-  createdAdminId: string;
-  clientsId: string | null;
-  equipmentId: string;
-  equipmentImage: TUploadedFile[];
-  registrationNumber: string;
-  equipmentName: string;
-  category: string;
-  status: string;
-  ownerName: string;
-  ownerAddress: string;
-  ownerNumber: string;
-  charteredBy: string;
-  charteredPersonPhone: string;
-  charteredPersonAddress: string;
-  brandName: string;
-  model: string;
-  dimensions: string;
-  manufacturingYear: string;
-  createdAt: string; // ISO Date string
-  updatedAt: string; // ISO Date string
 };
 
 // ProjectGalleryComment type

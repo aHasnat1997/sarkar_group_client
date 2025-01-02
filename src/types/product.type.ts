@@ -1,9 +1,11 @@
+import { TUploadedFile } from "./uploadedFile.type";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
-type TProduct = {
+export type TProduct = {
   id: string;
   equipmentId: string;
   equipmentName: string;
-  equipmentImage: string[];
+  equipmentImage: TUploadedFile[];
   registrationNumber: string;
   category: 'CIVIL' | 'MARIN' | 'ENGINEERING'; // Assuming category is an enum
   status: "IN_REPAIR" | "AVAILABLE" | "IN_USE"; // Assuming status is an enum
@@ -37,5 +39,3 @@ type TProduct = {
   projects: Record<string, unknown>[]; // Adjust this to the specific structure of projects if known
   crews: Record<string, unknown>[]; // Adjust this to the specific structure of crews if known
 };
-
-export default TProduct;

@@ -32,7 +32,6 @@ export default function DialogFour(
 
   const handelAddProjectGallery = async () => {
     const reqData = { projectId, images, title };
-    console.log({ reqData });
     try {
       const res = await addProjectGallery(reqData);
       if (res?.data?.success) {

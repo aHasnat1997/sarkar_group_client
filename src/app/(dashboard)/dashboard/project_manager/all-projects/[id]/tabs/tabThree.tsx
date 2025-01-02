@@ -1,27 +1,17 @@
-import { TProject, TProduct } from "@/types";
+import { TProduct, TProject } from "@/types";
 import { Box, IconButton, Stack } from "@mui/material";
-import ViewIcon from "@/assets/icons/view.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
 import SMDDataTable from "@/app/(dashboard)/components/ui/SMDDataTable";
 import capitalizeLetter from "@/utils/capitalizeLetter";
-import { useState } from "react";
-import ViewProductDialogs from "../../../all-products/components/viewProductDialogs";
-import TProductRow from "@/types/product.type";
+import ViewProductDialogs from "@/app/(dashboard)/components/ProductViewDialog";
 import { useRouter } from "next/navigation";
 import { useRemoveProductFromProjectMutation } from "@/redux/api/endpoints/projectsApi";
 
 export default function TabThree({ payload }: { payload: TProject }) {
   const { products } = payload;
-  const [open, setOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<TProduct | null>(null);
   const router = useRouter();
 
   const [removeProduct] = useRemoveProductFromProjectMutation();
-
-  const handleOpenModal = (row: TProduct) => {
-    setSelectedRow(row);
-    setOpen(true);
-  };
 
   const handelRemoveProductFromProject = async (productId: string) => {
     const removeData = {
@@ -50,9 +40,9 @@ export default function TabThree({ payload }: { payload: TProject }) {
           ]}
           actions={(row) => (
             <Stack gap='.2rem'>
-              <IconButton onClick={() => handleOpenModal(row)} sx={{ border: 'none', color: 'text.primary' }}>
-                <ViewIcon />
-              </IconButton>
+              <Box>
+                <ViewProductDialogs data={row as unknown as TProduct} />
+              </Box>
               <IconButton
                 sx={{ border: 'none', color: 'text.primary' }}
                 onClick={() => handelRemoveProductFromProject(row.id)}
@@ -65,8 +55,5 @@ export default function TabThree({ payload }: { payload: TProject }) {
           <Box></Box>
       }
     </Box>
-    {
-      open && <ViewProductDialogs open={open} setOpen={setOpen} data={selectedRow as unknown as TProductRow} />
-    }
   </>;
 };

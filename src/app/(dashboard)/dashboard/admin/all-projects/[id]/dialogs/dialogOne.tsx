@@ -47,8 +47,6 @@ export default function DialogOne(
       const project = await updateProjectData({ data: projectData, projectId: payload?.id });
       if (project?.data?.success) {
         setOpen(false)
-      } else {
-        console.log({ project });
       }
     } catch (error) {
       console.error(error);

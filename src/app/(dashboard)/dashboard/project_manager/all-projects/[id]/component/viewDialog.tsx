@@ -28,8 +28,6 @@ export default function ViewDialog(
   // const storedUser = useAppSelector((state: RootState) => state.auth.user) as TUser;
   const [comment, setComment] = useState<string | null>(null);
   const singleGalleryData: TProjectGallery = singleGalleryRes?.data;
-  console.log({ singleGalleryData });
-
 
   // useEffect(() => {
   //   setCurrentStoredUserId(storedUser.id);
