@@ -1,46 +1,63 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Autocomplete, Button, CircularProgress, Stack, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, Stack } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import EditIcon from "@/assets/icons/edit.svg";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
-import { useAddProductToProjectMutation } from "@/redux/api/endpoints/projectsApi";
+import { useCrateRequestProductMutation } from "@/redux/api/endpoints/requestProductsApi";
 import { useAllProductsQuery } from "@/redux/api/endpoints/productsApi";
+import { Form, FormDatePicker, FormField, FormInput, FormItem } from "@/components/form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+
+const requestProductsSchema = z.object({
+  productId: z.string(),
+  description: z.string(),
+  startDate: z.any(),
+  endDate: z.any()
+});
+type RequestProductsFormValues = z.infer<typeof requestProductsSchema>;
 
 export default function DialogThree(
   { open, setOpen, projectId }:
     { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, projectId: string }
 ) {
+  const router = useRouter();
   const [productName, setProductName] = useState<string>('');
-  const [openAutocomplete, setOpenAutocomplete] = useState<boolean>(false);
-  const [selectedProducts, setSelectedProducts] = useState<{ id: string }[]>([]);
-  const productIds = selectedProducts.map(data => data.id);
 
   const [
-    addProductToProject,
+    addRequestProductToProject,
     { isLoading, isError, isSuccess }
-  ] = useAddProductToProjectMutation();
-  const {
-    data: productsData,
-    isLoading: productsDataLoading,
-    isFetching: productsDataFetching
-  } = useAllProductsQuery({ equipmentName: productName, status: 'AVAILABLE', limit: 5 });
+  ] = useCrateRequestProductMutation();
+  const { data: productsData } = useAllProductsQuery({ equipmentName: productName, status: 'AVAILABLE', limit: 10 });
 
-  const handleAutocompleteChange = (event: React.ChangeEvent<unknown>, newValue: any[]) => {
-    setSelectedProducts(newValue);
-  };
+  const methods = useForm<RequestProductsFormValues>({
+    resolver: zodResolver(requestProductsSchema)
+  });
 
-  const handleAddProducts = async () => {
-    if (!productIds) return;
-    const done = await addProductToProject({ data: { productIds }, projectId });
-    if (done?.data?.success) {
-      setOpen(false)
+  const formSubmit: SubmitHandler<RequestProductsFormValues> = async (data) => {
+    const { startDate, endDate, ...rest } = data;
+    const projectData = {
+      ...rest,
+      projectId,
+      startDate: new Date(startDate).toISOString(),
+      endDate: new Date(endDate).toISOString(),
     };
+    try {
+      const project = await addRequestProductToProject(projectData);
+      if (project?.data?.success) {
+        router.push('/dashboard/project_manager/all-products/all-product-request');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return <>
     <Button onClick={() => setOpen(true)}>
       <Stack gap='.5rem' alignItems='center'>
-        <EditIcon /> Add Product
+        <EditIcon /> Request Product
       </Stack>
     </Button>
 
@@ -49,46 +66,95 @@ export default function DialogThree(
       onClose={() => setOpen(false)}
       title='Edit Profile'
     >
-      <Autocomplete
-        open={openAutocomplete}
-        onOpen={() => setOpenAutocomplete(true)}
-        onClose={() => setOpenAutocomplete(false)}
-        onChange={handleAutocompleteChange}
-        options={productsData?.data?.products || []}
-        getOptionLabel={(option: any) => option?.equipmentName || ''}
-        loading={productsDataLoading || productsDataFetching}
-        sx={{ mb: '1rem' }}
-        filterSelectedOptions
-        disablePortal
-        multiple
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Equipment Name"
-            onChange={(e) => setProductName(e.target.value)}
-            slotProps={{
-              input: {
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {productsDataLoading || productsDataFetching ? <CircularProgress color="inherit" size={20} /> : null}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
-              },
-            }}
-          />
-        )}
-      />
+      <Form {...methods}>
+        <Box
+          component="form"
+          onSubmit={methods.handleSubmit(formSubmit)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.5rem'
+          }}
+        >
+          <FormItem style={{ width: "100%" }}>
+            <FormField
+              name="productId"
+              control={methods.control}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  value={productsData?.data?.products.find((data: any) => data?.id === field.value) || null}
+                  onChange={(_, newValue) => field.onChange(newValue?.id || '')}
+                  disablePortal
+                  options={productsData?.data?.products || []}
+                  getOptionLabel={(option) => option?.equipmentName || ''}
+                  renderInput={(params) => (
+                    <FormInput
+                      {...params}
+                      label="Equipment Name"
+                      onChange={(e) => setProductName(e.target.value)}
+                    />
+                  )}
+                />
+              )}
+            />
+          </FormItem>
 
-      <Button
-        fullWidth
-        variant="contained"
-        disabled={isLoading || isSuccess}
-        onClick={handleAddProducts}
-      >
-        {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Add'}
-      </Button>
+          <FormItem style={{ width: "100%" }}>
+            <FormField
+              name="description"
+              control={methods.control}
+              render={({ field }) => (
+                <FormInput
+                  {...field}
+                  label="Description"
+                  multiline
+                  rows={5}
+                />
+              )}
+            />
+          </FormItem>
+
+          <Stack gap='1.5rem'>
+            <FormItem style={{ width: "100%" }}>
+              <FormField
+                name="startDate"
+                control={methods.control}
+                render={({ field }) => (
+                  <FormDatePicker
+                    {...field}
+                    label="Starting Date"
+                    disablePast
+                  />
+                )}
+              />
+            </FormItem>
+            <FormItem style={{ width: "100%" }}>
+              <FormField
+                name="endDate"
+                control={methods.control}
+                render={({ field }) => (
+                  <FormDatePicker
+                    {...field}
+                    label="Ending Date"
+                    disablePast
+                  />
+                )}
+              />
+            </FormItem>
+          </Stack>
+
+          <Button
+            fullWidth
+            variant="contained"
+            type="submit"
+            disabled={isLoading || isSuccess}
+          >
+            {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Send Request'}
+          </Button>
+        </Box>
+      </Form>
     </ResponsiveDialog>
   </>
 };

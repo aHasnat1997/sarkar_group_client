@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Autocomplete, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import EditIcon from "@/assets/icons/edit.svg";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
@@ -22,7 +22,7 @@ export default function DialogTwo(
     data: engineersData,
     isLoading: engineersDataLoading,
     isFetching: engineersDataFetching
-  } = useAllEngineersQuery({ 'user.email': engineerEmail, limit: 5 });
+  } = useAllEngineersQuery({ 'user.email': engineerEmail, limit: 10 });
 
   const handleAutocompleteChange = (event: React.ChangeEvent<unknown>, newValue: any[]) => {
     setSelectedEngineers(newValue);
@@ -48,46 +48,48 @@ export default function DialogTwo(
       onClose={() => setOpen(false)}
       title={<Typography fontSize='1.5rem' fontWeight={700}>Add Employee</Typography>}
     >
-      <Autocomplete
-        open={openAutocomplete}
-        onOpen={() => setOpenAutocomplete(true)}
-        onClose={() => setOpenAutocomplete(false)}
-        onChange={handleAutocompleteChange}
-        options={engineersData?.data || []}
-        getOptionLabel={(option: any) => option?.user?.email || ''}
-        loading={engineersDataLoading || engineersDataFetching}
-        sx={{ mb: '1rem' }}
-        filterSelectedOptions
-        disablePortal
-        multiple
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Engineer Email"
-            onChange={(e) => setEngineerEmail(e.target.value)}
-            slotProps={{
-              input: {
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {engineersDataLoading || engineersDataFetching ? <CircularProgress color="inherit" size={20} /> : null}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
-              },
-            }}
-          />
-        )}
-      />
+      <Box height={openAutocomplete ? '20rem' : '8rem'}>
+        <Autocomplete
+          open={openAutocomplete}
+          onOpen={() => setOpenAutocomplete(true)}
+          onClose={() => setOpenAutocomplete(false)}
+          onChange={handleAutocompleteChange}
+          options={engineersData?.data || []}
+          getOptionLabel={(option: any) => option?.user?.email || ''}
+          loading={engineersDataLoading || engineersDataFetching}
+          sx={{ mb: '1rem' }}
+          filterSelectedOptions
+          disablePortal
+          multiple
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Engineer Email"
+              onChange={(e) => setEngineerEmail(e.target.value)}
+              slotProps={{
+                input: {
+                  ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      {engineersDataLoading || engineersDataFetching ? <CircularProgress color="inherit" size={20} /> : null}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                },
+              }}
+            />
+          )}
+        />
 
-      <Button
-        fullWidth
-        variant="contained"
-        disabled={isLoading || isSuccess}
-        onClick={handleAddEngineers}
-      >
-        {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Add'}
-      </Button>
+        <Button
+          fullWidth
+          variant="contained"
+          disabled={isLoading || isSuccess}
+          onClick={handleAddEngineers}
+        >
+          {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Add'}
+        </Button>
+      </Box>
     </ResponsiveDialog>
   </>
 };

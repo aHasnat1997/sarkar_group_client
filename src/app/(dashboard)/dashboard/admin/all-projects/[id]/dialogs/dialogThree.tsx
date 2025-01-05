@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Autocomplete, Button, CircularProgress, Stack, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, CircularProgress, Stack, TextField } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import EditIcon from "@/assets/icons/edit.svg";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
@@ -49,46 +49,48 @@ export default function DialogThree(
       onClose={() => setOpen(false)}
       title='Edit Profile'
     >
-      <Autocomplete
-        open={openAutocomplete}
-        onOpen={() => setOpenAutocomplete(true)}
-        onClose={() => setOpenAutocomplete(false)}
-        onChange={handleAutocompleteChange}
-        options={productsData?.data?.products || []}
-        getOptionLabel={(option: any) => option?.equipmentName || ''}
-        loading={productsDataLoading || productsDataFetching}
-        sx={{ mb: '1rem' }}
-        filterSelectedOptions
-        disablePortal
-        multiple
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Equipment Name"
-            onChange={(e) => setProductName(e.target.value)}
-            slotProps={{
-              input: {
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {productsDataLoading || productsDataFetching ? <CircularProgress color="inherit" size={20} /> : null}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
-              },
-            }}
-          />
-        )}
-      />
+      <Box height={openAutocomplete ? '20rem' : '8rem'}>
+        <Autocomplete
+          open={openAutocomplete}
+          onOpen={() => setOpenAutocomplete(true)}
+          onClose={() => setOpenAutocomplete(false)}
+          onChange={handleAutocompleteChange}
+          options={productsData?.data?.products || []}
+          getOptionLabel={(option: any) => option?.equipmentName || ''}
+          loading={productsDataLoading || productsDataFetching}
+          sx={{ mb: '1rem' }}
+          filterSelectedOptions
+          disablePortal
+          multiple
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Equipment Name"
+              onChange={(e) => setProductName(e.target.value)}
+              slotProps={{
+                input: {
+                  ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      {productsDataLoading || productsDataFetching ? <CircularProgress color="inherit" size={20} /> : null}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                },
+              }}
+            />
+          )}
+        />
 
-      <Button
-        fullWidth
-        variant="contained"
-        disabled={isLoading || isSuccess}
-        onClick={handleAddProducts}
-      >
-        {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Add'}
-      </Button>
+        <Button
+          fullWidth
+          variant="contained"
+          disabled={isLoading || isSuccess}
+          onClick={handleAddProducts}
+        >
+          {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Add'}
+        </Button>
+      </Box>
     </ResponsiveDialog>
   </>
 };
