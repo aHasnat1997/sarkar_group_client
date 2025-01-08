@@ -35,7 +35,7 @@ export default function TabTwo({ payload }: { payload: TEmployeeData }) {
       data: dateFormate(payload.employeeInfo.joiningDate)
     },
     {
-      title: 'Project Location',
+      title: 'Office Location',
       data: payload.employeeInfo.officeLocation
     }
   ];

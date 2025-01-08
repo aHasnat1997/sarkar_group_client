@@ -39,7 +39,7 @@ export default function TabOne({ payload }: { payload: TEmployeeData }) {
       data: payload.employeeInfo.nationality
     },
     {
-      title: 'Address',
+      title: 'Street',
       data: payload.employeeInfo.street
     },
     {

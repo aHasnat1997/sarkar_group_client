@@ -7,6 +7,7 @@ import AllProjectIcon from '@/assets/icons/all-projects.svg';
 import ClientsIcon from '@/assets/icons/clients.svg';
 import PaymentIcon from '@/assets/icons/payment.svg';
 import ProductIcon from '@/assets/icons/product.svg';
+import EngineeringIcon from '@mui/icons-material/Engineering';
 import RequisitionIcon from '@/assets/icons/requisition.svg';
 import ApplicationIcon from '@/assets/icons/application.svg';
 import MediaIcon from '@/assets/icons/media.svg';
@@ -64,6 +65,12 @@ export default function DrawerListItems(): TList[] {
       icon: <ProductIcon />,
       title: 'Product',
       path: '/dashboard/admin/all-products',
+      hasChild: true
+    },
+    {
+      icon: <EngineeringIcon />,
+      title: 'All Crews',
+      path: '/dashboard/admin/all-crews',
       hasChild: true
     },
     {

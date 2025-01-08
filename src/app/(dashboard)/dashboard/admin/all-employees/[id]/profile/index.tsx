@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 import UserIcon from '@/assets/icons/user.svg';
 import BriefcaseIcon from "@/assets/icons/briefcase-04.svg";
@@ -9,8 +9,9 @@ import TabOne from "./tabs/tabOne";
 import TabTwo from "./tabs/tabTwo";
 import TabThree from "./tabs/tabThree";
 
-export default function ProfileTab({ payload }: { payload: TEmployeeData }) {
-  const [value, setValue] = useState(0);
+export default function ProfileTab(
+  { value, setValue, payload }: { value: number, setValue: Dispatch<SetStateAction<number>>, payload: TEmployeeData }
+) {
   const tebContent = [
     { index: 0, label: 'Personal Information', icon: <UserIcon /> },
     { index: 1, label: 'Professional Information', icon: <BriefcaseIcon /> },
