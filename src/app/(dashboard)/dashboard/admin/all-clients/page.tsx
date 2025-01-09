@@ -7,7 +7,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@/assets/icons/add-circle.svg';
 import SMDDataTable from "../../../components/ui/SMDDataTable";
 import ViewIcon from "@/assets/icons/view.svg";
-import EditIcon from "@/assets/icons/edit.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
 import { useAllClientsQuery } from "@/redux/api/endpoints/clientsApi";
 import { TClient } from "@/types";
@@ -76,9 +75,6 @@ export default function Clients() {
                   <ViewIcon />
                 </IconButton>
               </Link>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <EditIcon />
-              </IconButton>
               <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                 <TrashIcon />
               </IconButton>

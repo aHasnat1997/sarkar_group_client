@@ -87,7 +87,7 @@ export default function ProfileImageUpload(
               position='relative'
             >
               <div
-                className="absolute right-1 top-1 bg-slate-300 p-1 rounded-full"
+                className="absolute right-1 top-1 bg-slate-300 p-1 rounded-full cursor-pointer"
                 onClick={handleImageRemove}
               >
                 <CloseIcon />

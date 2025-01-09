@@ -1,8 +1,21 @@
-import { Box, Button, Stack } from "@mui/material";
+'use client';
+
+import { useState } from "react";
+import { Box, IconButton, Stack } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import AddCrew from "./dialogs/addCrew";
+import SMDDataTable from "@/app/(dashboard)/components/ui/SMDDataTable";
+import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
 import EditIcon from "@/assets/icons/edit.svg";
+import TrashIcon from "@/assets/icons/trash.svg";
+import { TCrew } from "@/types";
+import { useAllCrewsQuery } from "@/redux/api/endpoints/crewsApi";
+import ViewCrew from "./dialogs/viewCrew";
 
 export default function AllCrews() {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const { data: crewData, isLoading, isFetching, isError } = useAllCrewsQuery({ page, limit });
 
   return (
     <Box
@@ -35,15 +48,46 @@ export default function AllCrews() {
         </Stack>
         <Stack gap='1rem'>
 
-          <Button>
-            <Stack gap='.5rem' alignItems='center'>
-              <EditIcon /> Add Crew
-            </Stack>
-          </Button>
+          <Box>
+            <AddCrew />
+          </Box>
         </Stack>
       </Stack>
 
-
+      <Box>
+        {
+          isLoading || crewData ? <SMDDataTable
+            data={crewData?.data}
+            columns={[
+              { label: 'Crew Name', field: (row: TCrew) => row.fullName },
+              { label: 'Phone Number', field: (row: TCrew) => row.phone },
+              { label: 'NID No.', field: (row: TCrew) => row.nid }
+            ]}
+            page={page}
+            limit={limit}
+            totalPages={crewData?.mete?.totalPage}
+            total={crewData?.mete?.total}
+            isLoading={isLoading || isFetching}
+            onPageChange={setPage}
+            onLimitChange={setLimit}
+            actions={(row: TCrew) => (
+              <Stack gap='.2rem'>
+                <Box>
+                  <ViewCrew payload={row} />
+                </Box>
+                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
+                  <TrashIcon />
+                </IconButton>
+              </Stack>
+            )}
+          /> :
+            isError ? <DataNotFound /> :
+              <></>
+        }
+      </Box>
     </Box>
   );
 };

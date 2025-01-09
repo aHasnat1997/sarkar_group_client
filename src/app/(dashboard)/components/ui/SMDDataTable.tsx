@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Typography, Badge, TablePagination, Skeleton } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, Typography, Badge, TablePagination, Skeleton, Box, Stack } from '@mui/material';
 import { styled } from '@mui/system';
 import DataNotFound from './DataNotFound';
 
@@ -134,7 +134,7 @@ export default function SMDDataTable<T>({
                 )}
               </TableCell>
             ))}
-            {actions && <TableCell>
+            {actions && <TableCell align="right">
               <Typography variant="subtitle1" color='text.secondary'>Action</Typography>
             </TableCell>}
           </TableRow>
@@ -156,8 +156,12 @@ export default function SMDDataTable<T>({
                 </TableCell>
               ))}
               {actions && (
-                <TableCell>
-                  {actions(row)}
+                <TableCell align="right">
+                  <Stack justifyContent='end'>
+                    <Box>
+                      {actions(row)}
+                    </Box>
+                  </Stack>
                 </TableCell>
               )}
             </TableRow>

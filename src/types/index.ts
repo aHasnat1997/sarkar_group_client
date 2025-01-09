@@ -6,5 +6,6 @@ export * from './product.type';
 export * from './media.type';
 export * from './user.type';
 export * from './client.type';
+export * from './crew.type';
 export * from './application.type';
 export * from './uploadedFile.type';

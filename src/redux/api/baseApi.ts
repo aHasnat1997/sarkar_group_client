@@ -18,6 +18,7 @@ export const baseApi = createApi({
     'medias',
     'dashboards',
     'gallery',
-    'requestProducts'
+    'requestProducts',
+    'crews'
   ]
 });

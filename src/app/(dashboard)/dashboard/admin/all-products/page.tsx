@@ -147,9 +147,6 @@ export default function AllProduct() {
                   <ViewProductDialogs data={row as unknown as TProduct} />
                 </Box>
                 <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                   <TrashIcon />
                 </IconButton>
               </Stack>

@@ -8,7 +8,6 @@ import AddIcon from '@/assets/icons/add-circle.svg';
 import FilterIcon from '@/assets/icons/filter.svg';
 import Link from "next/link";
 import ViewIcon from "@/assets/icons/view.svg";
-import EditIcon from "@/assets/icons/edit.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
 import { useAllEmployeesQuery } from "@/redux/api/endpoints/employeesApi";
 import { TEmployeeData } from "@/types";
@@ -134,9 +133,6 @@ export default function AllEmployees() {
                     <ViewIcon />
                   </IconButton>
                 </Link>
-                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                  <EditIcon />
-                </IconButton>
                 <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                   <TrashIcon />
                 </IconButton>

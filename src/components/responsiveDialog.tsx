@@ -79,7 +79,7 @@ export const ResponsiveDialog: React.FC<ResponsiveDialogProps> = ({
               justifyContent: 'space-between',
             }}
           >
-            <Typography variant="h6" id="dialog-title">
+            <Typography id="dialog-title" fontSize='1.5rem' fontWeight={700}>
               {title}
             </Typography>
           </DialogTitle>
