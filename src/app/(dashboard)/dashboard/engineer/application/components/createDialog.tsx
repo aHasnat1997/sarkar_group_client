@@ -34,17 +34,18 @@ export default function CreateDialog() {
   });
 
   const formSubmit: SubmitHandler<ApplicationFormValues> = async (data) => {
-    const { startData, endData, ...rest } = data;
+    const { startDate, endDate, ...rest } = data;
     const applicationBodyData = {
       ...rest,
       documents: files,
-      startData: new Date(startData).toISOString(),
-      endData: new Date(endData).toISOString()
+      startDate: new Date(startDate).toISOString(),
+      endDate: new Date(endDate).toISOString()
     }
     try {
       const application = await crateApplication(applicationBodyData);
       if (application.data.success) {
         setLocalOpen(false);
+        methods.reset();
       }
     } catch (error) {
       console.error(error)
@@ -125,7 +126,7 @@ export default function CreateDialog() {
           <Stack gap='1.5rem'>
             <FormItem style={{ width: "100%" }}>
               <FormField
-                name="startData"
+                name="startDate"
                 control={methods.control}
                 render={({ field }) => (
                   <FormDatePicker
@@ -139,7 +140,7 @@ export default function CreateDialog() {
 
             <FormItem style={{ width: "100%" }}>
               <FormField
-                name="endData"
+                name="endDate"
                 control={methods.control}
                 render={({ field }) => (
                   <FormDatePicker
@@ -180,7 +181,13 @@ export default function CreateDialog() {
               fullWidth
               variant="outlined"
               type="button"
-              onClick={() => setLocalOpen(false)}
+              onClick={() => {
+                setLocalOpen(false)
+                methods.reset();
+                if (files.length > 0) {
+                  files.forEach(data => data?.public_id ? handleImageRemove(data?.public_id) : [])
+                }
+              }}
             >
               Cancel
             </Button>

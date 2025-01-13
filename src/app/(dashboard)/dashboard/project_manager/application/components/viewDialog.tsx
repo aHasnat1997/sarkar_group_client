@@ -1,10 +1,11 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Grid2, Stack } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
 import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
 import { TApplication } from "@/types";
 import capitalizeLetter from "@/utils/capitalizeLetter";
 import { dateFormate } from "@/utils/dateFormate";
+import ViewFile from "@/app/(dashboard)/components/ui/ViewFile";
 
 export default function ViewDialogs(
   { open, setOpen, data }:
@@ -28,8 +29,8 @@ export default function ViewDialogs(
           } />
         </Stack>
         <Stack gap='1rem'>
-          <DataViewField title="From This Date" data={dateFormate(data?.startData as string)} />
-          <DataViewField title="To This Date" data={dateFormate(data?.endData as string)} />
+          <DataViewField title="From This Date" data={dateFormate(data?.startDate as string)} />
+          <DataViewField title="To This Date" data={dateFormate(data?.endDate as string)} />
         </Stack>
         <DataViewField
           title="Subject"
@@ -64,6 +65,19 @@ export default function ViewDialogs(
                 <></>
           }
         </Box>
+        <Grid2 container spacing='1.5rem'>
+          {
+            data?.documents ? data?.documents.map(doc => <Grid2
+              key={doc.public_id}
+              size={6}
+            >
+              <ViewFile
+                file={doc}
+                downloadable={true}
+              />
+            </Grid2>) : <></>
+          }
+        </Grid2>
       </Stack>
     </ResponsiveDialog>
   </>

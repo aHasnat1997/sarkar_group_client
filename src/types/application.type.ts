@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { TUploadedFile } from "./uploadedFile.type";
+
 // Main response type
 export type TApplication = {
   id: string;
@@ -6,12 +9,12 @@ export type TApplication = {
   subject: string;
   description: string;
   applicationType: string;
-  startData: string;
-  endData: string;
+  startDate: string;
+  endDate: string;
   actionByAdminId: string | null;
   declineReason: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  documents: string[];
+  documents?: Partial<TUploadedFile>[];
   createdAt: string;
   updatedAt: string;
   admin: {

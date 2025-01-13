@@ -21,8 +21,8 @@ export const applicationSchema = z.object({
   description: z.string(),
   applicationType: ApplicationType,
   documents: z.array(z.object({})).optional(),
-  startData: z.any(),
-  endData: z.any()
+  startDate: z.any(),
+  endDate: z.any()
 });
 
 export type ApplicationFormValues = z.infer<typeof applicationSchema>;
