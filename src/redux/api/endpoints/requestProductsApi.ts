@@ -34,7 +34,7 @@ const requestProductsApi = baseApi.injectEndpoints({
         url: '/request-products/create',
         data: data
       }),
-      invalidatesTags: ['requestProducts']
+      invalidatesTags: ['requestProducts', 'projects', 'products']
     }),
 
     requestProductStatusUpdate: build.mutation({
@@ -43,7 +43,7 @@ const requestProductsApi = baseApi.injectEndpoints({
         url: `/request-products/${requestProductId}/update/status`,
         data
       }),
-      invalidatesTags: ['requestProducts']
+      invalidatesTags: ['requestProducts', 'projects', 'products']
     }),
   })
 });

@@ -6,11 +6,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddCrew from "./dialogs/addCrew";
 import SMDDataTable from "@/app/(dashboard)/components/ui/SMDDataTable";
 import DataNotFound from "@/app/(dashboard)/components/ui/DataNotFound";
-import EditIcon from "@/assets/icons/edit.svg";
 import TrashIcon from "@/assets/icons/trash.svg";
 import { TCrew } from "@/types";
 import { useAllCrewsQuery } from "@/redux/api/endpoints/crewsApi";
 import ViewCrew from "./dialogs/viewCrew";
+import UpdateCrew from "./dialogs/updateCrew";
 
 export default function AllCrews() {
   const [page, setPage] = useState(1);
@@ -75,9 +75,9 @@ export default function AllCrews() {
                 <Box>
                   <ViewCrew payload={row} />
                 </Box>
-                <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                  <EditIcon />
-                </IconButton>
+                <Box>
+                  <UpdateCrew payload={row} />
+                </Box>
                 <IconButton sx={{ border: 'none', color: 'text.primary' }}>
                   <TrashIcon />
                 </IconButton>
