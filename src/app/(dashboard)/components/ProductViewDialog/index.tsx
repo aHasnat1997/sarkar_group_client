@@ -1,15 +1,23 @@
-import { Button, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
-import DataViewField from "@/app/(dashboard)/components/ui/DataViewField";
-import capitalizeLetter from "@/utils/capitalizeLetter";
 import Image from "next/image";
 import assets from "@/assets";
-import ViewIcon from "@/assets/icons/view.svg";
 import { TProduct } from "@/types";
+import ViewIcon from "@/assets/icons/view.svg";
+import ProductIcon from '@/assets/icons/product.svg';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import EquipmentDetails from "./equipmentDetails";
+import CrewDetails from "./crewDetails";
 
 export default function ViewProductDialogs({ data }: { data: TProduct | null }) {
   const [open, setOpen] = useState<boolean>(false);
+  const [value, setValue] = useState<number>(0);
+  const tebContent = [
+    { index: 0, label: 'Equipment Information', icon: <ProductIcon /> },
+    { index: 1, label: 'Crew Information', icon: <EngineeringIcon /> }
+  ];
+
   return <>
     <IconButton
       onClick={() => setOpen(true)}
@@ -22,60 +30,56 @@ export default function ViewProductDialogs({ data }: { data: TProduct | null }) 
       open={open}
       onClose={() => setOpen(false)}
       isDrawer={true}
-      title='Product Details'
+      title={data?.equipmentName}
     >
-      <Stack direction='column' gap='1rem'>
-        <Image
-          alt="product image"
-          src={data?.equipmentImage[0]?.secure_url ? data?.equipmentImage[0]?.secure_url : assets.images.brokenImage}
-          width={500}
-          height={500}
-          className="rounded-2xl"
-        />
-        <DataViewField title="Equipment Name" data={data?.equipmentName} />
-        <Stack>
-          <DataViewField title="Equipment ID" data={data?.equipmentId} />
-          <DataViewField title="Registration Number" data={data?.registrationNumber} />
+      <Stack direction='column'>
+        <Stack alignItems='center' gap='1rem'>
+          {
+            data?.equipmentImage && data?.equipmentImage.length > 0 ?
+              data?.equipmentImage.slice(0, 2).map(img => <Box key={img.public_id}>
+                <Image
+                  alt="product image"
+                  src={img?.secure_url ? img?.secure_url : assets.images.brokenImage}
+                  width={500}
+                  height={500}
+                  className="w-96 h-60 rounded-2xl"
+                />
+              </Box>) :
+              <Box>
+                <Image
+                  alt="product image"
+                  src={assets.images.brokenImage}
+                  width={500}
+                  height={500}
+                  className="w-96 h-60 rounded-2xl"
+                />
+              </Box>
+          }
         </Stack>
-        <Stack>
-          <DataViewField title="Owner Name" data={data?.ownerName} />
-          <DataViewField title="Owner Address" data={data?.ownerAddress} />
-        </Stack>
-        <Stack>
-          <DataViewField title="Owner Number" data={data?.ownerNumber} />
-          <DataViewField title="Chartered by" data={data?.charteredBy} />
-        </Stack>
-        <Stack>
-          <DataViewField title="Chartered Person Number" data={data?.charteredPersonPhone} />
-          <DataViewField title="Chartered Person Address" data={data?.charteredPersonAddress} />
-        </Stack>
-        <Stack>
-          <DataViewField title="Brand Name" data={data?.brandName} />
-          <DataViewField title="Model" data={data?.model} />
-        </Stack>
-        <Stack>
-          <DataViewField title="Dimension" data={data?.dimensions} />
-          <DataViewField title="Total Number Of Crew" data={data?.crews?.length || 0} />
-        </Stack>
-        <Stack>
-          <DataViewField title="Manufacturing Year" data={data?.manufacturingYear} />
-          <DataViewField title="Equipment Status" data={capitalizeLetter(data?.status?.split('_').join(' ') as string)} />
-        </Stack>
-        <Stack alignItems='center' gap='1rem' justifyContent='start'>
-          <Button
-            variant="outlined"
-            type="button"
-            onClick={() => setOpen(false)}
+
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs
+            value={value}
+            onChange={(e, newValue) => setValue(newValue)}
           >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            type="submit"
-          >
-            Edit
-          </Button>
-        </Stack>
+            {tebContent.map(data => (
+              <Tab
+                key={data.index}
+                icon={data.icon}
+                iconPosition="start"
+                label={data.label}
+              />
+            ))}
+          </Tabs>
+        </Box>
+
+        <Box py={2}>
+          {
+            value === 0 ? <EquipmentDetails payload={data} setOpen={setOpen} /> :
+              value === 1 ? <CrewDetails payload={data} /> :
+                <></>
+          }
+        </Box>
       </Stack>
     </ResponsiveDialog>
   </>

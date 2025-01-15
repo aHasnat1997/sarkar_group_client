@@ -44,6 +44,15 @@ const crewsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['crews']
     }),
+
+    addCrewToProduct: build.mutation({
+      query: (data) => ({
+        method: 'PATCH',
+        url: '/crew/assign/product',
+        data
+      }),
+      invalidatesTags: ['crews', 'products', 'projects']
+    })
   })
 });
 
@@ -52,6 +61,7 @@ export const {
   useSingleCrewsQuery,
   useAddCrewMutation,
   useUpdateCrewMutation,
-  useDeleteCrewMutation
+  useDeleteCrewMutation,
+  useAddCrewToProductMutation
 } = crewsApi;
 export default crewsApi;

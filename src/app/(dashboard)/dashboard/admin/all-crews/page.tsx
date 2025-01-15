@@ -57,11 +57,11 @@ export default function AllCrews() {
       <Box>
         {
           isLoading || crewData ? <SMDDataTable
-            data={crewData?.data}
+            data={crewData?.data as TCrew[]}
             columns={[
-              { label: 'Crew Name', field: (row: TCrew) => row.fullName },
-              { label: 'Phone Number', field: (row: TCrew) => row.phone },
-              { label: 'NID No.', field: (row: TCrew) => row.nid }
+              { label: 'Crew Name', field: (row) => row.fullName },
+              { label: 'Phone Number', field: (row) => row.phone },
+              { label: 'NID No.', field: (row) => row.nid }
             ]}
             page={page}
             limit={limit}
@@ -70,7 +70,7 @@ export default function AllCrews() {
             isLoading={isLoading || isFetching}
             onPageChange={setPage}
             onLimitChange={setLimit}
-            actions={(row: TCrew) => (
+            actions={(row) => (
               <Stack gap='.2rem'>
                 <Box>
                   <ViewCrew payload={row} />

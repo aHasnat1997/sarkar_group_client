@@ -1,3 +1,4 @@
+import { TCrew } from "./crew.type";
 import { TUploadedFile } from "./uploadedFile.type";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -37,5 +38,5 @@ export type TProduct = {
     };
   };
   projects: Record<string, unknown>[]; // Adjust this to the specific structure of projects if known
-  crews: Record<string, unknown>[]; // Adjust this to the specific structure of crews if known
+  crews: TCrew[]; // Adjust this to the specific structure of crews if known
 };

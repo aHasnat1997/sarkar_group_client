@@ -39,7 +39,10 @@ export default function ViewCrew({ payload }: { payload: TCrew }) {
             <DataViewField title="Full Name" data={payload?.fullName} />
             <DataViewField title="Phone Number" data={payload?.phone} />
             <DataViewField title="NID No." data={payload?.nid} />
-            <DataViewField title="Product" data={payload?.product ? payload?.product?.equipmentName : 'N/A'} />
+            {
+              payload?.product &&
+              <DataViewField title="Product" data={payload?.product ? payload?.product?.equipmentName : 'N/A'} />
+            }
           </Stack>
         </Stack>
       </ResponsiveDialog>

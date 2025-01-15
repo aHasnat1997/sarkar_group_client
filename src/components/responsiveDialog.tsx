@@ -56,7 +56,7 @@ export const ResponsiveDialog: React.FC<ResponsiveDialogProps> = ({
       PaperProps={{
         sx: isDrawer
           ? {
-            width: isMobile ? '80%' : '60%', // Width adjustment for drawer
+            width: isMobile ? '80%' : '70%', // Width adjustment for drawer
             margin: 0,
             borderRadius: 0,
             position: 'fixed',
@@ -100,7 +100,6 @@ export const ResponsiveDialog: React.FC<ResponsiveDialogProps> = ({
       <DialogContent
         sx={{
           flex: 1, // Allow content to take remaining space
-          padding: 2,
           overflowY: 'auto', // Enable scrolling for overflow content
         }}
       >
@@ -109,7 +108,6 @@ export const ResponsiveDialog: React.FC<ResponsiveDialogProps> = ({
       {footer && (
         <DialogActions
           sx={{
-            padding: 2,
             borderTop: `1px solid ${theme.palette.divider}`, // Footer border for clarity
           }}
         >
