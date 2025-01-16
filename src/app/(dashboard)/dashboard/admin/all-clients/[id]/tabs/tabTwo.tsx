@@ -3,8 +3,6 @@ import { TClient } from "@/types";
 import { Box, IconButton, Stack } from "@mui/material";
 import Link from "next/link";
 import ViewIcon from "@/assets/icons/view.svg";
-import EditIcon from "@/assets/icons/edit.svg";
-import TrashIcon from "@/assets/icons/trash.svg";
 import capitalizeLetter from "@/utils/capitalizeLetter";
 import { dateFormate } from "@/utils/dateFormate";
 
@@ -28,12 +26,6 @@ export default function TabTwo({ payload }: { payload: TClient }) {
                   <ViewIcon />
                 </IconButton>
               </Link>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <EditIcon />
-              </IconButton>
-              <IconButton sx={{ border: 'none', color: 'text.primary' }}>
-                <TrashIcon />
-              </IconButton>
             </Stack>
           )}
         /> :

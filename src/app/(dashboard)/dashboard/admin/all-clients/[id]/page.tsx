@@ -12,6 +12,7 @@ import { useSingleClientsQuery } from "@/redux/api/endpoints/clientsApi";
 import Image from "next/image";
 import assets from "@/assets";
 import { TClient } from "@/types";
+import ClientDialogButtons from "./dialogs";
 
 export default function ClientDetails({ params }: { params: { id: string } }) {
   const { data: clientData, isLoading } = useSingleClientsQuery(params.id);
@@ -39,33 +40,46 @@ export default function ClientDetails({ params }: { params: { id: string } }) {
       }}
     >
       <Stack
-        alignItems='start'
-        gap='1.5rem'
+        alignItems='baseline'
+        justifyContent='space-between'
+        borderBottom='2px solid'
+        borderColor='grey.400'
+        paddingBottom='1.5rem'
       >
+        <Stack
+          alignItems='start'
+          gap='1.5rem'
+        >
+          <Box>
+            {(clientData.data as TClient)?.user.profileImage?.secure_url ?
+              <Image
+                src={clientData.data?.user.profileImage?.secure_url}
+                alt='Profile Image'
+                width={500}
+                height={500}
+                className='w-36 rounded-lg'
+              /> :
+              <Image
+                src={assets.images.userPlaceholderImage}
+                alt='Profile Image'
+                width={500}
+                height={500}
+                className='w-36 rounded-lg'
+              />
+            }
+          </Box>
+          <Box>
+            <Typography fontSize='1.5rem' fontWeight='600'>
+              {(clientData.data as TClient)?.user.firstName} {(clientData.data as TClient)?.user.lastName}
+            </Typography>
+          </Box>
+        </Stack>
+
         <Box>
-          {(clientData.data as TClient)?.user.profileImage?.secure_url ?
-            <Image
-              src={clientData.data?.user.profileImage?.secure_url}
-              alt='Profile Image'
-              width={500}
-              height={500}
-              className='w-36 rounded-lg'
-            /> :
-            <Image
-              src={assets.images.userPlaceholderImage}
-              alt='Profile Image'
-              width={500}
-              height={500}
-              className='w-36 rounded-lg'
-            />
-          }
-        </Box>
-        <Box>
-          <Typography fontSize='1.5rem' fontWeight='600'>
-            {(clientData.data as TClient)?.user.firstName} {(clientData.data as TClient)?.user.lastName}
-          </Typography>
+          <ClientDialogButtons value={value} payload={clientData.data} />
         </Box>
       </Stack>
+
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}

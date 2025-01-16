@@ -5,12 +5,19 @@ import SMDDataTable from "../ui/SMDDataTable";
 import DataNotFound from "../ui/DataNotFound";
 import ViewCrew from "../../dashboard/admin/all-crews/dialogs/viewCrew";
 import AddCrew from "./addCrew";
+import { usePathname } from "next/navigation";
 
 export default function CrewDetails({ payload }: { payload: TProduct | null }) {
+  const pathname = usePathname();
+
   return (<>
-    <Stack justifyContent='end'>
-      <AddCrew productId={payload?.id as string} />
-    </Stack>
+    {
+      pathname.startsWith('/dashboard/admin') ?
+        <Stack justifyContent='end'>
+          <AddCrew productId={payload?.id as string} />
+        </Stack> :
+        <></>
+    }
 
     <Stack alignItems='center' gap='1rem'>
       {

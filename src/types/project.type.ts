@@ -61,7 +61,7 @@ export type TProject = {
   estimatedEndDate: string; // ISO Date string
   projectType: string;
   productType: string;
-  status: string;
+  status: 'NOT_STARTED' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED' | 'DELAYED' | 'UNDER_REVIEW' | 'APPROVED' | 'ARCHIVED';
   street: string;
   city: string;
   state: string;

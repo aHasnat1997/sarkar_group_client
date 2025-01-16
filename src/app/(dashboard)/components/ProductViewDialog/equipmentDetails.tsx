@@ -4,10 +4,13 @@ import DataViewField from "../ui/DataViewField";
 import capitalizeLetter from "@/utils/capitalizeLetter";
 import { SetStateAction, Dispatch } from "react";
 import EditProduct from "./editProduct";
+import { usePathname } from "next/navigation";
 
 export default function EquipmentDetails(
   { payload, setOpen }: { payload: TProduct | null, setOpen: Dispatch<SetStateAction<boolean>> }
 ) {
+  const pathname = usePathname();
+
   return (<>
     <Stack direction='column' gap='1rem'>
       <Stack>
@@ -46,9 +49,13 @@ export default function EquipmentDetails(
         >
           Cancel
         </Button>
-        <Box>
-          <EditProduct payload={payload} />
-        </Box>
+        {
+          pathname.startsWith('/dashboard/admin') && pathname.startsWith('/dashboard/admin/all-products') ?
+            <Box>
+              <EditProduct payload={payload} />
+            </Box> :
+            <></>
+        }
       </Stack>
     </Stack>
   </>)

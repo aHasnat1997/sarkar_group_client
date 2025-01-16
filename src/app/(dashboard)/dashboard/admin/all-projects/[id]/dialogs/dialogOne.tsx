@@ -17,6 +17,7 @@ export default function DialogOne(
     { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, payload: TProject }
 ) {
   const enumsType = ['CIVIL', 'MARIN', 'ENGINEERING'];
+  const projectStatusType = ['NOT_STARTED', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETED', 'CANCELLED', 'DELAYED', 'UNDER_REVIEW', 'APPROVED', 'ARCHIVED']
 
   const [updateProjectData, { isLoading, isError, isSuccess }] = useUpdateProjectMutation();
 
@@ -29,6 +30,7 @@ export default function DialogOne(
       estimatedEndDate: dayjs(payload?.estimatedEndDate),
       productType: payload?.productType as "CIVIL" | "MARIN" | "ENGINEERING",
       projectType: payload?.projectType as "CIVIL" | "MARIN" | "ENGINEERING",
+      status: payload?.status,
       street: payload?.street,
       city: payload?.city,
       state: payload?.state,
@@ -175,6 +177,24 @@ export default function DialogOne(
                         enumsType.map((data, i) => <MenuItem key={i} value={data}>
                           {
                             capitalizeLetter(data)
+                          }
+                        </MenuItem>)
+                      }
+                    </FormSelect>
+                  )}
+                />
+              </FormItem>
+
+              <FormItem style={{ width: "100%" }}>
+                <FormField
+                  name='status'
+                  control={methods.control}
+                  render={({ field }) => (
+                    <FormSelect {...field} label="Project Status">
+                      {
+                        projectStatusType.map((data, i) => <MenuItem key={i} value={data}>
+                          {
+                            capitalizeLetter(data.split('_').join(' '))
                           }
                         </MenuItem>)
                       }
