@@ -1,6 +1,5 @@
 import { TProduct } from "@/types";
 import { Box, IconButton, Stack } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
 import TrashIcon from "@/assets/icons/trash.svg";
 import SMDDataTable from "../ui/SMDDataTable";
 import DataNotFound from "../ui/DataNotFound";
@@ -9,32 +8,11 @@ import AddCrew from "./addCrew";
 
 export default function CrewDetails({ payload }: { payload: TProduct | null }) {
   return (<>
-    <Stack justifyContent='space-between'>
-      <Stack
-        border='1.5px solid'
-        borderColor='grey.400'
-        color='text.primary'
-        borderRadius='0.5rem'
-        alignItems='center'
-        padding='0 .5rem'
-        gap='.5rem'
-      >
-        <Box color='#16151C'>
-          <SearchIcon />
-        </Box>
-        <input
-          type="text"
-          placeholder="Search"
-          className="focus:outline-none bg-transparent"
-        />
-      </Stack>
-
-      <Box>
-        <AddCrew productId={payload?.id as string} />
-      </Box>
+    <Stack justifyContent='end'>
+      <AddCrew productId={payload?.id as string} />
     </Stack>
 
-    <Stack alignItems='center' gap='1rem' mt='1.5rem'>
+    <Stack alignItems='center' gap='1rem'>
       {
         payload?.crews ? <SMDDataTable
           data={payload?.crews}

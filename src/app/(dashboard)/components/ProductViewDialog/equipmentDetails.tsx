@@ -1,8 +1,9 @@
 import { TProduct } from "@/types";
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import DataViewField from "../ui/DataViewField";
 import capitalizeLetter from "@/utils/capitalizeLetter";
 import { SetStateAction, Dispatch } from "react";
+import EditProduct from "./editProduct";
 
 export default function EquipmentDetails(
   { payload, setOpen }: { payload: TProduct | null, setOpen: Dispatch<SetStateAction<boolean>> }
@@ -45,12 +46,9 @@ export default function EquipmentDetails(
         >
           Cancel
         </Button>
-        <Button
-          variant="contained"
-          type="submit"
-        >
-          Edit
-        </Button>
+        <Box>
+          <EditProduct payload={payload} />
+        </Box>
       </Stack>
     </Stack>
   </>)

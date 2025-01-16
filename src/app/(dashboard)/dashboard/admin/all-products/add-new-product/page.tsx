@@ -40,11 +40,9 @@ export default function AddNewProduct() {
   };
 
   const formSubmit: SubmitHandler<ProductFormValues> = async (data) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { equipmentImage, ...rest } = data
     const productData = {
       equipmentImage: images,
-      ...rest
+      ...data
     };
     try {
       const product = await createProduct(productData);
