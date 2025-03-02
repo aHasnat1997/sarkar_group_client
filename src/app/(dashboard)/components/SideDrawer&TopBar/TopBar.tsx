@@ -1,32 +1,45 @@
-import { AppBar, Box, Button, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, IconButton, ListItemIcon, Stack, Toolbar, Typography } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import Image from "next/image";
 import assets from "@/assets";
-// import toast from "react-hot-toast";
-// import { useRouter } from "next/navigation";
-// import { useAppDispatch } from "@/redux/hooks";
-// import { removeUserInfo } from "@/redux/slices/authSlice";
-// import { useUserLogoutMutation } from "@/redux/api/endpoints/authApi";
+import capitalizeLetter from "@/utils/capitalizeLetter";
+import { useLoggedInUserInfoQuery } from "@/redux/api/endpoints/authApi";
+import MenuButton from "@/components/menuButton";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
+import { useAppDispatch } from "@/redux/hooks";
+import { useUserLogoutMutation } from "@/redux/api/endpoints/authApi";
+import { useRouter } from "next/navigation";
+import { removeUserInfo } from "@/redux/slices/authSlice";
 
 type TTopBarPayload = {
   drawerWidth: number;
   isClosing: boolean;
   mobileOpen: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setMobileOpen: any
+  setMobileOpen: React.Dispatch<React.SetStateAction<boolean>>
 };
+
 export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOpen }: TTopBarPayload) {
-  // const router = useRouter();
-  // const dispatch = useAppDispatch();
-  // const [userLogout] = useUserLogoutMutation();
+  const router = useRouter();
+  const { data: currentStoredUser } = useLoggedInUserInfoQuery(undefined);
+  const dispatch = useAppDispatch();
+  const [userLogout] = useUserLogoutMutation();
 
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
+  };
+
+  async function handelLogout() {
+    dispatch(removeUserInfo())
+    await userLogout('');
+    router.refresh();
+    router.push('/');
   };
 
   return (
@@ -57,8 +70,11 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
               fontWeight='600'
               color='text.primary'
             >
-              {/* to-do: dynamic role */}
-              Hello Admin👋🏻
+              {
+                currentStoredUser ?
+                  `Hello ${capitalizeLetter(currentStoredUser?.data?.role.split('_').join(' '))}👋🏻` :
+                  ''
+              }
             </Typography>
             {/* to-do: make dynamic greeting */}
             <Typography
@@ -100,47 +116,96 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
               <NotificationsNoneIcon />
             </IconButton>
 
-            <Button
-              variant='outlined'
-              sx={{
-                border: '1.5px solid',
-                borderColor: 'grey.400',
-                borderRadius: '0.5rem',
-                boxShadow: 'none',
-                padding: '.3rem'
-              }}
-            >
-              <Box
-                display='flex'
-                alignItems='center'
-                gap='0.5rem'
-                color='text.primary'
-              >
-                <Image
-                  alt="profile-image"
-                  src={assets.images.profile}
-                  height={500}
-                  width={500}
-                  className="size-8"
-                />
-                <Box textAlign='left'>
-                  <Typography
-                    fontSize='.75rem'
-                    fontWeight='600'
+            <MenuButton
+              buttonTitle={
+                <Stack
+                  sx={{
+                    border: '1.5px solid',
+                    padding: '0 0.5rem',
+                    borderRadius: '0.5rem',
+                    borderColor: 'grey.400',
+                    boxShadow: 'none',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: '1.5rem'
+                  }}
+                >
+                  <Box
+                    display='flex'
+                    alignItems='center'
+                    gap='0.5rem'
+                    color='text.primary'
                   >
-                    Shawkat Jamil
-                  </Typography>
-                  <Typography
-                    fontSize='0.5rem'
-                    color="text.secondary"
-                    fontWeight='300'
-                  >
-                    CEO, SARKAR GROUP
-                  </Typography>
-                </Box>
-                <KeyboardArrowDownIcon />
-              </Box>
-            </Button>
+                    {
+                      currentStoredUser && currentStoredUser?.data?.profileImage?.secure_url ?
+                        <Image
+                          alt="profile-image"
+                          src={currentStoredUser.data.profileImage.secure_url}
+                          height={500}
+                          width={500}
+                          className="size-8 rounded-md"
+                        /> :
+                        <Image
+                          alt="profile-image"
+                          src={assets.images.userPlaceholderImage}
+                          height={500}
+                          width={500}
+                          className="size-8 rounded-md"
+                        />
+                    }
+                    <Box textAlign='left'>
+                      <Typography
+                        fontWeight='600'
+                      >
+                        {
+                          currentStoredUser ?
+                            `${currentStoredUser.data.firstName} ${currentStoredUser.data.lastName}` :
+                            ''
+                        }
+                      </Typography>
+                      <Typography
+                        fontSize='0.75rem'
+                        color="text.secondary"
+                        fontWeight='300'
+                      >
+                        {
+                          currentStoredUser ?
+                            capitalizeLetter(currentStoredUser?.data?.profileData?.designation.split('_').join(' ')) :
+                            ''
+                        }
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <KeyboardArrowDownIcon />
+                </Stack>
+              }
+              menuList={[
+                {
+                  list: <Stack gap='.5rem' alignItems='center'>
+                    <ListItemIcon>
+                      <AccountCircleIcon />
+                    </ListItemIcon>
+                    Profile
+                  </Stack>
+                },
+                {
+                  list: <Stack gap='.5rem' alignItems='center'>
+                    <ListItemIcon>
+                      <Settings />
+                    </ListItemIcon>
+                    Settings
+                  </Stack>
+                },
+                {
+                  list: <Stack gap='.5rem' alignItems='center' onClick={handelLogout}>
+                    <ListItemIcon>
+                      <Logout />
+                    </ListItemIcon>
+                    Logout
+                  </Stack >
+                }
+              ]}
+            />
 
           </Stack>
         </Stack>

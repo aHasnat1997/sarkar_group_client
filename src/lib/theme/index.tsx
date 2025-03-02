@@ -14,6 +14,12 @@ const theme = createTheme({
     text: {
       primary: '#16151C',
       secondary: '#A2A1A8'
+    },
+    success: {
+      main: '#3FC28A'
+    },
+    warning: {
+      main: '#F45B69'
     }
   },
   components: {
@@ -21,8 +27,9 @@ const theme = createTheme({
       defaultProps: {
         variant: 'contained',
         sx: {
-          borderRadius: '.63rem',
-          fontSize: '1rem'
+          borderRadius: '.5rem',
+          fontSize: '.8rem',
+          padding: '.5rem 1rem'
         }
       }
     },
@@ -53,6 +60,21 @@ const theme = createTheme({
     MuiTypography: {
       defaultProps: {
         color: 'text.primary'
+      }
+    },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backdropFilter: 'blur(15px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        },
+      }
+    },
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          borderRadius: '1.5rem'
+        }
       }
     }
   },

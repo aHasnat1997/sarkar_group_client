@@ -1,0 +1,115 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { TUploadedFile } from "./uploadedFile.type";
+
+// Main response type
+export type TApplication = {
+  id: string;
+  applicationEmployeeId: string;
+  subject: string;
+  description: string;
+  applicationType: string;
+  startDate: string;
+  endDate: string;
+  actionByAdminId: string | null;
+  declineReason: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  documents?: Partial<TUploadedFile>[];
+  createdAt: string;
+  updatedAt: string;
+  admin: {
+    id: string;
+    employeeId: string;
+    userId: string;
+    mobile: string;
+    userName: string;
+    dob: string;
+    maritalStatus: string;
+    gender: string;
+    employeeType: string;
+    department: string;
+    designation: string;
+    joiningDate: string;
+    officeLocation: string;
+    nationality: string;
+    street: string;
+    city: string;
+    state: string;
+    zip: number;
+    appointmentLetter: string;
+    salarySlips: string[];
+    relivingLetter: string;
+    experienceLetter: string;
+    createdProjects: string[];
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      role: string;
+    };
+  } | null;
+  employee: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: string;
+    engineers: {
+      id: string;
+      employeeId: string;
+      userId: string;
+      mobile: string;
+      userName: string;
+      dob: string;
+      maritalStatus: string;
+      gender: string;
+      employeeType: string;
+      department: string;
+      designation: string;
+      joiningDate: string;
+      officeLocation: string;
+      nationality: string;
+      street: string;
+      city: string;
+      state: string;
+      zip: number;
+      appointmentLetter: string;
+      salarySlips: string[];
+      relivingLetter: string;
+      experienceLetter: string;
+      assignProjects: string[];
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    projectManagers: {
+      id: string;
+      employeeId: string;
+      userId: string;
+      mobile: string;
+      userName: string;
+      dob: string;
+      maritalStatus: string;
+      gender: string;
+      employeeType: string;
+      department: string;
+      designation: string;
+      joiningDate: string;
+      officeLocation: string;
+      nationality: string;
+      street: string;
+      city: string;
+      state: string;
+      zip: number;
+      appointmentLetter: string;
+      salarySlips: string[];
+      relivingLetter: string;
+      experienceLetter: string;
+      assignProjects: string[];
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+  };
+};

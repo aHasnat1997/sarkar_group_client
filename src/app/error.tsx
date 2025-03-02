@@ -19,8 +19,8 @@ export default function Error({
 
   return (
     <section className='w-full h-screen flex items-center justify-center'>
-      <div className='flex flex-col items-center gap-4'>
-        <h2 className='text-2xl font-semibold'>{error.message}</h2>
+      <div className='flex flex-col items-center justify-center gap-4'>
+        <h2 className='text-2xl font-semibold text-center'>{error.message}</h2>
         <Stack gap={2}>
           <Button
             onClick={() => router.push('/')}
