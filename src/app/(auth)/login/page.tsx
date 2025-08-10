@@ -2,14 +2,15 @@
 
 import assets from "@/assets";
 import { Form, FormInput, FormField, FormItem, FormMessage, FormInputPassword } from "@/components/form";
-import { Box, Button, Checkbox, FormControlLabel, Stack, Typography } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, Stack, Typography, Alert } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useUserLoginMutation } from "@/redux/api/endpoints/authApi";
+import { signIn, getSession } from "next-auth/react";
+import { useState } from "react";
 import { useAppDispatch } from "@/redux/hooks";
 import { storeUserInfo } from "@/redux/slices/authSlice";
 
@@ -23,7 +24,8 @@ type FormValues = z.infer<typeof userZodSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const [userLogin, { isLoading, isSuccess, isError }] = useUserLoginMutation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
 
   const methods = useForm<FormValues>({
@@ -36,17 +38,61 @@ export default function LoginPage() {
   });
 
   const formSubmit: SubmitHandler<FormValues> = async (value) => {
-    const { remember, ...rest } = value;
+    const { remember, ...credentials } = value;
     console.log({ remember });
 
+    setIsLoading(true);
+    setError(null);
+
     try {
-      const { data } = await userLogin(rest);
-      if (data.success) {
-        dispatch(storeUserInfo(data.data));
-        router.push('/dashboard');
+      const result = await signIn('credentials', {
+        ...credentials,
+        redirect: false, // Handle redirect manually
+      });
+
+      if (result?.error) {
+        setError('Invalid credentials. Please try again.');
+      } else if (result?.ok) {
+        // Get the session to access user data
+        const session = await getSession();
+
+        if (session?.accessToken) {
+          dispatch(storeUserInfo(session.accessToken));
+        }
+
+        // Store tokens in cookies for your existing middleware
+        if (session?.refreshToken) {
+          document.cookie = `refreshToken=${session.refreshToken}; path=/; max-age=${30 * 24 * 60 * 60}; secure; samesite=strict`;
+        }
+
+        // Get user role and handle different role formats
+        const userRole = session?.user?.role || session?.role;
+
+        let redirectPath = '/dashboard';
+
+        if (userRole) {
+          const roleKey = userRole.toLowerCase();
+
+          if (roleKey === 'super_admin' || roleKey === 'admin') {
+            redirectPath = '/dashboard/admin';
+          } else if (roleKey === 'project_manager') {
+            redirectPath = '/dashboard/project_manager';
+          } else if (roleKey === 'engineer') {
+            redirectPath = '/dashboard/engineer';
+          } else {
+            // If role doesn't match expected values, go to general dashboard
+            redirectPath = '/dashboard';
+          }
+        }
+
+        console.log('Redirecting to:', redirectPath) // Debug log
+        router.push(redirectPath);
       }
     } catch (error) {
-      console.error(error)
+      console.error('Login error:', error);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,7 +123,6 @@ export default function LoginPage() {
         width='100%'
         height='100%'
         justifyContent='center'
-        // bgcolor='primary.main'
         flexDirection='column'
         gap='2rem'
       >
@@ -106,6 +151,13 @@ export default function LoginPage() {
             </Typography>
           </Box>
         </Box>
+
+        {error && (
+          <Alert severity="error" sx={{ width: '60%' }}>
+            {error}
+          </Alert>
+        )}
+
         <Form {...methods}>
           <form onSubmit={methods.handleSubmit(formSubmit)}>
             <Stack
@@ -152,7 +204,6 @@ export default function LoginPage() {
                     control={methods.control}
                     render={({ field }) => (
                       <FormControlLabel
-                        // value={true}
                         control={<Checkbox />}
                         label="Remember Me"
                         labelPlacement="end"
@@ -171,18 +222,13 @@ export default function LoginPage() {
             <Button
               type='submit'
               sx={{ width: '60%' }}
-              disabled={isLoading || isSuccess}
+              disabled={isLoading}
             >
-              {
-                isLoading ? 'Loading...' :
-                  isSuccess ? 'Successful' :
-                    isError ? 'Error' :
-                      'Login'
-              }
+              {isLoading ? 'Signing in...' : 'Login'}
             </Button>
           </form>
         </Form>
       </Stack>
     </Stack>
   );
-};
+}
