@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,13 +18,16 @@ import { useRouter } from "next/navigation";
 
 export default function AddNewClient() {
   const router = useRouter();
-  const [image, setImage] = useState<Partial<TUploadedFile> | null>(null);
+  const [image, setImage] = useState<Partial<TUploadedFile> | undefined>(
+    undefined
+  );
   const [files, setFiles] = useState<Partial<TUploadedFile>[]>([]);
 
-  const [createClient, { isLoading, isSuccess, isError }] = useAddClientMutation();
+  const [createClient, { isLoading, isSuccess, isError }] =
+    useAddClientMutation();
 
   const methods = useForm<ClientFormValues>({
-    resolver: zodResolver(clientZodSchema)
+    resolver: zodResolver(clientZodSchema),
   });
 
   const formSubmit: SubmitHandler<ClientFormValues> = async (data) => {
@@ -33,13 +36,13 @@ export default function AddNewClient() {
     const clientData = {
       profileImage: image,
       documents: files,
-      ...rest
+      ...rest,
     };
     if (clientData) {
       try {
         const client = await createClient(clientData);
         if (client.data.success) {
-          router.push('/dashboard/admin/all-clients');
+          router.push("/dashboard/admin/all-clients");
         } else {
           console.error("Error adding client:", client.data.message);
         }
@@ -55,7 +58,7 @@ export default function AddNewClient() {
   };
 
   const handleFileRemove = async (public_id: string) => {
-    await cloudinaryRemove(public_id, 'image');
+    await cloudinaryRemove(public_id, "image");
     const newFiles = files.filter((file) => file.public_id !== public_id);
     setFiles(newFiles);
   };
@@ -63,18 +66,20 @@ export default function AddNewClient() {
   return (
     <Box
       sx={{
-        border: '.5px solid',
-        borderColor: 'grey.400',
-        borderRadius: '1rem',
-        overflow: 'hidden',
-        padding: '1.5rem'
+        border: ".5px solid",
+        borderColor: "grey.400",
+        borderRadius: "1rem",
+        overflow: "hidden",
+        padding: "1.5rem",
       }}
     >
-      <Box mb='1.5rem'>
-        <Typography fontSize='1.25rem' fontWeight={600}>Add Client</Typography>
+      <Box mb="1.5rem">
+        <Typography fontSize="1.25rem" fontWeight={600}>
+          Add Client
+        </Typography>
       </Box>
 
-      <Box mb='1.5rem'>
+      <Box mb="1.5rem">
         <ProfileImageUpload image={image} setImage={setImage} />
       </Box>
 
@@ -83,9 +88,9 @@ export default function AddNewClient() {
           component="form"
           onSubmit={methods.handleSubmit(formSubmit)}
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.5rem'
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.5rem",
           }}
         >
           <Box>
@@ -93,36 +98,33 @@ export default function AddNewClient() {
           </Box>
 
           <Box>
-            <Stack
-              gap='1.5rem'
-              alignItems='start'
-            >
-              <Box width='50%'>
+            <Stack gap="1.5rem" alignItems="start">
+              <Box width="50%">
                 <DockUpload onFileSelect={handleFileChange} />
               </Box>
-              <Box width='50%'>
-                {
-                  files.length > 0 ? files?.map((file, i) => (
+              <Box width="50%">
+                {files.length > 0 ? (
+                  files?.map((file, i) => (
                     <Box key={i}>
                       <ViewFile
                         file={file}
-                        handleImageRemove={() => file.public_id && handleFileRemove(file.public_id)}
+                        handleImageRemove={() =>
+                          file.public_id && handleFileRemove(file.public_id)
+                        }
                         downloadable={false}
                       />
                     </Box>
-                  )) :
-                    <></>
-                }
+                  ))
+                ) : (
+                  <></>
+                )}
               </Box>
             </Stack>
           </Box>
 
-          <Stack alignItems='center' gap='1rem' justifyContent='end'>
-            <Link href='/dashboard/admin/all-clients'>
-              <Button
-                variant="outlined"
-                type="button"
-              >
+          <Stack alignItems="center" gap="1rem" justifyContent="end">
+            <Link href="/dashboard/admin/all-clients">
+              <Button variant="outlined" type="button">
                 Cancel
               </Button>
             </Link>
@@ -131,11 +133,17 @@ export default function AddNewClient() {
               type="submit"
               disabled={isLoading || isSuccess}
             >
-              {isLoading ? 'Loading...' : isSuccess ? 'Success' : isError ? 'Error' : 'Submit'}
+              {isLoading
+                ? "Loading..."
+                : isSuccess
+                ? "Success"
+                : isError
+                ? "Error"
+                : "Submit"}
             </Button>
           </Stack>
         </Box>
       </Form>
     </Box>
   );
-};
+}

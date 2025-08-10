@@ -10,11 +10,7 @@ import { useLoggedInUserInfoQuery } from "@/redux/api/endpoints/authApi";
 import MenuButton from "@/components/menuButton";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import { useAppDispatch } from "@/redux/hooks";
-import { useUserLogoutMutation } from "@/redux/api/endpoints/authApi";
-import { useRouter } from "next/navigation";
-import { removeUserInfo } from "@/redux/slices/authSlice";
+import LogoutButton from "../ui/LogoutButton";
 
 type TTopBarPayload = {
   drawerWidth: number;
@@ -24,22 +20,12 @@ type TTopBarPayload = {
 };
 
 export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOpen }: TTopBarPayload) {
-  const router = useRouter();
   const { data: currentStoredUser } = useLoggedInUserInfoQuery(undefined);
-  const dispatch = useAppDispatch();
-  const [userLogout] = useUserLogoutMutation();
 
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
-  };
-
-  async function handelLogout() {
-    dispatch(removeUserInfo())
-    await userLogout('');
-    router.refresh();
-    router.push('/');
   };
 
   return (
@@ -197,11 +183,8 @@ export default function TopBar({ drawerWidth, isClosing, setMobileOpen, mobileOp
                   </Stack>
                 },
                 {
-                  list: <Stack gap='.5rem' alignItems='center' onClick={handelLogout}>
-                    <ListItemIcon>
-                      <Logout />
-                    </ListItemIcon>
-                    Logout
+                  list: <Stack gap='.5rem' alignItems='center'>
+                    <LogoutButton />
                   </Stack >
                 }
               ]}
