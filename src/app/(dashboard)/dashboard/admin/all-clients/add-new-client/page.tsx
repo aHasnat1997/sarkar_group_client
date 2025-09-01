@@ -58,7 +58,25 @@ export default function AddNewClient() {
   };
 
   const handleFileRemove = async (public_id: string) => {
-    await cloudinaryRemove(public_id, "image");
+    // Determine resource type based on file format
+    const file = files.find((f) => f.public_id === public_id);
+    let resourceType = "image";
+
+    if (file?.format) {
+      if (file.format === "pdf") {
+        resourceType = "raw";
+      } else if (
+        ["jpg", "jpeg", "png", "gif", "webp"].includes(
+          file.format.toLowerCase()
+        )
+      ) {
+        resourceType = "image";
+      } else {
+        resourceType = "raw";
+      }
+    }
+
+    await cloudinaryRemove(public_id, resourceType);
     const newFiles = files.filter((file) => file.public_id !== public_id);
     setFiles(newFiles);
   };
@@ -108,9 +126,7 @@ export default function AddNewClient() {
                     <Box key={i}>
                       <ViewFile
                         file={file}
-                        handleImageRemove={() =>
-                          file.public_id && handleFileRemove(file.public_id)
-                        }
+                        handleFileRemove={handleFileRemove}
                         downloadable={false}
                       />
                     </Box>

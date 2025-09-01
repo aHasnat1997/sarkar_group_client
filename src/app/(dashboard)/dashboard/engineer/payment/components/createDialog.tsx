@@ -15,8 +15,9 @@ import { useAllEmployeeProjectsQuery } from "@/redux/api/endpoints/projectsApi";
 export default function CreateDialog() {
   const [localOpen, setLocalOpen] = useState<boolean>(false);
   const [files, setFiles] = useState<Partial<TUploadedFile[] | []>>([]);
-  const [projectName, setProjectName] = useState<string>('');
-  const [cratePayment, { isLoading, isError, isSuccess }] = useCratePaymentMutation();
+  const [projectName, setProjectName] = useState<string>("");
+  const [cratePayment, { isLoading, isError, isSuccess }] =
+    useCratePaymentMutation();
   const { data: projectData } = useAllEmployeeProjectsQuery({ projectName });
 
   const handleImageChange = async (file: File) => {
@@ -24,171 +25,191 @@ export default function CreateDialog() {
     setFiles((prevFiles) => [...prevFiles, uploadedFile]);
   };
 
-  const handleImageRemove = async (public_id: string) => {
-    await cloudinaryRemove(public_id, 'image');
+  const handleFileRemove = async (public_id: string) => {
+    // Determine resource type based on file format
+    const file = files.find((f) => f?.public_id === public_id);
+    let resourceType = "image";
+
+    if (file?.format) {
+      if (file.format === "pdf") {
+        resourceType = "raw";
+      } else if (
+        ["jpg", "jpeg", "png", "gif", "webp"].includes(
+          file.format.toLowerCase()
+        )
+      ) {
+        resourceType = "image";
+      } else {
+        resourceType = "raw";
+      }
+    }
+
+    await cloudinaryRemove(public_id, resourceType);
     const newFiles = files.filter((file) => file?.public_id !== public_id);
     setFiles(newFiles);
   };
 
   const methods = useForm<PaymentFormValues>({
-    resolver: zodResolver(paymentSchema)
+    resolver: zodResolver(paymentSchema),
   });
 
   const formSubmit: SubmitHandler<PaymentFormValues> = async (data) => {
     const paymentBodyData = {
       ...data,
-      documents: files
-    }
+      documents: files,
+    };
     try {
       const payment = await cratePayment(paymentBodyData);
       if (payment.data.success) {
         setLocalOpen(false);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
 
-  return <>
-    <Button
-      fullWidth
-      onClick={() => setLocalOpen(true)}
-    >
-      Create Payment
-    </Button>
+  return (
+    <>
+      <Button fullWidth onClick={() => setLocalOpen(true)}>
+        Create Payment
+      </Button>
 
-    <ResponsiveDialog
-      open={localOpen}
-      onClose={() => setLocalOpen(false)}
-      title='Create Payment'
-    >
-      <Form {...methods}>
-        <Box
-          component="form"
-          onSubmit={methods.handleSubmit(formSubmit)}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.5rem'
-          }}
-        >
-          <FormItem style={{ width: "100%" }}>
-            <FormField
-              name="title"
-              control={methods.control}
-              render={({ field }) => (
-                <FormInput
-                  {...field}
-                  label="Payment Title"
-                />
-              )}
-            />
-          </FormItem>
-
-          <FormItem style={{ width: "100%" }}>
-            <FormField
-              name="description"
-              control={methods.control}
-              render={({ field }) => (
-                <FormInput
-                  {...field}
-                  multiline
-                  rows={5}
-                  label="Payment Description"
-                />
-              )}
-            />
-          </FormItem>
-
-          <Stack gap='1.5rem'>
+      <ResponsiveDialog
+        open={localOpen}
+        onClose={() => setLocalOpen(false)}
+        title="Create Payment"
+      >
+        <Form {...methods}>
+          <Box
+            component="form"
+            onSubmit={methods.handleSubmit(formSubmit)}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1.5rem",
+            }}
+          >
             <FormItem style={{ width: "100%" }}>
               <FormField
-                name="projectId"
+                name="title"
                 control={methods.control}
                 render={({ field }) => (
-                  <Autocomplete
-                    {...field}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    value={projectData?.data.find((pm: any) => pm?.id === field.value) || null}
-                    onChange={(_, newValue) => field.onChange(newValue?.id || '')}
-                    disablePortal
-                    options={projectData?.data || []}
-                    getOptionLabel={(option) => option?.projectName || ''}
-                    renderInput={(params) => (
-                      <FormInput
-                        {...params}
-                        label="Project Name"
-                        onChange={(e) => setProjectName(e.target.value)}
-                      />
-                    )}
-                  />
+                  <FormInput {...field} label="Payment Title" />
                 )}
               />
             </FormItem>
 
             <FormItem style={{ width: "100%" }}>
               <FormField
-                name="amount"
+                name="description"
                 control={methods.control}
                 render={({ field }) => (
                   <FormInput
                     {...field}
-                    label='Amount'
-                    type='number'
-                    onChange={(event) => field.onChange(event.target.value ? Number(event.target.value) : '')}
+                    multiline
+                    rows={5}
+                    label="Payment Description"
                   />
                 )}
               />
             </FormItem>
-          </Stack>
 
-          <Stack
-            width='100%'
-            gap='1rem'
-            alignItems='center'
-          >
-            <Box width='50%'>
-              <DockUpload onFileSelect={handleImageChange} />
-            </Box>
-            <Box width='50%'>
-              {
-                files.length > 0 ? files?.map((file, i) => (
-                  <Box key={i}>
-                    <ViewFile
-                      file={file!}
-                      handleImageRemove={handleImageRemove}
-                      downloadable={false}
+            <Stack gap="1.5rem">
+              <FormItem style={{ width: "100%" }}>
+                <FormField
+                  name="projectId"
+                  control={methods.control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      value={
+                        projectData?.data.find(
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          (pm: any) => pm?.id === field.value
+                        ) || null
+                      }
+                      onChange={(_, newValue) =>
+                        field.onChange(newValue?.id || "")
+                      }
+                      disablePortal
+                      options={projectData?.data || []}
+                      getOptionLabel={(option) => option?.projectName || ""}
+                      renderInput={(params) => (
+                        <FormInput
+                          {...params}
+                          label="Project Name"
+                          onChange={(e) => setProjectName(e.target.value)}
+                        />
+                      )}
                     />
-                  </Box>
-                )) : <></>
-              }
-            </Box>
-          </Stack>
+                  )}
+                />
+              </FormItem>
 
-          <Stack gap='1rem'>
-            <Button
-              fullWidth
-              variant="outlined"
-              type="button"
-              onClick={() => setLocalOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              fullWidth
-              type="submit"
-              disabled={isLoading || isSuccess}
-            >
-              {
-                isLoading ? 'Loading...' :
-                  isSuccess ? 'Successfully Sended' :
-                    isError ? 'Something Wrong, try again.' :
-                      'Send'
-              }
-            </Button>
-          </Stack>
-        </Box>
-      </Form>
-    </ResponsiveDialog>
-  </>
-};
+              <FormItem style={{ width: "100%" }}>
+                <FormField
+                  name="amount"
+                  control={methods.control}
+                  render={({ field }) => (
+                    <FormInput
+                      {...field}
+                      label="Amount"
+                      type="number"
+                      onChange={(event) =>
+                        field.onChange(
+                          event.target.value ? Number(event.target.value) : ""
+                        )
+                      }
+                    />
+                  )}
+                />
+              </FormItem>
+            </Stack>
+
+            <Stack width="100%" gap="1rem" alignItems="center">
+              <Box width="50%">
+                <DockUpload onFileSelect={handleImageChange} />
+              </Box>
+              <Box width="50%">
+                {files.length > 0 ? (
+                  files?.map((file, i) => (
+                    <Box key={i}>
+                      <ViewFile
+                        file={file!}
+                        handleFileRemove={handleFileRemove}
+                        downloadable={false}
+                      />
+                    </Box>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </Box>
+            </Stack>
+
+            <Stack gap="1rem">
+              <Button
+                fullWidth
+                variant="outlined"
+                type="button"
+                onClick={() => setLocalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button fullWidth type="submit" disabled={isLoading || isSuccess}>
+                {isLoading
+                  ? "Loading..."
+                  : isSuccess
+                  ? "Successfully Sended"
+                  : isError
+                  ? "Something Wrong, try again."
+                  : "Send"}
+              </Button>
+            </Stack>
+          </Box>
+        </Form>
+      </ResponsiveDialog>
+    </>
+  );
+}
