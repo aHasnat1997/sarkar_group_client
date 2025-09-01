@@ -8,11 +8,18 @@ import DockUpload from "@/app/(dashboard)/components/ui/DockUpload";
 import ViewFile from "@/app/(dashboard)/components/ui/ViewFile";
 import { useUpdateClientMutation } from "@/redux/api/endpoints/clientsApi";
 
-export default function DialogThree(
-  { open, setOpen, payload }:
-    { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, payload: TClient }
-) {
-  const [files, setFiles] = useState<Partial<TUploadedFile>[]>(payload?.documents);
+export default function DialogThree({
+  open,
+  setOpen,
+  payload,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  payload: TClient;
+}) {
+  const [files, setFiles] = useState<Partial<TUploadedFile>[]>(
+    payload?.documents
+  );
 
   const [updateClientData] = useUpdateClientMutation();
 
@@ -20,56 +27,79 @@ export default function DialogThree(
     const uploadedFile = await cloudinaryUpload(file);
     setFiles((prevFiles) => [...prevFiles, uploadedFile]);
     try {
-      await updateClientData({ data: { documents: files }, userId: payload?.userId })
+      await updateClientData({
+        data: { documents: files },
+        userId: payload?.userId,
+      });
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleImageRemove = async (public_id: string) => {
-    await cloudinaryRemove(public_id, 'image');
+  const handleFileRemove = async (public_id: string) => {
+    // Determine resource type based on file format
+    const file = files.find((f) => f.public_id === public_id);
+    let resourceType = "image";
+
+    if (file?.format) {
+      if (file.format === "pdf") {
+        resourceType = "raw";
+      } else if (
+        ["jpg", "jpeg", "png", "gif", "webp"].includes(
+          file.format.toLowerCase()
+        )
+      ) {
+        resourceType = "image";
+      } else {
+        resourceType = "raw";
+      }
+    }
+
+    await cloudinaryRemove(public_id, resourceType);
     const newFiles = files.filter((file) => file.public_id !== public_id);
     setFiles(newFiles);
     try {
-      await updateClientData({ data: { documents: files }, userId: payload?.userId })
+      await updateClientData({
+        data: { documents: newFiles },
+        userId: payload?.userId,
+      });
     } catch (error) {
       console.error(error);
     }
   };
 
-  return <>
-    <Button onClick={() => setOpen(true)}>
-      <Stack gap='.5rem' alignItems='center'>
-        <EditIcon /> Upload Dock
-      </Stack>
-    </Button>
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>
+        <Stack gap=".5rem" alignItems="center">
+          <EditIcon /> Upload Dock
+        </Stack>
+      </Button>
 
-    <ResponsiveDialog
-      open={open}
-      onClose={() => setOpen(false)}
-      title='Upload Employee Dock'
-    >
-      <Stack
-        direction='column'
-        gap='1.25rem'
-        alignItems='center'
+      <ResponsiveDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Upload Employee Dock"
       >
-        <Box width='100%'>
-          <DockUpload onFileSelect={handleImageChange} />
-        </Box>
-        {
-          files.length > 0 ? files?.map((file, i) => (
-            <Box key={i} width='50%'>
-              <ViewFile
-                file={file}
-                handleImageRemove={handleImageRemove}
-                downloadable={false}
-              />
-            </Box>
-          )) :
+        <Stack direction="column" gap="1.25rem" alignItems="center">
+          <Box width="100%">
+            <DockUpload onFileSelect={handleImageChange} />
+          </Box>
+          {files.length > 0 ? (
+            files?.map((file, i) => (
+              <Box key={i} width="50%">
+                <ViewFile
+                  file={file}
+                  handleFileRemove={handleFileRemove}
+                  downloadable={false}
+                />
+              </Box>
+            ))
+          ) : (
             <></>
-        }
-      </Stack>
-    </ResponsiveDialog>
-  </>
-};
+          )}
+        </Stack>
+      </ResponsiveDialog>
+    </>
+  );
+}

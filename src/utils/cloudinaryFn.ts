@@ -2,21 +2,33 @@
 export const cloudinaryUpload = async (file: File) => {
   if (!file) return;
 
-  const toBase64 = (file: File) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-
   try {
-    const fileData64 = await toBase64(file);
+    // Validate file size (50MB limit)
+    const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB in bytes
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error(
+        `File size exceeds 50MB limit. Current file size: ${Math.round(
+          file.size / (1024 * 1024)
+        )}MB`
+      );
+    }
 
-    const response = await fetch('/api/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ file: fileData64 }),
+    // Create FormData object
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Add timeout to fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      // Remove Content-Type header to let browser set it with proper boundary
+      body: formData,
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     const textResponse = await response.text();
     if (response.ok) {
@@ -24,31 +36,73 @@ export const cloudinaryUpload = async (file: File) => {
         const imageResponse = JSON.parse(textResponse);
         return {
           filename: file.name,
-          ...imageResponse
+          ...imageResponse,
         };
       } catch (err) {
-        console.error('Error parsing JSON:', err);
-        throw new Error('Invalid JSON response from server');
+        console.error("Error parsing JSON:", err);
+        throw new Error("Invalid JSON response from server. Please try again.");
       }
     } else {
-      console.error('Server error:', response.status, textResponse);
-      throw new Error(`Image upload failed with status ${response.status}: ${textResponse}`);
+      // Try to parse error response
+      let errorMessage = `Upload failed with status ${response.status}: ${response.statusText}`;
+
+      try {
+        const errorResponse = JSON.parse(textResponse);
+        if (errorResponse.error) {
+          errorMessage = errorResponse.error;
+        }
+      } catch {
+        // If we can't parse the error response, use the response text
+        if (textResponse) {
+          errorMessage = textResponse;
+        }
+      }
+
+      throw new Error(errorMessage);
     }
   } catch (error: any) {
-    console.error('Image upload failed:', error);
-    throw new Error(`Image upload failed: ${error.message}`);
+    console.error("File upload failed:", error);
+
+    // Handle timeout errors
+    if (error.name === "AbortError") {
+      throw new Error(
+        "Upload timed out. Please check your connection and try again."
+      );
+    }
+
+    // Handle network errors
+    if (error.message.includes("fetch") || error.message.includes("network")) {
+      throw new Error(
+        "Network error. Please check your connection and try again."
+      );
+    }
+
+    // Re-throw other errors
+    throw new Error(
+      error.message || "An unknown error occurred during upload."
+    );
   }
 };
 
-export const cloudinaryRemove = async (publicId: string, resourceType: string) => {
+export const cloudinaryRemove = async (
+  publicId: string,
+  resourceType: string
+) => {
   if (!publicId || !resourceType) return;
 
   try {
-    const response = await fetch('/api/delete', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+    // Add timeout to fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
+    const response = await fetch("/api/delete", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ publicId, resourceType }),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     const textResponse = await response.text();
     if (response.ok) {
@@ -56,15 +110,47 @@ export const cloudinaryRemove = async (publicId: string, resourceType: string) =
         const imageResponse = JSON.parse(textResponse);
         return imageResponse;
       } catch (err) {
-        console.error('Error parsing JSON:', err);
-        throw new Error('Invalid JSON response from server');
+        console.error("Error parsing JSON:", err);
+        throw new Error("Invalid JSON response from server. Please try again.");
       }
     } else {
-      console.error('Server error:', response.status, textResponse);
-      throw new Error(`Image removal failed with status ${response.status}: ${textResponse}`);
+      // Try to parse error response
+      let errorMessage = `Removal failed with status ${response.status}: ${response.statusText}`;
+
+      try {
+        const errorResponse = JSON.parse(textResponse);
+        if (errorResponse.error) {
+          errorMessage = errorResponse.error;
+        }
+      } catch {
+        // If we can't parse the error response, use the response text
+        if (textResponse) {
+          errorMessage = textResponse;
+        }
+      }
+
+      throw new Error(errorMessage);
     }
   } catch (error: any) {
-    console.error('Image removal failed:', error);
-    throw new Error(`Image removal failed: ${error.message}`);
+    console.error("File removal failed:", error);
+
+    // Handle timeout errors
+    if (error.name === "AbortError") {
+      throw new Error(
+        "Removal timed out. Please check your connection and try again."
+      );
+    }
+
+    // Handle network errors
+    if (error.message.includes("fetch") || error.message.includes("network")) {
+      throw new Error(
+        "Network error. Please check your connection and try again."
+      );
+    }
+
+    // Re-throw other errors with more context
+    throw new Error(
+      error.message || "An unknown error occurred during file removal."
+    );
   }
 };
