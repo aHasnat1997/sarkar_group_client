@@ -1,20 +1,15 @@
 import { z } from "zod";
 
 const ApplicationType = z.enum([
-  'LEAVE',
-  'EMERGENCY_MONEY',
-  'EQUIPMENT_PROBLEM',
-  'JOB_APPLICATION',
-  'INTERNSHIP_APPLICATION',
-  'VOLUNTEER_APPLICATION',
-  'SCHOLARSHIP_APPLICATION',
-  'GRANT_APPLICATION',
-  'MEMBERSHIP_APPLICATION',
-  'LOAN_APPLICATION',
-  'PARTNERSHIP_APPLICATION',
-  'CUSTOMER_FEEDBACK',
-  'SERVICE_REQUEST'
-])
+  "LEAVE_APPLICATION",
+  "RESIGNATION_APPLICATION",
+  "TRANSFER_APPLICATION",
+  "SALARY_ADVANCE",
+  "LOAN_APPLICATION",
+  "COMPLAINT_APPLICATION",
+  "GRIEVANCE_APPLICATION",
+  "EXPENSE_REIMBURSEMENT_APPLICATION",
+]);
 
 export const applicationSchema = z.object({
   subject: z.string(),
@@ -22,7 +17,7 @@ export const applicationSchema = z.object({
   applicationType: ApplicationType,
   documents: z.array(z.object({})).optional(),
   startDate: z.any(),
-  endDate: z.any()
+  endDate: z.any(),
 });
 
 export type ApplicationFormValues = z.infer<typeof applicationSchema>;

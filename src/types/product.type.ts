@@ -8,8 +8,8 @@ export type TProduct = {
   equipmentName: string;
   equipmentImage: TUploadedFile[];
   registrationNumber: string;
-  category: 'CIVIL' | 'MARIN' | 'ENGINEERING'; // Assuming category is an enum
-  status: 'WORKING' | 'STAND_BY' | 'BREAK_DOWN' | 'UNDER_MAINTENANCE' | 'OUT_OF_SERVICE' | 'IN_REPAIR' | 'DECOMMISSIONED' | 'PENDING_INSPECTION' | 'AVAILABLE' | 'RESERVED' | 'LOST' | 'DAMAGED'; // Assuming status is an enum
+  category: "CIVIL" | "MARIN" | "ENGINEERING"; // Assuming category is an enum
+  status: "WORKING" | "RUNNING" | "STAND_BY" | "BREAK_DOWN"; // Assuming status is an enum
   createdAdminId: string;
   ownerName: string;
   ownerAddress: string;

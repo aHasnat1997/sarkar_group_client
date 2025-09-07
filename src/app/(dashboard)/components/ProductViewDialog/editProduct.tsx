@@ -2,23 +2,34 @@ import ImageUploadField from "@/app/(dashboard)/components/ui/ImageUploadField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Grid2, MenuItem, Stack, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Form, FormField, FormInput, FormItem, FormSelect } from "@/components/form";
+import {
+  Form,
+  FormField,
+  FormInput,
+  FormItem,
+  FormSelect,
+} from "@/components/form";
 import Link from "next/link";
 import capitalizeLetter from "@/utils/capitalizeLetter";
 import { useState } from "react";
 import { TProduct, TUploadedFile } from "@/types";
 import { cloudinaryRemove, cloudinaryUpload } from "@/utils/cloudinaryFn";
 import Image from "next/image";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import assets from "@/assets";
-import { ProductUpdateFormValues, productUpdateZodSchema } from "../../dashboard/admin/all-products/add-new-product/form/formZodSchema";
+import {
+  ProductUpdateFormValues,
+  productUpdateZodSchema,
+} from "../../dashboard/admin/all-products/add-new-product/form/formZodSchema";
 import { ResponsiveDialog } from "@/components/responsiveDialog";
 import { useProductUpdateMutation } from "@/redux/api/endpoints/productsApi";
 
 export default function EditProduct({ payload }: { payload: TProduct | null }) {
   const [open, setOpen] = useState<boolean>(false);
-  const equipmentStatus = ['WORKING', 'STAND_BY', 'BREAK_DOWN', 'UNDER_MAINTENANCE', 'OUT_OF_SERVICE', 'IN_REPAIR', 'DECOMMISSIONED', 'PENDING_INSPECTION', 'AVAILABLE', 'RESERVED', 'LOST', 'DAMAGED'];
-  const [images, setImages] = useState<Partial<TUploadedFile>[]>(payload?.equipmentImage ? payload?.equipmentImage : []);
+  const equipmentStatus = ["WORKING", "RUNNING", "STAND_BY", "BREAK_DOWN"];
+  const [images, setImages] = useState<Partial<TUploadedFile>[]>(
+    payload?.equipmentImage ? payload?.equipmentImage : []
+  );
 
   const [updateProduct, { isLoading, isError }] = useProductUpdateMutation();
 
@@ -38,8 +49,8 @@ export default function EditProduct({ payload }: { payload: TProduct | null }) {
       model: payload?.model,
       dimensions: payload?.dimensions,
       manufacturingYear: payload?.manufacturingYear,
-      status: payload?.status
-    }
+      status: payload?.status,
+    },
   });
 
   const handleFileChange = async (file: File) => {
@@ -48,7 +59,7 @@ export default function EditProduct({ payload }: { payload: TProduct | null }) {
   };
 
   const handleImageRemove = async (public_id: string) => {
-    await cloudinaryRemove(public_id, 'image');
+    await cloudinaryRemove(public_id, "image");
     const newFiles = images.filter((image) => image.public_id !== public_id);
     setImages(newFiles);
   };
@@ -56,10 +67,13 @@ export default function EditProduct({ payload }: { payload: TProduct | null }) {
   const formSubmit: SubmitHandler<ProductUpdateFormValues> = async (data) => {
     const productData = {
       equipmentImage: images,
-      ...data
+      ...data,
     };
     try {
-      const product = await updateProduct({ productId: payload?.id, data: productData });
+      const product = await updateProduct({
+        productId: payload?.id,
+        data: productData,
+      });
       if (product.data.success) {
         setOpen(false);
       }
@@ -72,11 +86,7 @@ export default function EditProduct({ payload }: { payload: TProduct | null }) {
 
   return (
     <>
-      <Button
-        variant="contained"
-        type="submit"
-        onClick={() => setOpen(true)}
-      >
+      <Button variant="contained" type="submit" onClick={() => setOpen(true)}>
         Edit
       </Button>
 
@@ -84,57 +94,62 @@ export default function EditProduct({ payload }: { payload: TProduct | null }) {
         open={open}
         onClose={() => setOpen(false)}
         maxWidth="xl"
-        title={<Typography fontSize='1.5rem' fontWeight={700}>Edit Product Details</Typography>}
+        title={
+          <Typography fontSize="1.5rem" fontWeight={700}>
+            Edit Product Details
+          </Typography>
+        }
       >
         <Box
           sx={{
-            border: '.5px solid',
-            borderColor: 'grey.400',
-            borderRadius: '1rem',
-            overflow: 'hidden',
-            padding: '1.5rem'
+            border: ".5px solid",
+            borderColor: "grey.400",
+            borderRadius: "1rem",
+            overflow: "hidden",
+            padding: "1.5rem",
           }}
         >
-          <Stack alignItems='start' gap='1.5rem'>
-            <Box width='25%'>
-              <Stack direction='column' gap='1.5rem'>
+          <Stack alignItems="start" gap="1.5rem">
+            <Box width="25%">
+              <Stack direction="column" gap="1.5rem">
                 <ImageUploadField onFileSelect={handleFileChange} />
-                <Grid2 container spacing='1rem'>
-                  {
-                    images.map((image, i) => (
-                      <Grid2
-                        size={6}
-                        key={i}
-                        position='relative'
-                      >
-                        {
-                          <>
-                            <div
-                              className="absolute right-1 top-1 bg-slate-300 p-1 rounded-full"
-                              onClick={() => image.public_id && handleImageRemove(image.public_id)}
-                            >
-                              <CloseIcon />
-                            </div>
-                            <Image
-                              alt="Selected Image"
-                              src={image?.secure_url ? image?.secure_url : assets.images.brokenImage}
-                              width={500}
-                              height={500}
-                              className="w-full rounded-md"
-                            />
-                          </>
-                        }
-                      </Grid2>
-                    ))
-                  }
+                <Grid2 container spacing="1rem">
+                  {images.map((image, i) => (
+                    <Grid2 size={6} key={i} position="relative">
+                      {
+                        <>
+                          <div
+                            className="absolute right-1 top-1 bg-slate-300 p-1 rounded-full"
+                            onClick={() =>
+                              image.public_id &&
+                              handleImageRemove(image.public_id)
+                            }
+                          >
+                            <CloseIcon />
+                          </div>
+                          <Image
+                            alt="Selected Image"
+                            src={
+                              image?.secure_url
+                                ? image?.secure_url
+                                : assets.images.brokenImage
+                            }
+                            width={500}
+                            height={500}
+                            className="w-full rounded-md"
+                          />
+                        </>
+                      }
+                    </Grid2>
+                  ))}
                 </Grid2>
               </Stack>
             </Box>
             <Form {...methods}>
               <Stack
-                width='75%'
-                direction='column'
-                gap='1rem'
+                width="75%"
+                direction="column"
+                gap="1rem"
                 component="form"
                 onSubmit={methods.handleSubmit(formSubmit)}
               >
@@ -143,145 +158,118 @@ export default function EditProduct({ payload }: { payload: TProduct | null }) {
                     name="equipmentName"
                     control={methods.control}
                     render={({ field }) => (
-                      <FormInput
-                        {...field}
-                        label="Equipment Name"
-                      />
+                      <FormInput {...field} label="Equipment Name" />
                     )}
                   />
                 </FormItem>
 
-                <Stack gap='1rem'>
+                <Stack gap="1rem">
                   <FormItem style={{ width: "100%" }}>
                     <FormField
                       name="registrationNumber"
                       control={methods.control}
                       render={({ field }) => (
-                        <FormInput
-                          {...field}
-                          label="Registration Number"
-                        />
+                        <FormInput {...field} label="Registration Number" />
                       )}
                     />
                   </FormItem>
                   <FormItem style={{ width: "100%" }}>
                     <FormField
-                      name='category'
+                      name="category"
                       control={methods.control}
                       render={({ field }) => (
                         <FormSelect {...field} label="Category">
-                          <MenuItem value={'CIVIL'}>Civil</MenuItem>
-                          <MenuItem value={'MARIN'}>Marin</MenuItem>
-                          <MenuItem value={'ENGINEERING'}>Engineering</MenuItem>
+                          <MenuItem value={"CIVIL"}>Civil</MenuItem>
+                          <MenuItem value={"MARIN"}>Marin</MenuItem>
+                          <MenuItem value={"ENGINEERING"}>Engineering</MenuItem>
                         </FormSelect>
                       )}
                     />
                   </FormItem>
                 </Stack>
 
-                <Stack gap='1rem'>
+                <Stack gap="1rem">
                   <FormItem style={{ width: "100%" }}>
                     <FormField
                       name="ownerName"
                       control={methods.control}
                       render={({ field }) => (
-                        <FormInput
-                          {...field}
-                          label="Owner Name"
-                        />
+                        <FormInput {...field} label="Owner Name" />
                       )}
                     />
                   </FormItem>
                   <FormItem style={{ width: "100%" }}>
                     <FormField
-                      name='ownerAddress'
+                      name="ownerAddress"
                       control={methods.control}
                       render={({ field }) => (
-                        <FormInput
-                          {...field}
-                          label='Owner Address'
-                        />
+                        <FormInput {...field} label="Owner Address" />
                       )}
                     />
                   </FormItem>
                 </Stack>
 
-                <Stack gap='1rem'>
+                <Stack gap="1rem">
                   <FormItem style={{ width: "100%" }}>
                     <FormField
                       name="ownerNumber"
                       control={methods.control}
                       render={({ field }) => (
-                        <FormInput
-                          {...field}
-                          label="Owner Number"
-                        />
+                        <FormInput {...field} label="Owner Number" />
                       )}
                     />
                   </FormItem>
                   <FormItem style={{ width: "100%" }}>
                     <FormField
-                      name='charteredBy'
+                      name="charteredBy"
                       control={methods.control}
                       render={({ field }) => (
-                        <FormInput
-                          {...field}
-                          label='Chartered by'
-                        />
+                        <FormInput {...field} label="Chartered by" />
                       )}
                     />
                   </FormItem>
                 </Stack>
 
-                <Stack gap='1rem'>
+                <Stack gap="1rem">
                   <FormItem style={{ width: "100%" }}>
                     <FormField
                       name="charteredPersonPhone"
                       control={methods.control}
                       render={({ field }) => (
-                        <FormInput
-                          {...field}
-                          label="Chartered Person Phone"
-                        />
+                        <FormInput {...field} label="Chartered Person Phone" />
                       )}
                     />
                   </FormItem>
                   <FormItem style={{ width: "100%" }}>
                     <FormField
-                      name='charteredPersonAddress'
+                      name="charteredPersonAddress"
                       control={methods.control}
                       render={({ field }) => (
                         <FormInput
                           {...field}
-                          label='Chartered Person Address'
+                          label="Chartered Person Address"
                         />
                       )}
                     />
                   </FormItem>
                 </Stack>
 
-                <Stack gap='1rem'>
+                <Stack gap="1rem">
                   <FormItem style={{ width: "100%" }}>
                     <FormField
                       name="brandName"
                       control={methods.control}
                       render={({ field }) => (
-                        <FormInput
-                          {...field}
-                          label="Brand Name"
-                        />
+                        <FormInput {...field} label="Brand Name" />
                       )}
                     />
                   </FormItem>
                   <FormItem style={{ width: "100%" }}>
                     <FormField
-                      name='model'
+                      name="model"
                       control={methods.control}
                       render={({ field }) => (
-                        <FormInput
-                          {...field}
-                          label='Model'
-                        />
+                        <FormInput {...field} label="Model" />
                       )}
                     />
                   </FormItem>
@@ -292,55 +280,41 @@ export default function EditProduct({ payload }: { payload: TProduct | null }) {
                     name="dimensions"
                     control={methods.control}
                     render={({ field }) => (
-                      <FormInput
-                        {...field}
-                        label="Dimensions"
-                      />
+                      <FormInput {...field} label="Dimensions" />
                     )}
                   />
                 </FormItem>
 
-                <Stack gap='1rem'>
+                <Stack gap="1rem">
                   <FormItem style={{ width: "100%" }}>
                     <FormField
                       name="manufacturingYear"
                       control={methods.control}
                       render={({ field }) => (
-                        <FormInput
-                          {...field}
-                          label="Manufacturing Year"
-                        />
+                        <FormInput {...field} label="Manufacturing Year" />
                       )}
                     />
                   </FormItem>
                   <FormItem style={{ width: "100%" }}>
                     <FormField
-                      name='status'
+                      name="status"
                       control={methods.control}
                       render={({ field }) => (
                         <FormSelect {...field} label="Equipment Status">
-                          {
-                            equipmentStatus.map((status, i) => (
-                              <MenuItem
-                                key={i}
-                                value={status}
-                              >
-                                {capitalizeLetter(status.split('_').join(' '))}
-                              </MenuItem>
-                            ))
-                          }
+                          {equipmentStatus.map((status, i) => (
+                            <MenuItem key={i} value={status}>
+                              {capitalizeLetter(status.split("_").join(" "))}
+                            </MenuItem>
+                          ))}
                         </FormSelect>
                       )}
                     />
                   </FormItem>
                 </Stack>
 
-                <Stack alignItems='center' gap='1rem' justifyContent='end'>
-                  <Link href='/dashboard/admin/all-products'>
-                    <Button
-                      variant="outlined"
-                      type="button"
-                    >
+                <Stack alignItems="center" gap="1rem" justifyContent="end">
+                  <Link href="/dashboard/admin/all-products">
+                    <Button variant="outlined" type="button">
                       Cancel
                     </Button>
                   </Link>
@@ -349,10 +323,9 @@ export default function EditProduct({ payload }: { payload: TProduct | null }) {
                     type="submit"
                     disabled={isLoading}
                   >
-                    {isLoading ? 'Loading...' : isError ? 'Error' : 'Update'}
+                    {isLoading ? "Loading..." : isError ? "Error" : "Update"}
                   </Button>
                 </Stack>
-
               </Stack>
             </Form>
           </Stack>
@@ -360,4 +333,4 @@ export default function EditProduct({ payload }: { payload: TProduct | null }) {
       </ResponsiveDialog>
     </>
   );
-};
+}
