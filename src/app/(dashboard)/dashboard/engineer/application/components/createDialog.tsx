@@ -21,19 +21,14 @@ import capitalizeLetter from "@/utils/capitalizeLetter";
 
 export default function CreateDialog() {
   const applicationTypes = [
-    "LEAVE",
-    "EMERGENCY_MONEY",
-    "EQUIPMENT_PROBLEM",
-    "JOB_APPLICATION",
-    "INTERNSHIP_APPLICATION",
-    "VOLUNTEER_APPLICATION",
-    "SCHOLARSHIP_APPLICATION",
-    "GRANT_APPLICATION",
-    "MEMBERSHIP_APPLICATION",
+    "LEAVE_APPLICATION",
+    "RESIGNATION_APPLICATION",
+    "TRANSFER_APPLICATION",
+    "SALARY_ADVANCE",
     "LOAN_APPLICATION",
-    "PARTNERSHIP_APPLICATION",
-    "CUSTOMER_FEEDBACK",
-    "SERVICE_REQUEST",
+    "COMPLAINT_APPLICATION",
+    "GRIEVANCE_APPLICATION",
+    "EXPENSE_REIMBURSEMENT_APPLICATION",
   ];
   const [localOpen, setLocalOpen] = useState<boolean>(false);
   const [files, setFiles] = useState<Partial<TUploadedFile[] | []>>([]);

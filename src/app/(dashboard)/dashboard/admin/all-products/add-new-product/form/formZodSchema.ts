@@ -1,19 +1,11 @@
 import { z } from "zod";
 
-const ProductCategory = z.enum(['CIVIL', 'MARIN', 'ENGINEERING']);
+const ProductCategory = z.enum(["CIVIL", "MARIN", "ENGINEERING"]);
 const EquipmentStatus = z.enum([
-  'WORKING',
-  'STAND_BY',
-  'BREAK_DOWN',
-  'UNDER_MAINTENANCE',
-  'OUT_OF_SERVICE',
-  'IN_REPAIR',
-  'DECOMMISSIONED',
-  'PENDING_INSPECTION',
-  'AVAILABLE',
-  'RESERVED',
-  'LOST',
-  'DAMAGED'
+  "WORKING",
+  "RUNNING",
+  "STAND_BY",
+  "BREAK_DOWN",
 ]);
 
 export const productZodSchema = z.object({
@@ -30,7 +22,7 @@ export const productZodSchema = z.object({
   brandName: z.string(),
   model: z.string(),
   dimensions: z.string(),
-  manufacturingYear: z.string()
+  manufacturingYear: z.string(),
 });
 
 export const productUpdateZodSchema = z.object({
